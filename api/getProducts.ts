@@ -19,7 +19,7 @@ const getData = async (params: ReadonlyURLSearchParams) : Promise<ProductSearchR
         params.getAll("category").forEach( cat => url.searchParams.append("category", cat));
     }
     try {
-        const response: AxiosResponse<ProductSearchResult> = await axios.get<ProductSearchResult>(
+        const response: AxiosResponse = await axios.get(
             url.toString(),
             {
                 headers: {
@@ -28,7 +28,7 @@ const getData = async (params: ReadonlyURLSearchParams) : Promise<ProductSearchR
                 },
             }
         );
-        return response.data;
+        return response.data.data;
     } catch (error) {
         console.error('Error fetching data:', error);
         throw error;

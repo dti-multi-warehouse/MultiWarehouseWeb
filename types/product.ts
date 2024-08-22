@@ -18,7 +18,7 @@ export interface ProductSummary {
     categoryId: number;
 }
 
-interface hit {
+export interface hit {
     document: ProductSummary;
 }
 
