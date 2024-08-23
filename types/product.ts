@@ -1,12 +1,12 @@
 
 
 export interface Product {
-    id: number;
-    name: string;
-    description: string;
-    price: number;
-    stock: number;
-    categoryId: number;
+    id?: number;
+    name?: string;
+    description?: string;
+    price?: number;
+    stock?: number;
+    category?: string;
 }
 
 export interface ProductSummary {

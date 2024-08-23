@@ -14,3 +14,5 @@ const useProductDetails = (id: number) => {
 
     return { data, isLoading, error }
 }
+
+export default useProductDetails;
