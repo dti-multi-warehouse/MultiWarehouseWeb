@@ -11,7 +11,7 @@ interface Props {
     }
 }
 
-const ProductPage: FC<Props> = ({ params }) => {
+const ProductDetailsPage: FC<Props> = ({ params }) => {
     const { data, isLoading, error } = useProductDetails(params.id)
     console.log(data)
 
@@ -22,4 +22,4 @@ const ProductPage: FC<Props> = ({ params }) => {
     </div>
 }
 
-export default ProductPage
+export default ProductDetailsPage
