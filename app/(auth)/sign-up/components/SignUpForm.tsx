@@ -5,13 +5,7 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRegisterUser } from "@/hooks/useUser";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogContent,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
+import AlertDialog from "@/components/AlertDialog";
 
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().required("Email is required"),
@@ -19,12 +13,13 @@ const SignUpSchema = Yup.object().shape({
 
 const SignUpForm: React.FC = () => {
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
   const router = useRouter();
   const registerUser = useRegisterUser();
 
   const handleDialogClose = () => {
     setDialogOpen(false);
-    router.push("/sign-in"); // Redirect after dialog closes
+    router.push("/sign-in");
   };
 
   return (
@@ -34,12 +29,20 @@ const SignUpForm: React.FC = () => {
         validationSchema={SignUpSchema}
         onSubmit={(values, { setSubmitting }) => {
           registerUser.mutate({ email: values.email }, {
-            onSuccess: () => setDialogOpen(true),
+            onSuccess: (data) => {
+              if (data.message.includes("already registered but not verified")) {
+                setDialogMessage("This email is already registered but not verified. Please check your email to verify your account.");
+              } else {
+                setDialogMessage("Verification email sent. Please check your email.");
+              }
+              setDialogOpen(true);
+            },
             onError: () => alert("Failed to send verification email"),
           });
           setSubmitting(false);
         }}
       >
+        {({ isSubmitting }) => (
         <Form className="flex flex-col gap-y-5 items-start justify-center w-full">
           <div className="flex flex-col gap-y-1 w-full">
             <label className="text-sm font-medium">Email:</label>
@@ -57,21 +60,21 @@ const SignUpForm: React.FC = () => {
           </div>
           <button
             type="submit"
-            className="w-full bg-red-600 text-white hover:scale-105 py-2 rounded-xl transition-all duration-500 hover:shadow-md hover:shadow-gray-300 text-sm font-medium"
+            className="w-full bg-red-600 text-white hover:scale-105 py-2 rounded-xl transition-all duration-500 hover:shadow-md hover:shadow-gray-300 text-sm font-medium" 
+            disabled={isSubmitting}
           >
-            Verify Email
+              {isSubmitting ? "Loading..." : "Verify Email"}
           </button>
         </Form>
+         )}
       </Formik>
 
-      <AlertDialog open={dialogOpen} onOpenChange={setDialogOpen}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>Check Your Email</AlertDialogTitle>
-          </AlertDialogHeader>
-          <AlertDialogAction onClick={handleDialogClose} className="bg-red-500">OK</AlertDialogAction>
-        </AlertDialogContent>
-      </AlertDialog>
+      <AlertDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        title={dialogMessage}
+        onAction={handleDialogClose}
+      />
     </>
   );
 };
