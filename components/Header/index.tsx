@@ -1,17 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { BiUser, BiSearch } from "react-icons/bi";
 import { links } from "@/data/data";
 import { ResponsiveHeader } from "../ResponsiveHeader";
 import { useSession, signOut } from "next-auth/react";
+import { useUser as useClerkUser } from "@clerk/nextjs";
 import AlertDialog from "../AlertDialog";
 
 const Header: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState<Boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { data: session } = useSession();
+  const { isSignedIn: isClerkSignedIn } = useClerkUser();  // Check if signed in with Clerk
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -23,11 +25,16 @@ const Header: React.FC = () => {
 
   const confirmLogout = () => {
     signOut({ redirect: false });
+    if (isClerkSignedIn) {
+      window.Clerk?.signOut();
+    }
   };
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
+
+  const isLoggedIn = session || isClerkSignedIn;
 
   return (
     <>
@@ -69,7 +76,7 @@ const Header: React.FC = () => {
           </div>
           <div className="md:flex items-center gap-3 hidden">
             <BiUser />
-            {session ? (
+            {isLoggedIn ? (
               <button onClick={handleLogout} className="text-blue-500">
                 Logout
               </button>

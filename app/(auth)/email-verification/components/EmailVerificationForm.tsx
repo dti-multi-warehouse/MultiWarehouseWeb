@@ -5,6 +5,7 @@ import { useConfirmRegistration } from "@/hooks/useUser";
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import AlertDialog from "@/components/AlertDialog";
+import { useRouter } from "next/navigation";
 
 const EmailVerifSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
@@ -18,6 +19,7 @@ const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({
   const [showPassword, setShowPassword] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+  const router = useRouter();
 
   const togglePasswordVisibility = () => {
     setShowPassword((prevState) => !prevState);
@@ -39,6 +41,7 @@ const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({
             onSuccess: () => {
               alert("Registration confirmed!");
               setSubmitting(false);
+              router.push('/sign-in')
             },
             onError: (error: any) => {
               const errorMessage = error.response?.data?.message || error.message;

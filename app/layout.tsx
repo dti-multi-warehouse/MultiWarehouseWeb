@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import { ClerkProvider} from '@clerk/nextjs'
 import "./globals.css";
 import SessionProviderWrapper from "./SessionProviderWrapper";
 
@@ -21,6 +22,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
+    // <html lang="en">
+    //   <body className={montserrat.className}>
+    //     
+    //       {children}  
+    //    
+    //   </body>
+    // </html>
+    <ClerkProvider>
     <html lang="en">
       <body className={montserrat.className}>
         <SessionProviderWrapper>
@@ -28,5 +37,6 @@ export default function RootLayout({
         </SessionProviderWrapper>
       </body>
     </html>
+  </ClerkProvider>
   );
 }

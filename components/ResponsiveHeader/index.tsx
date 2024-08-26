@@ -6,10 +6,12 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { links } from "@/data/data";
 import Link from "next/link";
 import { HiMenuAlt3 } from "react-icons/hi";
+import { useUser as useClerkUser } from "@clerk/nextjs";
 import AlertDialog from "../AlertDialog";
 
 const ResponsiveHeader: React.FC = () => {
   const { data: session } = useSession(); // Get session data to check if user is authenticated
+  const { isSignedIn: isClerkSignedIn } = useClerkUser();  // Check if signed in with Clerk
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleLogout = () => {
@@ -18,11 +20,16 @@ const ResponsiveHeader: React.FC = () => {
 
   const confirmLogout = () => {
     signOut({ redirect: false });
+    if (isClerkSignedIn) {
+      window.Clerk?.signOut();
+    }
   };
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
   };
+
+  const isLoggedIn = session || isClerkSignedIn;
 
   return (
     <>
@@ -50,7 +57,7 @@ const ResponsiveHeader: React.FC = () => {
                 </Link>
               ))}
               <div className="mt-4">
-                {session ? (
+                {isLoggedIn ? (
                   <button onClick={handleLogout} className="text-blue-500">
                     Logout
                   </button>

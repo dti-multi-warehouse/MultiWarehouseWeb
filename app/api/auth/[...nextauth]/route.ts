@@ -9,21 +9,20 @@ export const authOptions: NextAuthOptions = {
       name: 'Credentials',
       credentials: {
         email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
+        password: { label: "Password", type: "password" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
-          console.log('Missing credentials');
           return null;
         }
+
         try {
-          console.log('Attempting login with:', credentials.email);
           const response = await apiClient.post<LoginResponse>('/api/v1/login', {
             email: credentials.email,
             password: credentials.password,
           });
+
           if (response.data && response.data.accessToken) {
-            console.log('Successful login, returning user object');
             return {
               id: response.data.userId,
               token: response.data.accessToken,
@@ -31,14 +30,13 @@ export const authOptions: NextAuthOptions = {
               role: response.data.role,
             };
           }
-          console.log('Invalid credentials or unexpected response structure');
+
           return null;
         } catch (error: any) {
-          console.error('Authentication error:', error.response?.data || error.message);
           throw new Error(error.response?.data || error.message);
         }
-      }
-    })
+      },
+    }),
   ],
   session: {
     strategy: "jwt",
@@ -62,7 +60,7 @@ export const authOptions: NextAuthOptions = {
         role: token.role,
       };
       return session;
-    }
+    },
   },
   pages: {
     signIn: '/sign-in',
@@ -70,5 +68,4 @@ export const authOptions: NextAuthOptions = {
 };
 
 const handler = NextAuth(authOptions);
-
 export { handler as GET, handler as POST };

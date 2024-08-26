@@ -1,12 +1,14 @@
 "use client";
 
+import React from 'react';
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useLoginUser } from "@/hooks/useUser";
-import AlertDialog from "@/components/AlertDialog"; 
+import AlertDialog from "@/components/AlertDialog";
+import SocialButtonLogin from './SocialButtonLogin';
 
 const SignInForm: React.FC = () => {
   const router = useRouter();
@@ -61,7 +63,7 @@ const SignInForm: React.FC = () => {
           );
         }}
       >
-        <Form className="flex flex-col gap-y-5 items-start justify-center w-full">
+        <Form className="flex flex-col gap-y-5 items-center justify-center w-full">
           <div className="flex flex-col gap-y-1 w-full">
             <label className="text-sm font-medium">Registered Email</label>
             <Field
@@ -113,6 +115,11 @@ const SignInForm: React.FC = () => {
           >
             Sign In
           </button>
+
+          <div className="">
+            <span className="text-center text-sm text-gray-500">Or</span>
+          </div>
+          <SocialButtonLogin />
         </Form>
       </Formik>
 
@@ -126,3 +133,4 @@ const SignInForm: React.FC = () => {
 };
 
 export default SignInForm;
+

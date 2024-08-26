@@ -1,11 +1,13 @@
-"use client"; 
 
+"use client";
+
+import React, { useState } from 'react';
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useRegisterUser } from "@/hooks/useUser";
 import AlertDialog from "@/components/AlertDialog";
+import SocialButtonRegister from './SocialButtonRegister';
 
 const SignUpSchema = Yup.object().shape({
   email: Yup.string().required("Email is required"),
@@ -43,7 +45,7 @@ const SignUpForm: React.FC = () => {
         }}
       >
         {({ isSubmitting }) => (
-        <Form className="flex flex-col gap-y-5 items-start justify-center w-full">
+        <Form className="flex flex-col gap-y-5 items-center justify-center w-full">
           <div className="flex flex-col gap-y-1 w-full">
             <label className="text-sm font-medium">Email:</label>
             <Field
@@ -65,6 +67,11 @@ const SignUpForm: React.FC = () => {
           >
               {isSubmitting ? "Loading..." : "Verify Email"}
           </button>
+
+          <div className="">
+            <span className="text-center text-sm text-gray-500">Or</span>
+          </div>
+          <SocialButtonRegister />
         </Form>
          )}
       </Formik>

@@ -1,12 +1,23 @@
+// src/hooks/useUserHooks.ts
 import { useMutation, useQueryClient, UseMutationResult } from 'react-query';
 import apiClient from '@/lib/apiClient';
-import { AxiosError, AxiosResponse } from 'axios';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react';
-import { ConfirmRegistrationRequest, ConfirmRegistrationResponse, LoginRequest, LoginResponse, LogoutRequest, RegisterUserRequest, RegisterUserResponse } from '@/types/datatypes';
+import {
+  ConfirmRegistrationRequest,
+  ConfirmRegistrationResponse,
+  LoginRequest,
+  LoginResponse,
+  LogoutRequest,
+  RegisterUserRequest,
+  RegisterUserResponse,
+} from '@/types/datatypes';
 
-export const useRegisterUser = (): UseMutationResult<RegisterUserResponse, unknown, RegisterUserRequest> => {
+export const useRegisterUser = (): UseMutationResult<
+  RegisterUserResponse,
+  unknown,
+  RegisterUserRequest
+> => {
   const queryClient = useQueryClient();
-  
   return useMutation(
     (data: RegisterUserRequest) =>
       apiClient.post<RegisterUserResponse>('/api/v1/register', data).then((response) => response.data),
@@ -15,33 +26,37 @@ export const useRegisterUser = (): UseMutationResult<RegisterUserResponse, unkno
         queryClient.invalidateQueries('user');
       },
       onError: (error) => {
-        console.error("Error during registration:", error);
+        console.error('Error during registration:', error);
       },
     }
   );
 };
 
-export const useConfirmRegistration = (): UseMutationResult<ConfirmRegistrationResponse, unknown, ConfirmRegistrationRequest> => {
-    return useMutation(
-        (data: ConfirmRegistrationRequest) => {
-            console.log("Sending confirmation request with data:", data); // Add this log
-            return apiClient.post<ConfirmRegistrationResponse>('/api/v1/register/confirm', data)
-                .then((response: AxiosResponse<ConfirmRegistrationResponse>) => response.data)
-                .catch((error: AxiosError) => {
-                    console.error("API Error:", error.response?.status, error.response?.data);
-                    throw error;
-                });
-        },
-        {
-            onSuccess: (data) => {
-                console.log("Registration confirmed successfully:", data);
-            },
-            onError: (error: AxiosError) => {
-                console.error("Error during confirmation:", error.message);
-                console.error("Error details:", error.response?.data);
-            },
-        }
-    );
+export const useConfirmRegistration = (): UseMutationResult<
+  ConfirmRegistrationResponse,
+  unknown,
+  ConfirmRegistrationRequest
+> => {
+  return useMutation(
+    (data: ConfirmRegistrationRequest) => {
+      return apiClient
+        .post<ConfirmRegistrationResponse>('/api/v1/register/confirm', data)
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error('API Error:', error.response?.status, error.response?.data);
+          throw error;
+        });
+    },
+    {
+      onSuccess: (data) => {
+        console.log('Registration confirmed successfully:', data);
+      },
+      onError: (error: any) => {
+        console.error('Error during confirmation:', error.message);
+        console.error('Error details:', error.response?.data);
+      },
+    }
+  );
 };
 
 export const useLoginUser = (): UseMutationResult<LoginResponse, unknown, LoginRequest> => {
@@ -62,7 +77,6 @@ export const useLoginUser = (): UseMutationResult<LoginResponse, unknown, LoginR
         throw new Error('Failed to sign in');
       }
 
-      // Fetch the session to get the user data
       const session = await getSession();
       if (!session?.user) {
         throw new Error('Failed to get user session');
@@ -80,12 +94,11 @@ export const useLoginUser = (): UseMutationResult<LoginResponse, unknown, LoginR
         queryClient.invalidateQueries('user');
       },
       onError: (error: any) => {
-        console.error("Error during login:", error.message);
+        console.error('Error during login:', error.message);
       },
     }
   );
 };
-
 
 export const useLogoutUser = (): UseMutationResult<void, unknown, LogoutRequest> => {
   return useMutation(
@@ -96,20 +109,24 @@ export const useLogoutUser = (): UseMutationResult<void, unknown, LogoutRequest>
       }),
     {
       onSuccess: () => {
-        console.log("Logged out successfully");
+        console.log('Logged out successfully');
       },
-      onError: (error: AxiosError) => {
-        console.error("Error during logout:", error.message);
+      onError: (error: any) => {
+        console.error('Error during logout:', error.message);
       },
     }
   );
 };
 
+// This function will be used to save the email to the backend
+export const saveEmailToBackend = async (email: string) => {
+  return await apiClient.post('/api/v1/save-email', { email });
+};
+
 export const useUser = () => {
   const { data: session, status } = useSession();
-  const loading = status === "loading";
-  const loggedIn = status === "authenticated";
-
+  const loading = status === 'loading';
+  const loggedIn = status === 'authenticated';
   return {
     session,
     loading,
