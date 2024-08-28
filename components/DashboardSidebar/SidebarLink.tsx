@@ -9,7 +9,7 @@ import {clsx} from "clsx";
 const SidebarLink: FC<SidebarLinkProps> = ({icon, text, link}) => {
     const fullPathname = usePathname()
     const pathSegments = fullPathname.split("/")
-    const pathname = pathSegments[2]
+    const pathname = pathSegments[2] || ""
 
     return (
         <Link
