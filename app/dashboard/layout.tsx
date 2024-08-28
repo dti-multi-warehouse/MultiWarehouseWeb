@@ -7,9 +7,9 @@ const DashboardLayout = ({
     }: Readonly<{
         children: ReactNode
     }>) => {
-    return <main className={"flex h-screen w-full"}>
+    return <main className={"flex h-screen w-screen"}>
         <DashboardSidebar />
-        <div>
+        <div className={"h-screen w-full"}>
             <DashboardHeader />
             {children}
         </div>
