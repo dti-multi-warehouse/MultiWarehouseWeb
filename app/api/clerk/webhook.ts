@@ -1,4 +1,3 @@
-// pages/api/clerk/webhook.ts
 
 import { WebhookEvent } from "@clerk/nextjs/server";
 import { NextApiRequest, NextApiResponse } from "next";

@@ -8,6 +8,7 @@ declare module "next-auth" {
       id?: string;
       role?: string;
     } & DefaultSession["user"]
+    isSocialUser: boolean;
   }
 
   interface User extends DefaultUser {

@@ -10,8 +10,8 @@ import { useUser as useClerkUser } from "@clerk/nextjs";
 import AlertDialog from "../AlertDialog";
 
 const ResponsiveHeader: React.FC = () => {
-  const { data: session } = useSession(); // Get session data to check if user is authenticated
-  const { isSignedIn: isClerkSignedIn } = useClerkUser();  // Check if signed in with Clerk
+  const { data: session } = useSession(); 
+  const { isSignedIn: isClerkSignedIn } = useClerkUser(); 
   const [dialogOpen, setDialogOpen] = useState(false);
 
   const handleLogout = () => {

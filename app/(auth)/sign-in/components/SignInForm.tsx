@@ -9,6 +9,7 @@ import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useLoginUser } from "@/hooks/useUser";
 import AlertDialog from "@/components/AlertDialog";
 import SocialButtonLogin from './SocialButtonLogin';
+import Link from 'next/link';
 
 const SignInForm: React.FC = () => {
   const router = useRouter();
@@ -108,6 +109,9 @@ const SignInForm: React.FC = () => {
               component="div"
               className="text-sm text-red-500 w-fit"
             />
+          </div>
+          <div className='self-start'>
+            <Link href="/reset-password" className='text-red-500 text-sm'>Reset password</Link>
           </div>
           <button
             type="submit"

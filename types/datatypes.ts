@@ -33,3 +33,17 @@ export interface ConfirmRegistrationResponse {
     success: boolean;
     message: string;
 }
+
+export interface ResetPasswordRequest{
+    email: string;
+}
+
+export interface ResetPasswordResponse{
+    message: string;
+}
+
+export interface ConfirmResetPasswordRequest {
+    email: string;
+    token: string;
+    newPassword: string;
+}

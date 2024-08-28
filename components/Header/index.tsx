@@ -8,12 +8,13 @@ import { ResponsiveHeader } from "../ResponsiveHeader";
 import { useSession, signOut } from "next-auth/react";
 import { useUser as useClerkUser } from "@clerk/nextjs";
 import AlertDialog from "../AlertDialog";
+import CartHeader from "./CartHeader";
 
 const Header: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState<Boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const { data: session } = useSession();
-  const { isSignedIn: isClerkSignedIn } = useClerkUser();  // Check if signed in with Clerk
+  const { isSignedIn: isClerkSignedIn } = useClerkUser(); 
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -53,7 +54,7 @@ const Header: React.FC = () => {
             </Link>
           ))}
         </div>
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-5">
           <div className="relative flex items-center">
             <button
               onClick={toggleSearch}
@@ -74,7 +75,8 @@ const Header: React.FC = () => {
               }}
             />
           </div>
-          <div className="md:flex items-center gap-3 hidden">
+          <CartHeader />
+          <div className="md:flex items-center gap-2 hidden">
             <BiUser />
             {isLoggedIn ? (
               <button onClick={handleLogout} className="text-blue-500">
@@ -82,7 +84,7 @@ const Header: React.FC = () => {
               </button>
             ) : (
               <>
-                <Link href="/sign-in">Login</Link> / <Link href="/sign-up">Register</Link>
+                <Link href="/sign-in" className="hover:text-red-500">Login</Link> / <Link href="/sign-up" className="hover:text-red-500">Register</Link>
               </>
             )}
           </div>
@@ -97,7 +99,7 @@ const Header: React.FC = () => {
         description="You will be logged out of your session."
         actionLabel="Logout"
         cancelLabel="Cancel"
-        onAction={confirmLogout} // Call signOut only if the user confirms
+        onAction={confirmLogout}
       />
     </>
   );

@@ -5,11 +5,14 @@ import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import {
   ConfirmRegistrationRequest,
   ConfirmRegistrationResponse,
+  ConfirmResetPasswordRequest,
   LoginRequest,
   LoginResponse,
   LogoutRequest,
   RegisterUserRequest,
   RegisterUserResponse,
+  ResetPasswordRequest,
+  ResetPasswordResponse,
 } from '@/types/datatypes';
 
 export const useRegisterUser = (): UseMutationResult<
@@ -118,10 +121,62 @@ export const useLogoutUser = (): UseMutationResult<void, unknown, LogoutRequest>
   );
 };
 
-// This function will be used to save the email to the backend
 export const saveEmailToBackend = async (email: string) => {
   return await apiClient.post('/api/v1/save-email', { email });
 };
+
+export const useRequestPasswordReset = (): UseMutationResult<
+  ResetPasswordResponse,
+  unknown,
+  ResetPasswordRequest
+> => {
+  return useMutation(
+    (data: ResetPasswordRequest) => {
+      return apiClient
+        .post<ResetPasswordResponse>('/api/v1/reset-password/request', data)
+        .then((response) => response.data)
+        .catch((error) => {
+          console.error('API Error during password reset request:', error.response?.status, error.response?.data);
+          throw error;
+        });
+    },
+    {
+      onSuccess: (data) => {
+        console.log('Password reset email sent successfully:', data);
+      },
+      onError: (error: any) => {
+        console.error('Error during password reset request:', error.message);
+        console.error('Error details:', error.response?.data);
+      },
+    }
+  );
+};
+
+export const useConfirmPasswordReset = (): UseMutationResult<
+  ResetPasswordResponse,
+  unknown,
+  ConfirmResetPasswordRequest
+> => {
+  return useMutation(
+    (data: ConfirmResetPasswordRequest) => {
+      return apiClient.post<ResetPasswordResponse>('/api/v1/reset-password/confirm', data)
+      .then((response) => response.data)
+      .catch((error) => {
+        console.error('API Error during password reset confirmation:', error.response?.status, error.response?.data);
+        throw error;
+      });
+    },
+    {
+      onSuccess: (data) => {
+        console.log('Password reset confirmed successfully:', data);
+      },
+      onError: (error: any) => {
+        console.error('Error during password reset confirmation:', error.message);
+        console.error('Error details:', error.response?.data);
+      }
+    }
+  )
+}
 
 export const useUser = () => {
   const { data: session, status } = useSession();
