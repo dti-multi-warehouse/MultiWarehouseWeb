@@ -1,21 +1,22 @@
 "use client";
+
+import React, { useState } from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useConfirmRegistration } from "@/hooks/useUser";
-import { useState } from "react";
-import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { useConfirmPasswordReset } from "@/hooks/useUser";
 import AlertDialog from "@/components/AlertDialog";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useRouter } from "next/navigation";
 
-const EmailVerifSchema = Yup.object().shape({
-  password: Yup.string().required("Password is required"),
+const ResetPasswordConfirmSchema = Yup.object().shape({
+  newPassword: Yup.string().required("Password is required"),
 });
 
-const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({
+const ResetPasswordConfirmForm: React.FC<{ email: string; token: string }> = ({
   email,
   token,
 }) => {
-  const confirmRegistration = useConfirmRegistration();
+  const confirmPasswordReset = useConfirmPasswordReset();
   const [showPassword, setShowPassword] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -28,29 +29,25 @@ const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({
   return (
     <>
       <Formik
-        initialValues={{ password: "" }}
-        validationSchema={EmailVerifSchema}
+        initialValues={{ newPassword: "" }}
+        validationSchema={ResetPasswordConfirmSchema}
         onSubmit={(values, { setSubmitting }) => {
           const data = {
             email: email,
-            password: values.password, 
             token: token,
+            newPassword: values.newPassword,
           };
 
-          confirmRegistration.mutate(data, {
+          confirmPasswordReset.mutate(data, {
             onSuccess: () => {
-              alert("Registration confirmed!");
+              setDialogMessage("Your password has been reset successfully.");
+              setDialogOpen(true);
               setSubmitting(false);
-              router.push('/sign-in')
+              router.push("/sign-in");
             },
             onError: (error: any) => {
               const errorMessage = error.response?.data?.message || error.message;
-              if (errorMessage.includes("Token expired")) {
-                setDialogMessage("Your verification link has expired. A new verification email has been sent. Please check your email.");
-                setDialogOpen(true);
-              } else {
-                alert(`Failed to confirm registration: ${errorMessage}`);
-              }
+              alert(`Failed to reset password: ${errorMessage}`);
               setSubmitting(false);
             },
           });
@@ -59,12 +56,12 @@ const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({
         {({ isSubmitting }) => (
           <Form className="flex flex-col gap-y-5 items-start justify-center w-full">
             <div className="flex flex-col gap-y-1 w-full">
-              <label className="text-sm font-medium">Set Password</label>
+              <label className="text-sm font-medium">New Password</label>
               <div style={{ position: "relative" }} className="">
                 <Field
                   type={showPassword ? "text" : "password"}
-                  name="password"
-                  placeholder="Input your password"
+                  name="newPassword"
+                  placeholder="Input your new password"
                   className="w-full p-1 border-2 rounded-lg border-gray-300"
                 />
                 <button
@@ -84,7 +81,7 @@ const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({
                 </button>
               </div>
               <ErrorMessage
-                name="password"
+                name="newPassword"
                 component="div"
                 className="text-sm text-red-500 w-fit"
               />
@@ -94,7 +91,7 @@ const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({
               className="w-full bg-red-600 text-white hover:scale-105 py-2 rounded-xl transition-all duration-500 hover:shadow-md hover:shadow-gray-300 text-sm font-medium"
               disabled={isSubmitting}
             >
-              {isSubmitting ? "Confirming..." : "Confirm Password"}
+              {isSubmitting ? "Resetting..." : "Reset Password"}
             </button>
           </Form>
         )}
@@ -108,4 +105,4 @@ const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({
   );
 };
 
-export default EmailVerificationForm;
+export default ResetPasswordConfirmForm;
