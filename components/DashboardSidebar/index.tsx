@@ -1,6 +1,6 @@
 import {FC} from "react";
 import Link from "next/link";
-import {Building, ChartNoAxesCombined, Library, Mail, Package2, Truck, UsersRound, Warehouse} from "lucide-react";
+import {Building, ChartNoAxesCombined, Library, Mail, Package2, Tag, Truck, UsersRound, Warehouse} from "lucide-react";
 import SidebarLink from "@/components/DashboardSidebar/SidebarLink";
 import {SidebarLinkProps} from "@/components/DashboardSidebar/types";
 
@@ -42,6 +42,11 @@ const superAdminLinks: SidebarLinkProps[] = [
         icon: <Library />,
         text: "Products",
         link: "products"
+    },
+    {
+        icon: <Tag />,
+        text: "Categories",
+        link: "categories"
     },
     {
         icon: <UsersRound />,
