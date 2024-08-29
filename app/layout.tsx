@@ -3,6 +3,8 @@ import { Montserrat } from "next/font/google";
 import { ClerkProvider} from '@clerk/nextjs'
 import "./globals.css";
 import SessionProviderWrapper from "./SessionProviderWrapper";
+import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
+
 
 const montserrat = Montserrat({ 
   subsets: ["latin"],
@@ -36,6 +38,9 @@ export default function RootLayout({
           {children}
         </SessionProviderWrapper>
       </body>
+      <ReactQueryProvider>
+        <body className={montserrat.className}>{children}</body>
+      </ReactQueryProvider>
     </html>
   </ClerkProvider>
   );

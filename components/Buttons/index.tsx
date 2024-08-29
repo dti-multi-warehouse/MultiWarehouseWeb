@@ -1,3 +1,5 @@
+'use client'
+
 interface ButtonProps{
     children?: JSX.Element | React.ReactNode;
     onClick?: () => void;
