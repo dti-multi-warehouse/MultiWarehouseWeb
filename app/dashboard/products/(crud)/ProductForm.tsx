@@ -1,11 +1,21 @@
 "use client"
 
-import {FC} from "react";
+import {FC, useCallback} from "react";
 import {Form, Formik} from "formik";
 import CustomInput from "@/components/Inputs/CustomInput";
 import CategorySelector from "@/components/Inputs/CategorySelector";
 import DescriptionInput from "@/components/Inputs/DescriptionInput";
 import * as Yup from "yup";
+import {useDropzone} from "react-dropzone";
+import {
+    Carousel,
+    CarouselContent,
+    CarouselItem,
+    CarouselNext,
+    CarouselPrevious,
+} from "@/components/ui/carousel"
+import ImageUploader from "@/app/dashboard/products/(crud)/components/ImageUploader";
+
 
 const productSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),
@@ -16,6 +26,12 @@ const productSchema = Yup.object().shape({
 })
 
 const ProductForm: FC = () => {
+    // const onDrop = useCallback(acceptedFile => {
+    //     console.log(acceptedFile)
+    // }, [])
+    // const { getRootProps, getInputProps, isDragActive} = useDropzone({onDrop})
+
+
     return (
         <Formik
             initialValues={{
@@ -27,12 +43,13 @@ const ProductForm: FC = () => {
             }}
             validationSchema={productSchema}
             onSubmit={values => console.log(values)}>
-            <Form>
-                <CustomInput name={"name"} label={"Product Name"} placeholder={"What's the name of the product?"} />
-                <CustomInput name={"price"} label={"Price"} placeholder={"How much is it going to be?"} />
-                <CustomInput name={"stock"} label={"Stock"} placeholder={"Stock"} />
-                <CategorySelector />
-                <DescriptionInput />
+            <Form className={"flex flex-col"}>
+                <CustomInput name={"name"} label={"Product Name"} placeholder={"What's the name of the product?"}/>
+                <CustomInput name={"price"} label={"Price"} placeholder={"How much is it going to be?"}/>
+                <CustomInput name={"stock"} label={"Stock"} placeholder={"Stock"}/>
+                <CategorySelector/>
+                <DescriptionInput/>
+                <ImageUploader />
                 <button type={"submit"}>button</button>
             </Form>
         </Formik>
