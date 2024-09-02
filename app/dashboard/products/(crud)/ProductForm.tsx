@@ -7,18 +7,10 @@ import CategorySelector from "@/components/Inputs/CategorySelector";
 import DescriptionInput from "@/components/Inputs/DescriptionInput";
 import * as Yup from "yup";
 import {useDropzone} from "react-dropzone";
-import {
-    Carousel,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious,
-} from "@/components/ui/carousel"
-import ImageUploader from "@/app/dashboard/products/(crud)/components/ImageUploader";
 import Image from "next/image";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
-import {json} from "node:stream/consumers";
+import {BadgeX, ImageUp} from "lucide-react";
 
 interface FileWithPreview extends File {
     preview: string;
@@ -33,14 +25,14 @@ const productSchema = Yup.object().shape({
 })
 
 const ProductForm: FC = () => {
-    const [files, setFiles] = useState<FileWithPreview[]>([]);
+    const [images, setImages] = useState<FileWithPreview[]>([]);
 
-    const onDrop = useCallback((acceptedFiles: File[]) => {
-        setFiles(prevFiles => [
-            ...prevFiles,
-            ...acceptedFiles.map(file =>
-                Object.assign(file, {
-                    preview: URL.createObjectURL(file)
+    const onDrop = useCallback((acceptedImages: File[]) => {
+        setImages(prevImages => [
+            ...prevImages,
+            ...acceptedImages.map(image =>
+                Object.assign(image, {
+                    preview: URL.createObjectURL(image)
                 })
             )
         ]);
@@ -48,15 +40,25 @@ const ProductForm: FC = () => {
 
     const { getRootProps, getInputProps } = useDropzone({
         accept: {
-            'image/*': []
+            'image/png': ['.png'],
+            'image/jpg': ['.jpg'],
+            'image/jpeg': ['.jpeg'],
+            'image/gif': ['.gif']
         },
-        onDrop
+        onDrop,
+        maxSize: 1000000
     });
 
     useEffect(() => {
         // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
-        return () => files.forEach(file => URL.revokeObjectURL(file.preview));
+        return () => images.forEach(image => URL.revokeObjectURL(image.preview));
     }, []);
+
+    const handleRemoveImage = (i: number) => {
+        setImages(prev => {
+            return prev.filter((_, index) => index !== i);
+        })
+    }
 
 
     return (
@@ -72,37 +74,50 @@ const ProductForm: FC = () => {
             onSubmit={values => {
                 const formData = new FormData()
                 formData.append("product", new Blob([JSON.stringify(values)], {type: 'application/json'}))
-                files.forEach(file => formData.append("images", file))
+                images.forEach(image => formData.append("images", image))
                 fetch('http://localhost:8080/api/v1/product', {
                     method: 'POST',
                     body: formData
                 })
             }}>
-            <Form className={"flex flex-col gap-4 px-64 py-16"}>
+            <Form className={"flex flex-col gap-4 p-4 lg:px-64 lg:py-16"}>
                 <CustomInput name={"name"} label={"Product Name"} placeholder={"What's the name of the product?"}/>
-                <CustomInput name={"price"} label={"Price"} placeholder={"How much is it going to be?"}/>
-                <CustomInput name={"stock"} label={"Stock"} placeholder={"Stock"}/>
+                <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={"How much is it going to be?"}/>
                 <CategorySelector/>
                 <DescriptionInput/>
 
                 {/*Image Uploader*/}
-                <div className={"grid grid-cols-3"}>
-                    <Label className={"col-span-1"}>Product Image</Label>
-                    <Carousel className={"w-96 h-96 col-span-2"}>
-                        <CarouselContent className={"w-96 h-96"}>
-                            {files.map((file, index) => (
-                                <CarouselItem key={index}>
-                                    <Image src={file.preview} alt={"alt image"} height={384} width={384} />
-                                </CarouselItem>
-                            ))}
-                            <CarouselItem {...getRootProps()} className={"flex items-center justify-center bg-gray-400 text-white"}>
-                                <input {...getInputProps()} className={""}/>
-                                <p>Add picture</p>
-                            </CarouselItem>
-                        </CarouselContent>
-                        <CarouselPrevious/>
-                        <CarouselNext />
-                    </Carousel>
+                <div className={"flex flex-col gap-3 lg:grid lg:grid-cols-3"}>
+                    <div className={"col-span-1"}>
+                        <Label>Product Image</Label>
+                        <p className={"text-sm font-extralight text-gray-500"}>The first image will automatically be the thumbnail</p>
+                    </div>
+                    <div className={"col-span-2 flex gap-4 flex-wrap"}>
+                        {images.map((image, index) => (
+                            <div
+                                key={index}
+                                className="w-24 h-24 border border-dotted relative group"
+                                onClick={() => handleRemoveImage(index)}
+                            >
+                                <Image
+                                    src={image.preview}
+                                    alt="Product image"
+                                    fill
+                                    style={{objectFit: "cover"}}
+                                    className="z-0 cursor-pointer"
+                                />
+                                <div
+                                    className="absolute -top-2 -right-2 z-10 opacity-0 group-hover:opacity-100 transition-opacity">
+                                    <BadgeX className="text-red-500 bg-white rounded-full"/>
+                                </div>
+                            </div>
+                        ))}
+                        <div
+                            className={"w-24 h-24 border border-dotted flex items-center justify-center cursor-pointer"} {...getRootProps()}>
+                            <input {...getInputProps()} />
+                            <ImageUp className={"text-gray-500"}/>
+                        </div>
+                    </div>
                 </div>
                 <Button type={"submit"} className={"w-48 self-center mt-20"}>Add product</Button>
             </Form>

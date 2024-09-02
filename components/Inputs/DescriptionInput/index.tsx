@@ -8,7 +8,7 @@ const DescriptionInput: FC = () => {
     return (
         <Field name={"description"} id={"description"}>
             {({ field, form }: FieldProps<any, FormikValues>) => (
-                <div className={"grid grid-cols-3"}>
+                <div className={"flex flex-col gap-3 lg:grid lg:grid-cols-3"}>
                     <Label htmlFor={"description"} className={"col-span-1"}>Description</Label>
                     <div className={"col-span-2"}>
                         <Textarea

@@ -53,7 +53,7 @@ const CategorySelector: FC = () => {
     return (
         <Field name={"descriptionId"} id={"descriptionId"}>
             {({ field, form }: FieldProps<any, FormikValues>) => (
-                <div className={"grid grid-cols-3"}>
+                <div className={"flex flex-col gap-3 lg:grid lg:grid-cols-3"}>
                     <Label htmlFor={"descriptionId"} className={"col-span-1"}>Category</Label>
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
