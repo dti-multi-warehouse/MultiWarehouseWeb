@@ -1,7 +1,6 @@
 import {useQuery} from "react-query";
 import {getProducts} from "@/api/getProducts";
 import {ReadonlyURLSearchParams} from "next/navigation";
-import {ProductSearchResult} from "@/types/product";
 
 
 const useProducts = ( params: ReadonlyURLSearchParams) => {
