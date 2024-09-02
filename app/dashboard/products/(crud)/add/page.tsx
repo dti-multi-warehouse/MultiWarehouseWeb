@@ -1,3 +1,5 @@
+'use client'
+
 import {FC} from "react";
 import ProductForm from "@/app/dashboard/products/(crud)/ProductForm";
 import {FileWithPreview, ProductData} from "@/app/dashboard/products/types";
