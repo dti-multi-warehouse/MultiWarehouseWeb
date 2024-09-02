@@ -11,13 +11,15 @@ const CustomInput: FC<CustomInputProps> = ({name, label, ...props}) => {
     return (
         <Field name={name}>
             {({ field, form}: FieldProps<any, FormikValues>) => (
-                <>
-                    <Label htmlFor={name}>{label}</Label>
-                    <Input {...field} {...props} />
-                    {form.touched[name] && form.errors[name] && (
-                        <div className="text-red-500 text-sm mt-1">{form.errors[name]?.toString()}</div>
-                    )}
-                </>
+                <div className={"grid grid-cols-3"}>
+                    <Label htmlFor={name} className={"col-span-1"}>{label}</Label>
+                    <div className={"col-span-2"}>
+                        <Input {...field} {...props}  />
+                        {form.touched[name] && form.errors[name] && (
+                            <div className="text-red-500 text-sm mt-1">{form.errors[name]?.toString()}</div>
+                        )}
+                    </div>
+                </div>
             )}
         </Field>
     )

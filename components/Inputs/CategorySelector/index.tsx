@@ -53,15 +53,15 @@ const CategorySelector: FC = () => {
     return (
         <Field name={"descriptionId"} id={"descriptionId"}>
             {({ field, form }: FieldProps<any, FormikValues>) => (
-                <>
-                    <Label htmlFor={"descriptionId"}>Framework</Label>
+                <div className={"grid grid-cols-3"}>
+                    <Label htmlFor={"descriptionId"} className={"col-span-1"}>Category</Label>
                     <Popover open={open} onOpenChange={setOpen}>
                         <PopoverTrigger asChild>
                             <Button
                                 variant="outline"
                                 role="combobox"
                                 aria-expanded={open}
-                                className="w-[200px] justify-between"
+                                className="w-[200px] justify-between col-span-2"
                             >
                                 {value
                                     ? frameworks.find((framework) => framework.value === value)?.label
@@ -99,7 +99,7 @@ const CategorySelector: FC = () => {
                             </Command>
                         </PopoverContent>
                     </Popover>
-                </>
+                </div>
             )}
         </Field>
     )
