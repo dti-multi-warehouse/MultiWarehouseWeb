@@ -17,7 +17,6 @@ const productSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),
     description: Yup.string().required("Description is required"),
     price: Yup.number().required("Price is required"),
-    stock: Yup.number().required("Stock is required"),
     categoryId: Yup.number().required("Category is required"),
 })
 
