@@ -21,34 +21,13 @@ import {
 import {FC} from "react";
 import { Field, FieldProps, FormikValues} from "formik";
 import {Label} from "@/components/ui/label";
+import useCategories from "@/hooks/useCategories";
 
-const frameworks = [
-    {
-        value: 1,
-        label: "Next.js",
-    },
-    {
-        value: 2,
-        label: "SvelteKit",
-    },
-    {
-        value: 3,
-        label: "Nuxt.js",
-    },
-    {
-        value: 4,
-        label: "Remix",
-    },
-    {
-        value: 5,
-        label: "Astro",
-    },
-]
 
 const CategorySelector: FC = () => {
-    // TODO: fetch all categories
+    const {data, isLoading, error} = useCategories()
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState<number>(0)
+    const [value, setValue] = React.useState<string>("")
 
     return (
         <Field name={"descriptionId"} id={"descriptionId"}>
@@ -64,34 +43,35 @@ const CategorySelector: FC = () => {
                                 className="w-[200px] justify-between col-span-2"
                             >
                                 {value
-                                    ? frameworks.find((framework) => framework.value === value)?.label
+                                    ? data?.find((category) => category.name === value)?.name
                                     : "Select category..."}
                                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-[200px] p-0">
                             <Command>
-                                <CommandInput placeholder="Search framework..." />
+                                <CommandInput placeholder="Search category..." />
                                 <CommandList>
-                                    <CommandEmpty>No framework found.</CommandEmpty>
+                                    <CommandEmpty>No category found.</CommandEmpty>
                                     <CommandGroup>
-                                        {frameworks.map((framework) => (
+                                        {data?.map((category) => (
                                             <CommandItem
-                                                key={framework.value}
-                                                value={framework.value.toString()}
+                                                key={category.id}
+                                                value={category.name}
                                                 onSelect={(currentValue) => {
-                                                    setValue(currentValue === value.toString() ? 0 : parseInt(currentValue, 10));
-                                                    form.setFieldValue("categoryId", parseInt(currentValue, 10));
+                                                    setValue(currentValue);
+                                                    form.setFieldValue("categoryId", category.id);
                                                     setOpen(false)
+                                                    console.log(currentValue)
                                                 }}
                                             >
                                                 <Check
                                                     className={cn(
                                                         "mr-2 h-4 w-4",
-                                                        value === framework.value ? "opacity-100" : "opacity-0"
+                                                        value === category.name ? "opacity-100" : "opacity-0"
                                                     )}
                                                 />
-                                                {framework.label}
+                                                {category.name}
                                             </CommandItem>
                                         ))}
                                     </CommandGroup>
