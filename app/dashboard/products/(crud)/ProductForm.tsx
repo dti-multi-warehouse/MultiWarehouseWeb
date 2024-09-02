@@ -11,10 +11,7 @@ import Image from "next/image";
 import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
 import {BadgeX, ImageUp} from "lucide-react";
-
-interface FileWithPreview extends File {
-    preview: string;
-}
+import {FileWithPreview, ProductData} from "@/app/dashboard/products/types";
 
 const productSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),
@@ -24,7 +21,11 @@ const productSchema = Yup.object().shape({
     categoryId: Yup.number().required("Category is required"),
 })
 
-const ProductForm: FC = () => {
+interface ProductFormProps {
+    handleSubmit: (values: ProductData, images: FileWithPreview[]) => void;
+}
+
+const ProductForm: FC<ProductFormProps> = ({handleSubmit}) => {
     const [images, setImages] = useState<FileWithPreview[]>([]);
 
     const onDrop = useCallback((acceptedImages: File[]) => {
@@ -67,19 +68,10 @@ const ProductForm: FC = () => {
                 name: '',
                 description: '',
                 price: 0,
-                stock: 0,
                 categoryId: 0
             }}
             validationSchema={productSchema}
-            onSubmit={values => {
-                const formData = new FormData()
-                formData.append("product", new Blob([JSON.stringify(values)], {type: 'application/json'}))
-                images.forEach(image => formData.append("images", image))
-                fetch('http://localhost:8080/api/v1/product', {
-                    method: 'POST',
-                    body: formData
-                })
-            }}>
+            onSubmit={(values) => handleSubmit(values, images)}>
             <Form className={"flex flex-col gap-4 p-4 lg:px-64 lg:py-16"}>
                 <CustomInput name={"name"} label={"Product Name"} placeholder={"What's the name of the product?"}/>
                 <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={"How much is it going to be?"}/>
