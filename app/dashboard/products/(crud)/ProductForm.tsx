@@ -12,6 +12,7 @@ import {Label} from "@/components/ui/label";
 import {Button} from "@/components/ui/button";
 import {BadgeX, ImageUp} from "lucide-react";
 import {FileWithPreview, ProductData} from "@/app/dashboard/products/types";
+import {Product} from "@/types/product";
 
 const productSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),
@@ -22,11 +23,13 @@ const productSchema = Yup.object().shape({
 
 interface ProductFormProps {
     handleSubmit: (values: ProductData, images: FileWithPreview[]) => void;
+    productData?: Product
 }
 
-const ProductForm: FC<ProductFormProps> = ({handleSubmit}) => {
+const ProductForm: FC<ProductFormProps> = ({handleSubmit, productData}) => {
     const [images, setImages] = useState<FileWithPreview[]>([]);
 
+    console.log(productData)
     const onDrop = useCallback((acceptedImages: File[]) => {
         setImages(prevImages => [
             ...prevImages,
@@ -64,18 +67,18 @@ const ProductForm: FC<ProductFormProps> = ({handleSubmit}) => {
     return (
         <Formik
             initialValues={{
-                name: '',
-                description: '',
-                price: 0,
+                name: productData?.name || '',
+                description: productData?.description || '',
+                price: productData?.price,
                 categoryId: 0
             }}
             validationSchema={productSchema}
             onSubmit={(values) => handleSubmit(values, images)}>
             <Form className={"flex flex-col gap-4 p-4 lg:px-64 lg:py-16"}>
-                <CustomInput name={"name"} label={"Product Name"} placeholder={"What's the name of the product?"}/>
-                <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={"How much is it going to be?"}/>
+                <CustomInput name={"name"} label={"Product Name"} placeholder={productData?.name || "What's the name of the product?"}/>
+                <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={productData?.price?.toString() || "How much is it going to be?"}/>
                 <CategorySelector/>
-                <DescriptionInput/>
+                <DescriptionInput placeholder={productData?.description || "Tell more about the product"}/>
 
                 {/*Image Uploader*/}
                 <div className={"flex flex-col gap-3 lg:grid lg:grid-cols-3"}>

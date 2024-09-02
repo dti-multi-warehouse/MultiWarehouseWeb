@@ -9,12 +9,11 @@ import useProductDetails from "@/hooks/useProductDetails";
 interface Props {
     params: {
         id: number;
-    }
+    },
 }
 
 const EditProductPage: FC<Props> = ({params}) => {
     const { data, isLoading, error } = useProductDetails(params.id)
-    console.log(data)
 
     const handleSubmit = (values: ProductData, images: FileWithPreview[]) => {
         const formData = new FormData()
@@ -24,7 +23,7 @@ const EditProductPage: FC<Props> = ({params}) => {
     }
     return <main className={"p-8"}>
         <h1 className={"text-3xl font-semibold"}>Edit product</h1>
-        <ProductForm handleSubmit={handleSubmit}/>
+        <ProductForm handleSubmit={handleSubmit} productData={data}/>
     </main>
 }
 

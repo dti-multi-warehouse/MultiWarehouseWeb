@@ -7,6 +7,7 @@ export interface Product {
     price?: number;
     stock?: number;
     category?: string;
+    imageUrls?: string[];
 }
 
 export interface ProductSummary {

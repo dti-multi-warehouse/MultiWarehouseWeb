@@ -2,9 +2,10 @@ import {FC} from "react";
 import {Field, FieldProps, FormikValues} from "formik";
 import {Label} from "@/components/ui/label";
 import {Textarea} from "@/components/ui/textarea";
+import {InputProps} from "@/components/ui/input";
 
 
-const DescriptionInput: FC = () => {
+const DescriptionInput: FC<InputProps> = ({...props}) => {
     return (
         <Field name={"description"} id={"description"}>
             {({ field, form }: FieldProps<any, FormikValues>) => (
@@ -13,7 +14,7 @@ const DescriptionInput: FC = () => {
                     <div className={"col-span-2"}>
                         <Textarea
                             name={"description"}
-                            placeholder={"Tell more about the product"}
+                            placeholder={props.placeholder}
                             onChange={ currentValue => (
                                 form.setFieldValue("description", currentValue.target.value)
                             )}
