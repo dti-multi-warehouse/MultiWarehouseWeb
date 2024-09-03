@@ -1,3 +1,4 @@
+'use client'
 import {FC} from "react";
 import {
     Table,
@@ -9,9 +10,12 @@ import {
 } from "@/components/ui/table"
 import {Pencil, Trash2} from "lucide-react";
 import CategoryDrawerDialog from "@/app/dashboard/categories/components/CategoryDrawerDialog";
-
+import useCategories from "@/hooks/useCategories";
 
 const CategoryTable: FC = () => {
+    const { data, isLoading, error } = useCategories()
+
+    console.log(data)
     return (
         <Table>
             <TableHeader>
@@ -22,20 +26,31 @@ const CategoryTable: FC = () => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                <CategoryRow />
+                {data?.map( category => (
+                    <CategoryRow
+                        key={category.id}
+                        id={category.id}
+                        name={category.name}
+                    />)
+                )}
             </TableBody>
         </Table>
 
     )
 }
 
-const CategoryRow: FC = () => {
+interface CategoryRowProps {
+    id: number,
+    name: string
+}
+
+const CategoryRow: FC<CategoryRowProps> = ({ id, name }) => {
     return (
         <TableRow>
-            <TableCell className="font-medium">1</TableCell>
-            <TableCell>Micin</TableCell>
+            <TableCell className="font-medium">{id}</TableCell>
+            <TableCell>{name}</TableCell>
             <TableCell className="flex gap-4 justify-end">
-                <CategoryDrawerDialog mode={'update'}>
+                <CategoryDrawerDialog mode={'update'} id={id}>
                     <Pencil className={"cursor-pointer"} />
                 </CategoryDrawerDialog>
                 <Trash2 />

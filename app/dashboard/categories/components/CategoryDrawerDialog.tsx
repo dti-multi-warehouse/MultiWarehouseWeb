@@ -24,30 +24,30 @@ import { Label } from "@/components/ui/label"
 import useMediaQuery from "@/hooks/useMediaQuery";
 import {Field, FieldProps, Form, Formik, FormikValues} from "formik";
 import {FC} from "react";
+import axios from "axios";
+import {config} from "@/constants/url";
 
 interface CategoryDrawerDialogProps {
-    children: React.ReactNode;
-    mode: 'create' | 'update'
+    children: React.ReactNode,
+    mode: 'create' | 'update',
+    id?: number
 }
 
-const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode}) => {
+interface CategoryFormProps {
+    className?: string,
+    mode: "create" | "update",
+    id?: number
+}
+
+interface FormValue {
+    category: string
+}
+
+const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id}) => {
     const [open, setOpen] = React.useState(false)
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
-    const variants = {
-        create: {
-            title: 'Create new category',
-            handleSubmit: () => {
-                console.log("Created!")
-            }
-        },
-        update: {
-            title: 'Update category',
-            handleSubmit: () => {
-                console.log("Updated!")
-            }
-        }
-    }
+    const title = mode === "create" ? "Add new category" : "Update category"
 
     if (isDesktop) {
         return (
@@ -57,9 +57,9 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode}) =
                 </DialogTrigger>
                 <DialogContent className="sm:max-w-[425px]">
                     <DialogHeader>
-                        <DialogTitle>{variants[mode].title}</DialogTitle>
+                        <DialogTitle>{title}</DialogTitle>
                     </DialogHeader>
-                    <CategoryForm handleSubmit={variants[mode].handleSubmit} />
+                    <CategoryForm mode={mode} id={id} />
                 </DialogContent>
             </Dialog>
         )
@@ -72,9 +72,9 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode}) =
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className="text-left">
-                    <DrawerTitle>{variants[mode].title}</DrawerTitle>
+                    <DrawerTitle>{title}</DrawerTitle>
                 </DrawerHeader>
-                <CategoryForm className="px-4" handleSubmit={variants[mode].handleSubmit} />
+                <CategoryForm className="px-4" mode={mode} id={id} />
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
                         <Button variant="outline">Cancel</Button>
@@ -87,26 +87,30 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode}) =
 
 export default CategoryDrawerDialog
 
-interface CategoryFormProps {
-    className?: string
-    handleSubmit: () => void
-}
+const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id }) => {
 
-const CategoryForm: FC<CategoryFormProps> = ({ className, handleSubmit }) => {
+
     return (
         <Formik
-            initialValues={{ category: '' }}
-            onSubmit={ (values) => handleSubmit()}
+            initialValues={{ name: '' }}
+            onSubmit={ (values) => {
+                const url = config.BASE_URL + config.endpoints.category
+                if (mode === "create") {
+                    axios.post(url, values)
+                } else {
+                    axios.put(url + `/${id}`, values)
+                }
+            }}
         >
 
             <Form className={cn("grid items-start gap-4", className)}>
-                <Field name={"category"} className="grid gap-2">
+                <Field name={"name"} className="grid gap-2">
                     {({ field, form}: FieldProps<any, FormikValues>) => (
                         <>
-                            <Label htmlFor={"category"} className={"lg:col-span-1"}>Category Name</Label>
+                            <Label htmlFor={"name"} className={"lg:col-span-1"}>Category Name</Label>
                             <Input {...field} />
-                            {form.touched["category"] && form.errors["category"] && (
-                                <div className="text-red-500 text-sm mt-1">{form.errors["category"]?.toString()}</div>
+                            {form.touched["name"] && form.errors["name"] && (
+                                <div className="text-red-500 text-sm mt-1">{form.errors["name"]?.toString()}</div>
                             )}
                         </>
                     )}
