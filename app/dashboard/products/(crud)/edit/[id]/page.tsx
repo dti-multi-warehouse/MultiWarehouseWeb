@@ -1,7 +1,6 @@
 'use client'
 
 import {FC} from "react";
-import ProductForm from "@/app/dashboard/products/(crud)/ProductForm";
 import {FileWithPreview, ProductData} from "@/app/dashboard/products/types";
 import axios from "axios";
 import useProductDetails from "@/hooks/useProductDetails";
@@ -23,7 +22,6 @@ const EditProductPage: FC<Props> = ({params}) => {
     }
     return <main className={"p-8"}>
         <h1 className={"text-3xl font-semibold"}>Edit product</h1>
-        <ProductForm handleSubmit={handleSubmit} productData={data}/>
     </main>
 }
 
