@@ -11,6 +11,8 @@ import {
 import {Pencil, Trash2} from "lucide-react";
 import CategoryDrawerDialog from "@/app/dashboard/categories/components/CategoryDrawerDialog";
 import useCategories from "@/hooks/useCategories";
+import axios from "axios";
+import {config} from "@/constants/url";
 
 const CategoryTable: FC = () => {
     const { data, isLoading, error } = useCategories()
@@ -45,6 +47,9 @@ interface CategoryRowProps {
 }
 
 const CategoryRow: FC<CategoryRowProps> = ({ id, name }) => {
+    const handleDelete = () => {
+        axios.delete(config.BASE_URL + config.endpoints.category + `/${id}`)
+    }
     return (
         <TableRow>
             <TableCell className="font-medium">{id}</TableCell>
@@ -53,7 +58,7 @@ const CategoryRow: FC<CategoryRowProps> = ({ id, name }) => {
                 <CategoryDrawerDialog mode={'update'} id={id}>
                     <Pencil className={"cursor-pointer"} />
                 </CategoryDrawerDialog>
-                <Trash2 />
+                <Trash2 onClick={handleDelete}/>
             </TableCell>
         </TableRow>
     )

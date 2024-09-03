@@ -36,7 +36,7 @@ interface CategoryDrawerDialogProps {
 interface CategoryFormProps {
     className?: string,
     mode: "create" | "update",
-    id?: number
+    id?: number,
 }
 
 interface FormValue {
@@ -89,17 +89,18 @@ export default CategoryDrawerDialog
 
 const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id }) => {
 
-
     return (
         <Formik
             initialValues={{ name: '' }}
             onSubmit={ (values) => {
                 const url = config.BASE_URL + config.endpoints.category
-                if (mode === "create") {
-                    axios.post(url, values)
-                } else {
-                    axios.put(url + `/${id}`, values)
-                }
+                const request = mode === "create"
+                    ? axios.post(url, values)
+                    : axios.put(url + `/${id}`, values)
+                request.then(response => {
+                //     Handle success, close the drawer
+                }).catch(error => {
+                })
             }}
         >
 
