@@ -3,8 +3,9 @@ export interface FileWithPreview extends File {
 }
 
 export interface ProductData {
-    name: string,
-    description: string,
-    price: number,
-    categoryId: number
+    name?: string,
+    description?: string,
+    price?: number,
+    categoryId?: number,
+    prevImages?: string[]
 }
