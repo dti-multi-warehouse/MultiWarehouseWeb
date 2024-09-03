@@ -62,7 +62,7 @@ const EditProductPage: FC<Props> = ({params}) => {
 
     useEffect(() => {
         if (data && data.imageUrls) {
-            setPrevImages(data.imageUrls.reverse());
+            setPrevImages(data.imageUrls);
         }
     }, [data]);
 
