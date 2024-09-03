@@ -18,16 +18,25 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import { Field, FieldProps, FormikValues} from "formik";
 import {Label} from "@/components/ui/label";
 import useCategories from "@/hooks/useCategories";
 
+interface CategorySelectorProps {
+    initialValue?: string
+}
 
-const CategorySelector: FC = () => {
+const CategorySelector: FC<CategorySelectorProps> = ({initialValue}) => {
     const {data, isLoading, error} = useCategories()
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState<string>("")
+
+    useEffect(() => {
+        if (initialValue !== undefined) {
+            setValue(initialValue)
+        }
+    }, [initialValue])
 
     return (
         <Field name={"descriptionId"} id={"descriptionId"}>
@@ -62,7 +71,6 @@ const CategorySelector: FC = () => {
                                                     setValue(currentValue);
                                                     form.setFieldValue("categoryId", category.id);
                                                     setOpen(false)
-                                                    console.log(currentValue)
                                                 }}
                                             >
                                                 <Check

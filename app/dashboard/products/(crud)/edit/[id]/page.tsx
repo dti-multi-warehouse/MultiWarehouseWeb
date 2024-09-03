@@ -102,7 +102,7 @@ const EditProductPage: FC<Props> = ({params}) => {
             <Form className={"flex flex-col gap-4 p-4 lg:px-64 lg:py-16"}>
                 <CustomInput name={"name"} label={"Product Name"} placeholder={data?.name || "What's the name of the product?"}/>
                 <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={data?.price?.toString() || "How much is it going to be?"}/>
-                <CategorySelector/>
+                <CategorySelector initialValue={data?.category}/>
                 <DescriptionInput placeholder={data?.description || "Tell more about the product"}/>
 
                 {/*Image Uploader*/}
