@@ -22,10 +22,10 @@ interface Props {
 }
 
 const productSchema = Yup.object().shape({
-    name: Yup.string().required("Product name is required"),
-    description: Yup.string().required("Description is required"),
-    price: Yup.number().required("Price is required"),
-    categoryId: Yup.number().required("Category is required"),
+    name: Yup.string(),
+    description: Yup.string(),
+    price: Yup.number(),
+    categoryId: Yup.number(),
 })
 
 const EditProductPage: FC<Props> = ({params}) => {
@@ -95,15 +95,15 @@ const EditProductPage: FC<Props> = ({params}) => {
                 name: data?.name,
                 description: data?.description,
                 price: data?.price,
-                categoryId: 0,
+                categoryId: undefined,
             }}
             validationSchema={productSchema}
             onSubmit={(values) => handleSubmit(values, images)}>
             <Form className={"flex flex-col gap-4 p-4 lg:px-64 lg:py-16"}>
-                <CustomInput name={"name"} label={"Product Name"} placeholder={"What's the name of the product?"}/>
-                <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={"How much is it going to be?"}/>
+                <CustomInput name={"name"} label={"Product Name"} placeholder={data?.name || "What's the name of the product?"}/>
+                <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={data?.price?.toString() || "How much is it going to be?"}/>
                 <CategorySelector/>
-                <DescriptionInput placeholder={"Tell more about the product"}/>
+                <DescriptionInput placeholder={data?.description || "Tell more about the product"}/>
 
                 {/*Image Uploader*/}
                 <div className={"flex flex-col gap-3 lg:grid lg:grid-cols-3"}>
@@ -157,7 +157,7 @@ const EditProductPage: FC<Props> = ({params}) => {
                         </div>
                     </div>
                 </div>
-                <Button type={"submit"} className={"w-48 self-center mt-20"}>Add product</Button>
+                <Button type={"submit"} className={"w-48 self-center mt-20"}>Edit product</Button>
             </Form>
         </Formik>
     </main>
