@@ -24,23 +24,15 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <html lang="en">
-    //   <body className={montserrat.className}>
-    //     
-    //       {children}  
-    //    
-    //   </body>
-    // </html>
     <ClerkProvider>
     <html lang="en">
       <body className={montserrat.className}>
-        <SessionProviderWrapper>
-          {children}
-        </SessionProviderWrapper>
-      </body>
-      <ReactQueryProvider>
-        <body className={montserrat.className}>{children}</body>
-      </ReactQueryProvider>
+        <ReactQueryProvider>
+          <SessionProviderWrapper>
+            {children}
+          </SessionProviderWrapper>
+        </ReactQueryProvider>
+    </body>
     </html>
   </ClerkProvider>
   );

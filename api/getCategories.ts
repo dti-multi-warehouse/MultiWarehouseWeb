@@ -1,12 +1,12 @@
-import {Product} from "@/types/product";
 import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
+import {Category} from "@/types/category";
 
 
-const getData = async (id: number): Promise<Product> => {
+const getData = async (): Promise<Category[]> => {
     try {
         const response: AxiosResponse = await axios.get(
-            config.BASE_URL + config.API_VER + config.endpoints.product + `/${id}`,
+            config.BASE_URL + config.API_VER + config.endpoints.category,
             {
                 headers: {
                     accept: 'application/json',
@@ -21,6 +21,6 @@ const getData = async (id: number): Promise<Product> => {
     }
 }
 
-export const getProductDetails = async (id: number): Promise<Product> => {
-    return await getData(id);
+export const getCategories = async (): Promise<Category[]> => {
+    return await getData();
 }
