@@ -93,7 +93,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id }) => {
         <Formik
             initialValues={{ name: '' }}
             onSubmit={ (values) => {
-                const url = config.BASE_URL + config.endpoints.category
+                const url = config.BASE_URL + config.API_VER + config.endpoints.category
                 const request = mode === "create"
                     ? axios.post(url, values)
                     : axios.put(url + `/${id}`, values)

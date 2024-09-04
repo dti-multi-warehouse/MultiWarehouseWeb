@@ -13,6 +13,7 @@ import {Label} from "@/components/ui/label";
 import Image from "next/image";
 import {BadgeX, ImageUp} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {config} from "@/constants/url";
 
 const productSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),
@@ -60,7 +61,7 @@ const AddProductPage: FC = () => {
         const formData = new FormData()
         formData.append("product", new Blob([JSON.stringify(values)], {type: 'application/json'}))
         images.forEach(image => formData.append("images", image))
-        axios.post('http://localhost:8080/api/v1/product', formData)
+        axios.post(config.BASE_URL + config.API_VER + config.endpoints.product, formData)
     }
 
     return <main className={"p-8"}>

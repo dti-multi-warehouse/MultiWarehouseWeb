@@ -6,7 +6,7 @@ import {config} from "@/constants/url";
 const getData = async (id: number): Promise<Product> => {
     try {
         const response: AxiosResponse = await axios.get(
-            config.BASE_URL + config.endpoints.product + `/${id}`,
+            config.BASE_URL + config.API_VER + config.endpoints.product + `/${id}`,
             {
                 headers: {
                     accept: 'application/json',

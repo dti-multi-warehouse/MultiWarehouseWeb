@@ -14,6 +14,7 @@ import {Label} from "@/components/ui/label";
 import Image from "next/image";
 import {BadgeX, ImageUp} from "lucide-react";
 import {Button} from "@/components/ui/button";
+import {config} from "@/constants/url";
 
 interface Props {
     params: {
@@ -86,7 +87,7 @@ const EditProductPage: FC<Props> = ({params}) => {
         if (images.length > 0) {
             images.forEach(image => formData.append("images", image))
         }
-        axios.put(`http://localhost:8080/api/v1/product/${params.id}`, formData)
+        axios.put(config.BASE_URL + config.API_VER + config.endpoints.product + `/${params.id}`, formData)
     }
     return <main className={"p-8"}>
         <h1 className={"text-3xl font-semibold"}>Edit product</h1>

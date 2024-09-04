@@ -6,7 +6,7 @@ import {Category} from "@/types/category";
 const getData = async (): Promise<Category[]> => {
     try {
         const response: AxiosResponse = await axios.get(
-            config.BASE_URL + config.endpoints.category,
+            config.BASE_URL + config.API_VER + config.endpoints.category,
             {
                 headers: {
                     accept: 'application/json',

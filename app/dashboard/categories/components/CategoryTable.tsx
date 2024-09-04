@@ -48,7 +48,7 @@ interface CategoryRowProps {
 
 const CategoryRow: FC<CategoryRowProps> = ({ id, name }) => {
     const handleDelete = () => {
-        axios.delete(config.BASE_URL + config.endpoints.category + `/${id}`)
+        axios.delete(config.BASE_URL + config.API_VER + config.endpoints.category + `/${id}`)
     }
     return (
         <TableRow>

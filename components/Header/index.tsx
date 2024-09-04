@@ -1,17 +1,41 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { BiUser, BiSearch } from "react-icons/bi";
 import { links } from "@/data/data";
 import { ResponsiveHeader } from "../ResponsiveHeader";
+import { useSession, signOut } from "next-auth/react";
+import { useUser as useClerkUser } from "@clerk/nextjs";
+import AlertDialog from "../AlertDialog";
+import CartHeader from "./CartHeader";
 
 const Header: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState<Boolean>(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const { data: session } = useSession();
+  const { isSignedIn: isClerkSignedIn } = useClerkUser(); 
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
   };
+
+  const handleLogout = () => {
+    setDialogOpen(true);
+  };
+
+  const confirmLogout = () => {
+    signOut({ redirect: false });
+    if (isClerkSignedIn) {
+      window.Clerk?.signOut();
+    }
+  };
+
+  const handleCloseDialog = () => {
+    setDialogOpen(false);
+  };
+
+  const isLoggedIn = session || isClerkSignedIn;
 
   return (
     <>
@@ -30,9 +54,14 @@ const Header: React.FC = () => {
             </Link>
           ))}
         </div>
-        <div className="flex items-center gap-3">
-        <div className="relative flex items-center">
-            <button onClick={toggleSearch} className={`focus:outline-none transition-all duration-300 ease-in-out transform ${isSearchOpen ? "translate-x-[20%] opacity-100" : "translate-x-0 opacity-100"}`}>
+        <div className="flex items-center gap-5">
+          <div className="relative flex items-center">
+            <button
+              onClick={toggleSearch}
+              className={`focus:outline-none transition-all duration-300 ease-in-out transform ${
+                isSearchOpen ? "translate-x-[20%] opacity-100" : "translate-x-0 opacity-100"
+              }`}
+            >
               <BiSearch size={20} className="text-gray-500" />
             </button>
             <input
@@ -46,14 +75,32 @@ const Header: React.FC = () => {
               }}
             />
           </div>
-          <p className="md:flex items-center gap-3 text-blue-500 hidden">
+          <CartHeader />
+          <div className="md:flex items-center gap-2 hidden">
             <BiUser />
-            <Link href="/sign-in">Login</Link> / <Link href="/sign-up">Register</Link>
-          </p>
-            <ResponsiveHeader />
+            {isLoggedIn ? (
+              <button onClick={handleLogout} className="text-blue-500">
+                Logout
+              </button>
+            ) : (
+              <>
+                <Link href="/sign-in" className="hover:text-red-500">Login</Link> / <Link href="/sign-up" className="hover:text-red-500">Register</Link>
+              </>
+            )}
+          </div>
+          <ResponsiveHeader />
         </div>
       </div>
-      
+
+      <AlertDialog 
+        open={dialogOpen}
+        onOpenChange={handleCloseDialog}
+        title="Are you sure you want to logout?"
+        description="You will be logged out of your session."
+        actionLabel="Logout"
+        cancelLabel="Cancel"
+        onAction={confirmLogout}
+      />
     </>
   );
 };
