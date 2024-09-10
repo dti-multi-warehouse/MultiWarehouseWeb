@@ -3,39 +3,18 @@
 import React, { useEffect, useState } from "react";
 import { useSignUp, useUser, useClerk } from "@clerk/nextjs";
 import { FaGoogle } from "react-icons/fa";
-import { saveEmailToBackend } from '@/hooks/useUser';
 
 const SocialButtonRegister: React.FC = () => {
   const { signUp, isLoaded } = useSignUp();
-  const { user, isLoaded: isUserLoaded } = useUser();
-  const { client } = useClerk();
-  const [emailSent, setEmailSent] = useState(false);
-
-  useEffect(() => {
-    if (isUserLoaded && user && !emailSent) {
-      const email = user.primaryEmailAddress?.emailAddress;
-
-      if (email) {
-        saveEmailToBackend(email)
-          .then(() => {
-            console.log('Email successfully saved to the backend.');
-            setEmailSent(true);
-          })
-          .catch((error) => {
-            console.error('Failed to save email to backend:', error);
-          });
-      }
-    }
-  }, [isUserLoaded, user, emailSent]);
-
+  
   const handleSocialSignUp = async (strategy: 'oauth_google') => {
     if (!isLoaded) return;
 
     try {
       await signUp.authenticateWithRedirect({
         strategy,
-        redirectUrl: `${window.location.origin}/after-sign-up`,
-        redirectUrlComplete: `${window.location.origin}/after-sign-up`,
+        redirectUrl: `/after-sign-up`,
+        redirectUrlComplete: `/after-sign-up`,
       });
     } catch (err) {
       console.error("Error during social sign-up:", err);

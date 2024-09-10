@@ -55,7 +55,7 @@ const SignInForm: React.FC = () => {
                 setSubmitting(false);
               },
               onError: (error: any) => {
-                const errorMessage = error.message || "Failed to log in. Please check your credentials and try again.";
+                const errorMessage = "Failed to log in. Please check your credentials, input the correct email or password and try again.";
                 setDialogMessage(errorMessage);
                 setDialogOpen(true);
                 setSubmitting(false);
@@ -131,6 +131,7 @@ const SignInForm: React.FC = () => {
         open={dialogOpen}
         onOpenChange={handleDialogClose}
         title={dialogMessage}
+        cancelVisibility='hidden'
       />
     </>
   );

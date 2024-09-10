@@ -1,5 +1,4 @@
-// src/hooks/useUserHooks.ts
-import { useMutation, useQueryClient, UseMutationResult } from 'react-query';
+import { useMutation, useQueryClient, UseMutationResult, useQuery } from 'react-query';
 import apiClient from '@/lib/apiClient';
 import { getSession, signIn, signOut, useSession } from 'next-auth/react';
 import {
@@ -13,6 +12,7 @@ import {
   RegisterUserResponse,
   ResetPasswordRequest,
   ResetPasswordResponse,
+  UserProfileDTO,
 } from '@/types/datatypes';
 
 export const useRegisterUser = (): UseMutationResult<
@@ -23,7 +23,7 @@ export const useRegisterUser = (): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation(
     (data: RegisterUserRequest) =>
-      apiClient.post<RegisterUserResponse>('/api/v1/register', data).then((response) => response.data),
+      apiClient.post<RegisterUserResponse>('/api/v1/auth/register', data).then((response) => response.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
@@ -43,7 +43,7 @@ export const useConfirmRegistration = (): UseMutationResult<
   return useMutation(
     (data: ConfirmRegistrationRequest) => {
       return apiClient
-        .post<ConfirmRegistrationResponse>('/api/v1/register/confirm', data)
+        .post<ConfirmRegistrationResponse>('/api/v1/auth/register/confirm', data)
         .then((response) => response.data)
         .catch((error) => {
           console.error('API Error:', error.response?.status, error.response?.data);
@@ -106,7 +106,7 @@ export const useLoginUser = (): UseMutationResult<LoginResponse, unknown, LoginR
 export const useLogoutUser = (): UseMutationResult<void, unknown, LogoutRequest> => {
   return useMutation(
     (data: LogoutRequest) =>
-      apiClient.post('/api/v1/logout', { token: data.token }).then((response) => {
+      apiClient.post('/api/v1/auth/logout', { token: data.token }).then((response) => {
         signOut({ redirect: false });
         return response.data;
       }),
@@ -122,7 +122,68 @@ export const useLogoutUser = (): UseMutationResult<void, unknown, LogoutRequest>
 };
 
 export const saveEmailToBackend = async (email: string) => {
-  return await apiClient.post('/api/v1/save-email', { email });
+  return await apiClient.post('/api/v1/auth/save-email', { email });
+};
+
+export const checkEmailExists = async (email: string) => {
+  const response = await apiClient.post<{ exists: boolean }>('/api/v1/auth/check-email', { email });
+  return response.data.exists;
+};
+
+
+export const useGetProfile = () => {
+  const { data: session } = useSession();
+
+  const { data, error, isLoading, refetch } = useQuery<UserProfileDTO>(
+    ["userProfile", session?.user?.id],
+    async () => {
+      if (!session?.user?.id) throw new Error("User is not logged in");
+
+      const response = await apiClient.get<UserProfileDTO>("/api/v1/profile", {
+        params: { userId: session.user.id },
+      });
+
+      return response.data;
+    },
+    {
+      enabled: !!session?.user?.id,
+    }
+  );
+
+  return {
+    profile: data,
+    isLoading,
+    error,
+    refetch,
+  };
+};
+
+export const useUpdateProfile = (): UseMutationResult<void, unknown, FormData> => {
+  const queryClient = useQueryClient();
+  const { data: session } = useSession();
+
+  return useMutation(
+    async (data: FormData) => {
+      if (!session?.accessToken) {
+        throw new Error("No access token");
+      }
+
+      await apiClient.put('/api/v1/updateProfile', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${session.accessToken}`,
+        },
+      });
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('userProfile');
+      },
+      onError: (error) => {
+        console.error('Profile update failed:', error);
+      },
+    }
+  );
 };
 
 export const useRequestPasswordReset = (): UseMutationResult<
@@ -177,6 +238,29 @@ export const useConfirmPasswordReset = (): UseMutationResult<
     }
   )
 }
+
+export const useResendVerificationEmail = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async ({ email }: { email: string }) => {
+      const response = await apiClient.post(`/api/v1/auth/resend-verification-email?email=${encodeURIComponent(email)}`);
+      if (response.status !== 200) {
+        throw new Error("Failed to resend verification email");
+      }
+      return response.data;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("userProfile");
+      },
+      onError: (error) => {
+        console.error("Failed to resend verification email:", error);
+      },
+    }
+  );
+};
+
 
 export const useUser = () => {
   const { data: session, status } = useSession();
