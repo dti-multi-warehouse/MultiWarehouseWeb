@@ -21,21 +21,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    // <html lang="en">
-    //   <body className={montserrat.className}>
-    //
-    //       {children}
-    //
-    //   </body>
-    // </html>
     <ClerkProvider>
-      <html lang="en">
-        <body className={montserrat.className}>
+    <html lang="en">
+      <body className={montserrat.className}>
+        <ReactQueryProvider>
           <SessionProviderWrapper>
-            <ReactQueryProvider>{children}</ReactQueryProvider>
+            {children}
           </SessionProviderWrapper>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ReactQueryProvider>
+    </body>
+    </html>
+  </ClerkProvider>
   );
 }

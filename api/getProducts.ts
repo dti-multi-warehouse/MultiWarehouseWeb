@@ -5,7 +5,7 @@ import {ReadonlyURLSearchParams} from "next/navigation";
 
 const getData = async (params: ReadonlyURLSearchParams) : Promise<ProductSearchResult> => {
     // const [_key, params] = queryKey
-    const url = new URL(config.endpoints.product, config.BASE_URL)
+    const url = new URL(config.endpoints.product, config.BASE_URL + config.API_VER)
     // url.searchParams.set("query", params.query || "");
     // url.searchParams.set("page", String(params.page || 1));
     // url.searchParams.set("perPage", String(params.perPage || 20));
