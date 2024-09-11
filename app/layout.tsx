@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
-import { ClerkProvider} from '@clerk/nextjs'
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import SessionProviderWrapper from "./SessionProviderWrapper";
 import ReactQueryProvider from "@/utils/providers/ReactQueryProvider";
 
-
-const montserrat = Montserrat({ 
+const montserrat = Montserrat({
   subsets: ["latin"],
-  weight: [
-    "300","400","500","600","700","800","900"
-  ]
+  weight: ["300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {

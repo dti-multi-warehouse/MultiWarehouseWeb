@@ -16,6 +16,7 @@ interface AlertDialogProps {
   actionLabel?: string;
   onAction?: () => void;
   cancelLabel?: string;
+  cancelVisibility?: string;
 }
 
 const AlertDialog: React.FC<AlertDialogProps> = ({
@@ -26,6 +27,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
   actionLabel = "OK",
   cancelLabel = "Cancel",
   onAction,
+  cancelVisibility
 }) => {
 
   const handleAction = () => {
@@ -43,7 +45,7 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
             <AlertDialogTitle>{title}</AlertDialogTitle>
             <AlertDialogDescription>{description}</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogCancel onClick={() => onOpenChange(false)}>{cancelLabel}</AlertDialogCancel>
+          <AlertDialogCancel onClick={() => onOpenChange(false)} className={` ${cancelVisibility}`}>{cancelLabel}</AlertDialogCancel>
           <AlertDialogAction onClick={handleAction} className="bg-red-500">
             {actionLabel}
           </AlertDialogAction>

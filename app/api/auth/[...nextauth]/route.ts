@@ -1,40 +1,77 @@
-import NextAuth, { NextAuthOptions } from 'next-auth';
-import CredentialsProvider from 'next-auth/providers/credentials';
-import apiClient from '@/lib/apiClient';
-import { LoginResponse } from '@/types/datatypes';
+import NextAuth, { NextAuthOptions } from "next-auth";
+import CredentialsProvider from "next-auth/providers/credentials";
+import GoogleProvider from "next-auth/providers/google";
+import apiClient from "@/lib/apiClient";
+import { LoginResponse } from "@/types/datatypes";
 
 export const authOptions: NextAuthOptions = {
   providers: [
     CredentialsProvider({
-      name: 'Credentials',
+      name: "Credentials",
       credentials: {
         email: { label: "Email", type: "text" },
         password: { label: "Password", type: "password" },
+        token: { label: "Token", type: "password" },
+        social: { label: "Social", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email || !credentials?.password) {
+        if (!credentials?.email) {
           return null;
         }
 
-        try {
-          const response = await apiClient.post<LoginResponse>('/api/v1/login', {
+        if (credentials.social) {
+          try {
+            const response = await apiClient.post<LoginResponse>("/api/v1/auth/social-login", {
+              email: credentials.email,
+              token: credentials.token,
+            });
+
+            if (response.data && response.data.accessToken) {
+              return {
+                id: response.data.userId, 
+                token: response.data.accessToken,
+                email: response.data.email,
+                social: true,
+              };
+            }
+          } catch (error) {
+            console.error("Error during social login:", error);
+            return null;
+          }
+        }
+
+        else if (credentials.password) {
+          const response = await apiClient.post<LoginResponse>("/api/v1/auth/login", {
             email: credentials.email,
             password: credentials.password,
           });
 
           if (response.data && response.data.accessToken) {
             return {
-              id: response.data.userId,
+              id: response.data.userId, 
               token: response.data.accessToken,
               email: response.data.email,
               role: response.data.role,
+              social: false,
             };
           }
-
-          return null;
-        } catch (error: any) {
-          throw new Error(error.response?.data || error.message);
         }
+
+        return null;
+      },
+    }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID!,
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+      async profile(profile, tokens) {
+        return {
+          id: profile.sub,
+          email: profile.email,
+          name: profile.name,
+          role: "user",
+          social: true,
+          token: tokens.access_token || "",
+        };
       },
     }),
   ],
@@ -47,23 +84,26 @@ export const authOptions: NextAuthOptions = {
         token.accessToken = user.token;
         token.id = user.id;
         token.email = user.email;
-        token.role = user.role;
+        token.social = user.social;
       }
       return token;
     },
+
     async session({ session, token }) {
       session.accessToken = token.accessToken;
+
       session.user = {
-        id: token.id,
+        id: token.id, 
         email: token.email,
-        name: token.name,
         role: token.role,
+        social: token.social,
       };
+
       return session;
     },
   },
   pages: {
-    signIn: '/sign-in',
+    signIn: "/sign-in",
   },
 };
 

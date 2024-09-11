@@ -39,7 +39,7 @@ const SignUpForm: React.FC = () => {
               }
               setDialogOpen(true);
             },
-            onError: () => alert("Failed to send verification email"),
+            onError: () => setDialogMessage("Failed to send verification email, you might already registered with this email."),
           });
           setSubmitting(false);
         }}
@@ -81,6 +81,7 @@ const SignUpForm: React.FC = () => {
         onOpenChange={setDialogOpen}
         title={dialogMessage}
         onAction={handleDialogClose}
+        cancelVisibility='hidden'
       />
     </>
   );

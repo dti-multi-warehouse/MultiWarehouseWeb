@@ -1,3 +1,26 @@
+export interface productCards{
+    image: string;
+    name: string;
+    price: number;
+    stock: number;
+}
+
+export interface productCategories{
+    name: string;
+    icon: string;
+    content: productCards[];
+}
+
+export interface UserProfileDTO {
+    id: number;
+    username: string;
+    email: string;
+    social: boolean;
+    verified: boolean;
+    avatar: string;
+    role: string;
+  }
+
 export interface LoginRequest {
     email: string;
     password: string;

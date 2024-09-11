@@ -1,5 +1,5 @@
-import NextAuth, { DefaultSession, DefaultUser } from "next-auth"
-import { JWT as NextAuthJWT } from "next-auth/jwt"
+import NextAuth, { DefaultSession, DefaultUser } from "next-auth";
+import { JWT as NextAuthJWT } from "next-auth/jwt";
 
 declare module "next-auth" {
   interface Session {
@@ -7,14 +7,15 @@ declare module "next-auth" {
     user?: {
       id?: string;
       role?: string;
-    } & DefaultSession["user"]
-    isSocialUser: boolean;
+      social?: boolean;
+    } & DefaultSession["user"];
   }
 
   interface User extends DefaultUser {
     token: string;
     id?: string;
     role?: string;
+    social?: boolean;
   }
 }
 
@@ -23,5 +24,6 @@ declare module "next-auth/jwt" {
     accessToken?: string;
     id?: string;
     role?: string;
+    social?: boolean;
   }
 }
