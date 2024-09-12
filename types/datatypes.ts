@@ -1,5 +1,5 @@
 export interface productCards{
-    image: string;
+    thumbnail: string;
     name: string;
     price: number;
     stock: number;

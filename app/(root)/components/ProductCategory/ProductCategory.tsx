@@ -10,7 +10,7 @@ import { MdOutlinePets } from "react-icons/md";
 import { GiShop } from "react-icons/gi";
 import { GiInnerSelf } from "react-icons/gi";
 import { GiMeat } from "react-icons/gi";
-import ProductList from "./ProductList";
+import ProductCard from "../../../../components/ProductCard";
 
 const iconMap: { [key: string]: JSX.Element } = {
   BiDrink: <BiDrink />,
@@ -41,7 +41,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({ categoriesToShow }) =
             </div>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
               {item.content.slice(0, 6).map((product, productIndex) => (
-                <ProductList key={productIndex} {...product} />
+                  <ProductCard key={productIndex} {...product} />
               ))}
             </div>
           </div>

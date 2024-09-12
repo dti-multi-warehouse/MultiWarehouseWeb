@@ -17,6 +17,7 @@ export interface ProductSummary {
     price: number;
     stock: number;
     categoryId: number;
+    thumbnail: string;
 }
 
 export interface hit {
