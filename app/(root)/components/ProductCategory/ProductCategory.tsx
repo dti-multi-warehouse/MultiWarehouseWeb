@@ -31,7 +31,6 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({ categoriesToShow }) =
   const params = useSearchParams();
   const {data, isLoading, error} = useFeaturedProducts()
 
-  console.log(data?.featuredProducts)
   return (
     <div className="flex flex-col gap-[60px] h-full">
       {/*{productCategory*/}
