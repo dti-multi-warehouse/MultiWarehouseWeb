@@ -42,7 +42,7 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock }) => {
       <div className="flex flex-col gap-2 p-5 h-full justify-between">
         <h2 className="font-medium line-clamp-2">{name}</h2>
         <p className="font-semibold text-gray-500">Stok dari toko</p>
-        <p className="font-bold text-red-600">Rp {price}</p>
+        <p className="font-bold text-red-600">Rp {price.toLocaleString()}</p>
         <Buttons 
           className={`w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
             stock === 0 || !isAuthenticated || !isVerified ? "!bg-gray-300 !text-gray-800" : "!bg-red-600"
