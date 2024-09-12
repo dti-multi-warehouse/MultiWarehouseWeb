@@ -11,6 +11,19 @@ export interface productCategories{
     content: productCards[];
 }
 
+export interface FeaturedProductsDTO {
+    featuredProducts: FeaturedProducts[];
+}
+
+interface FeaturedProducts {
+    group_key: string;
+    hits: Document[];
+}
+
+interface Document {
+    document: productCards;
+}
+
 export interface UserProfileDTO {
     id: number;
     username: string;
