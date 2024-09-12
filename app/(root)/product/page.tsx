@@ -8,7 +8,6 @@ const ProductPage = () => {
     const params = useSearchParams()
     const { data, isLoading, error } = useProducts(params)
 
-    console.log(data)
     return <main>
         <ProductRow isRow={false} hits={data?.hits} />
     </main>
