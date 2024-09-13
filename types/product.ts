@@ -1,4 +1,10 @@
-
+export interface DashboardProducts {
+    id: number;
+    name: string;
+    price: number;
+    category: string;
+    thumbnail: string;
+}
 
 export interface Product {
     id?: number;
