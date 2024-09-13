@@ -83,3 +83,11 @@ export interface ConfirmResetPasswordRequest {
     token: string;
     newPassword: string;
 }
+
+export interface Stock {
+    id: number;
+    warehouseId: number;
+    thumbnail: string;
+    name: string;
+    stock: number
+}

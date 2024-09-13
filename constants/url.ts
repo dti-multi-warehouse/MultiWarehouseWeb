@@ -4,5 +4,6 @@ export const config = {
     endpoints: {
         product: 'product',
         category: 'category',
+        stock: 'stock'
     },
 }
