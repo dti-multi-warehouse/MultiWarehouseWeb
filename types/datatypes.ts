@@ -5,6 +5,21 @@ export interface productCards{
     stock: number;
 }
 
+export interface userAddress {
+    id: number;
+    name: string;
+    phoneNumber: string;
+    label: string;
+    address: {
+      street: string;
+      city: string;
+      province: string;
+      latitude: number;
+      longitude: number;
+    };
+    isPrimary: boolean;
+}  
+
 export interface productCategories{
     name: string;
     icon: string;

@@ -10,24 +10,56 @@ import * as Yup from "yup";
 import { Formik, Form, Field } from "formik";
 import Buttons from "@/components/Buttons";
 import axios from "axios";
-import { useState, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useCreateUserAddress } from "@/hooks/useAddress";
+import { useGetUserAddressById, useUpdateUserAddress } from "@/hooks/useAddress";
 import { userAddress } from "@/types/datatypes";
 
-interface AddAddressProps {
+interface EditAddressProps {
   onClose: () => void;
+  addressId: number;
 }
 
-const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
+const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
   const [coordinates, setCoordinates] = useState({
     latitude: -6.2,
     longitude: 106.816666,
   });
   const [isLoading, setIsLoading] = useState(false);
   const mapRef = useRef<any>(null);
-  const { mutate: createAddress } = useCreateUserAddress();
+
+  const { address: addressData, isLoading: addressLoading } = useGetUserAddressById(addressId);
+  const { mutate: updateAddress } = useUpdateUserAddress();
+
+  const [initialValues, setInitialValues] = useState({
+    name: "",
+    phoneNumber: "",
+    label: "",
+    street: "",
+    city: "",
+    province: "",
+    isPrimary: false,
+  });
+
+  useEffect(() => {
+    if (addressData) {
+      setInitialValues({
+        name: addressData.name || "",
+        phoneNumber: addressData.phoneNumber || "",
+        label: addressData.label || "",
+        street: addressData.address?.street || "",
+        city: addressData.address?.city || "",
+        province: addressData.address?.province || "",
+        isPrimary: addressData.isPrimary || false,
+      });
+      setCoordinates({
+        latitude: addressData.address?.latitude || -6.2,
+        longitude: addressData.address?.longitude || 106.816666,
+      });
+    }
+  }, [addressData]);
+
 
   const fetchGeolocation = async (fullAddress: string) => {
     try {
@@ -98,34 +130,27 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
     return null;
   };
 
+  if (addressLoading) return <p>Loading address data...</p>;
+
   return (
     <>
       <Dialog open={true} onOpenChange={onClose}>
         <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="pt-5 text-center">
-              Tambah Alamat
-            </DialogTitle>
+            <DialogTitle className="pt-5 text-center">Edit Alamat</DialogTitle>
           </DialogHeader>
           <hr className="border-dashed border-gray-800" />
           <Formik
-            initialValues={{
-              name: "",
-              phoneNumber: "",
-              label: "",
-              street: "",
-              city: "",
-              province: "",
-              isPrimary: false,
-            }}
-            validationSchema={Yup.object().shape({
-              name: Yup.string().required("Nama is required"),
-              phoneNumber: Yup.string().required("Nomor telepon is required"),
-              label: Yup.string().required("Label is required"),
-              street: Yup.string().required("Alamat is required"),
-              city: Yup.string().required("Kota is required"),
-              province: Yup.string().required("Provinsi is required"),
-            })}
+            enableReinitialize
+              initialValues={initialValues}
+              validationSchema={Yup.object().shape({
+                name: Yup.string().required("Nama is required"),
+                phoneNumber: Yup.string().required("Nomor telepon is required"),
+                label: Yup.string().required("Label is required"),
+                street: Yup.string().required("Alamat is required"),
+                city: Yup.string().required("Kota is required"),
+                province: Yup.string().required("Provinsi is required"),
+              })}
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(true);
               const dataToSubmit: userAddress = {
@@ -133,19 +158,22 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
                 latitude: coordinates.latitude,
                 longitude: coordinates.longitude,
               };
-              createAddress(dataToSubmit, {
-                onSuccess: () => {
-                  alert("Address added successfully!");
-                  onClose();
-                },
-                onError: (err) => {
-                  console.error("Error creating address:", err);
-                  alert("Failed to add address.");
-                },
-                onSettled: () => {
-                  setSubmitting(false);
-                },
-              });
+              updateAddress(
+                { addressId, data: dataToSubmit },
+                {
+                  onSuccess: () => {
+                    alert("Address updated successfully!");
+                    onClose();
+                  },
+                  onError: (err) => {
+                    console.error("Error updating address:", err);
+                    alert("Failed to update address.");
+                  },
+                  onSettled: () => {
+                    setSubmitting(false);
+                  },
+                }
+              );
             }}
           >
             {({ values, setFieldValue, isSubmitting }) => (
@@ -231,9 +259,7 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                         attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
                       />
-                      <Marker
-                        position={[coordinates.latitude, coordinates.longitude]}
-                      />
+                      <Marker position={[coordinates.latitude, coordinates.longitude]} />
                       <MapClickHandler setFieldValue={setFieldValue} />
                     </MapContainer>
                   )}
@@ -249,7 +275,7 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
                   </label>
                   <div className="flex items-center gap-5">
                     <Buttons type="submit" disabled={isSubmitting || isLoading}>
-                      {isSubmitting ? "Saving..." : "Simpan"}
+                      {isSubmitting ? "Updating..." : "Update"}
                     </Buttons>
                     <Buttons
                       className="bg-gray-300 text-gray-600"
@@ -268,4 +294,4 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
   );
 };
 
-export default AddAddress;
+export default EditAddress;
