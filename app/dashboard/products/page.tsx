@@ -1,7 +1,12 @@
 import {FC} from "react";
+import ProductTable from "@/app/dashboard/products/components/ProductTable";
 
 const ProductsDashboardPage: FC = () => {
-    return <></>
+    return (
+        <>
+            <ProductTable />
+        </>
+    )
 }
 
 export default ProductsDashboardPage;
