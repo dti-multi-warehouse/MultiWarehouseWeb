@@ -1,3 +1,21 @@
+export interface AddItemDto {
+    productId: number;
+    quantity: number;
+}
+
+export interface cartItems {
+    productId: number;
+    name: string;
+    price: number;
+    quantity: number;
+    imageUrl: string; 
+}
+
+export interface CartResponse {
+    cartItems: cartItems[];
+    totalPrice: number;
+}
+
 export interface productCards{
     image: string;
     name: string;

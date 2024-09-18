@@ -135,7 +135,7 @@ const AddressSaved: React.FC = () => {
                     </p>
                     <div
                       className={`h-2 w-full bg-gray-200 rounded-lg mt-5 ${
-                        index === 2 ? "hidden" : "block"
+                        index === index.length - 1 ? "hidden" : "block"
                       }`}
                     ></div>
                   </div>
