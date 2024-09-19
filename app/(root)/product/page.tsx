@@ -15,7 +15,7 @@ const ProductPage = () => {
     }
 
     return <main>
-        <ProductRow isRow={false} hits={data?.hits} />
+        <ProductRow isRow={false} hits={data.hits} />
         <ProductPagination currentPage={data.page} totalPages={data.totalPage} params={params}/>
     </main>
 }
