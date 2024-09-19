@@ -15,7 +15,7 @@ const CartQuantity: FC<Props> = ({quantity, setQuantity}) => {
     }
 
     const handleDecrement = () => {
-        if (quantity > 0) {
+        if (quantity > 1) {
             setQuantity( prev => prev - 1)
         }
     }
