@@ -3,7 +3,7 @@ import {Product} from "@/types/product";
 
 
 const ProductDetails: FC<Product> = ({name, price, description}) => {
-    return <div className={"col-span-2"}>
+    return <div className={"col-span-2 order-3 lg:order-2"}>
         <div className={"flex flex-col gap-5"}>
             <h2 className={"font-bold text-3xl"}>{name}</h2>
             <p className={"font-bold text-xl text-red-500"}>Rp.{price?.toLocaleString()}</p>
