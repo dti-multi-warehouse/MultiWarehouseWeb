@@ -9,7 +9,7 @@ const useProducts = ( params: ReadonlyURLSearchParams) => {
         isLoading,
         error
     } = useQuery({
-        queryKey: ['products'],
+        queryKey: ['products', params.toString()],
         queryFn: async () => getProducts(params),
     })
 
