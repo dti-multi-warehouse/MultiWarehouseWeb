@@ -1,4 +1,5 @@
 export interface productCards{
+    id: number;
     thumbnail: string;
     name: string;
     price: number;
