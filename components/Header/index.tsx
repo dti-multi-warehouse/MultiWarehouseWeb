@@ -13,14 +13,17 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import Image from "next/image";
 import { useGetProfile } from "@/hooks/useUser";
 import AddressSaved from "../Address/AddressSaved";
+import {useRouter} from "next/navigation";
 
 const Header: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState<Boolean>(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const { data: session } = useSession();
   const { isSignedIn: isClerkSignedIn } = useClerkUser();
   const { profile, isLoading: isProfileLoading } = useGetProfile();
+  const router = useRouter();
 
   const toggleSearch = () => {
     setIsSearchOpen(!isSearchOpen);
@@ -84,6 +87,13 @@ const Header: React.FC = () => {
             <input
               type="text"
               placeholder="Search..."
+              value={searchValue}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") {
+                  router.push("/product?query=" + searchValue)
+                }
+              }}
+              onChange={(e) => {setSearchValue(e.target.value);}}
               className={`absolute left-full ml-2 border rounded-md px-2 py-1 transition-all duration-300 ease-in-out transform ${
                 isSearchOpen
                   ? "translate-x-[-115%] opacity-100"
