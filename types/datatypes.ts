@@ -1,5 +1,5 @@
 export interface productCards{
-    image: string;
+    thumbnail: string;
     name: string;
     price: number;
     stock: number;
@@ -9,6 +9,19 @@ export interface productCategories{
     name: string;
     icon: string;
     content: productCards[];
+}
+
+export interface FeaturedProductsDTO {
+    featuredProducts: FeaturedProducts[];
+}
+
+interface FeaturedProducts {
+    group_key: string;
+    hits: Document[];
+}
+
+interface Document {
+    document: productCards;
 }
 
 export interface UserProfileDTO {
@@ -69,4 +82,12 @@ export interface ConfirmResetPasswordRequest {
     email: string;
     token: string;
     newPassword: string;
+}
+
+export interface Stock {
+    id: number;
+    warehouseId: number;
+    thumbnail: string;
+    name: string;
+    stock: number
 }

@@ -1,38 +1,68 @@
-import {FC} from "react";
-import {
-    Card,
-    CardContent,
-    CardFooter,
-} from "@/components/ui/card"
-import Buttons from "@/components/Buttons";
+"use client";
+
+import React, { useState } from "react";
 import Image from "next/image";
-import {ProductSummary} from "@/types/product";
+import Buttons from "@/components/Buttons";
+import { productCards } from "@/types/datatypes";
+import { useSession } from "next-auth/react";
+import { useGetProfile } from "@/hooks/useUser";
+import AlertDialog from "@/components/AlertDialog";
 
-interface ProductCardProps {
-    product: ProductSummary;
-}
+const Index: React.FC<productCards> = ({ thumbnail, name, price, stock }) => {
+  const { data: session, status } = useSession(); 
+  const { profile, isLoading: isProfileLoading } = useGetProfile();
+  const [dialogOpen, setDialogOpen] = useState(false);
+  const [dialogMessage, setDialogMessage] = useState("");
 
+  const isAuthenticated = status === "authenticated";
+  const isVerified = profile?.verified; 
 
-const ProductCard: FC<ProductCardProps> = ({product}) => {
-
-    const handleBuy = () => {
-        console.log("Buy")
+  const handleButtonClick = () => {
+    if (!isAuthenticated) {
+      setDialogMessage("You need to login to buy this product.");
+      setDialogOpen(true);
+    } else if (!isVerified) {
+      setDialogMessage("Please verify your email to buy this product.");
+      setDialogOpen(true);
     }
+  };
 
-    return <Card className={"w-[175px] lg:w-[200px] border-0 flex flex-col justify-between"}>
-        <CardContent>
-            <Image src={"/product.png"} alt={"Product image"} width={200} height={200}/>
-            <div className={'flex flex-col gap-2.5 mt-6'}>
-                <p>{product.name}</p>
-                <p>Rp{product.price.toLocaleString()}</p>
-            </div>
-        </CardContent>
-        <CardFooter className={"self-center"}>
-            <Buttons className={"bg-red-500 px-14 py-2 rounded-2xl text-white"}>
-                Buy
-            </Buttons>
-        </CardFooter>
-    </Card>
-}
+  const handleDialogClose = () => {
+    setDialogOpen(false);
+  };
 
-export default ProductCard;
+  return (
+    <div className="flex flex-col gap-2 min-w-[150px] h-full max-w-[200px] hover:bg-white shadow-antiMetal shadow-transparent hover:scale-105 hover:shadow-gray-200 rounded-xl transition-all duration-500">
+      <Image 
+        src={thumbnail}
+        width={200}
+        height={200}
+        alt={name}
+      />
+      <div className="flex flex-col gap-2 p-5 h-full justify-between">
+        <h2 className="font-medium line-clamp-2">{name}</h2>
+        <p className="font-semibold text-gray-500">Stok dari toko</p>
+        <p className="font-bold text-red-600">Rp {price.toLocaleString()}</p>
+        <Buttons 
+          className={`w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
+            stock === 0 || !isAuthenticated || !isVerified ? "!bg-gray-300 !text-gray-800" : "!bg-red-600"
+          }`}
+          disabled={stock === 0} 
+          onClick={handleButtonClick}
+        >
+          {stock === 0 ? "Stock Kosong" : "Beli"}
+        </Buttons>
+      </div>
+
+      <AlertDialog
+        open={dialogOpen}
+        onOpenChange={setDialogOpen}
+        title={dialogMessage}
+        onAction={handleDialogClose}
+        cancelVisibility='hidden'
+      />
+    </div>
+  );
+};
+
+export default Index;
