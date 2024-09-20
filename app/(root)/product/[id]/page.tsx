@@ -19,7 +19,7 @@ const ProductDetailsPage: FC<Props> = ({ params }) => {
         return <Loader />
     }
 
-    return <div className={"flex flex-col lg:grid lg:grid-cols-4 gap-5 mx-16 my-12"}>
+    return <div className={"flex flex-col items-center xl:grid xl:grid-cols-4 gap-4 xl:gap-24 m-4 lg:mx-16 lg:my-12"}>
         <ProductImage imageUrls={data.imageUrls} />
         <ProductDetails name={data.name} price={data?.price} description={data?.description} />
         <CTA />
