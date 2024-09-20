@@ -9,13 +9,10 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import {Pencil, Trash2} from "lucide-react";
-import CategoryDrawerDialog from "@/app/dashboard/categories/components/CategoryDrawerDialog";
-import useCategories from "@/hooks/useCategories";
-import axios from "axios";
-import {config} from "@/constants/url";
 import useDashboardProducts from "@/hooks/useDashboardProducts";
 import {DashboardProducts} from "@/types/product";
 import Image from "next/image";
+import {useRouter} from "next/navigation";
 
 const ProductTable: FC = () => {
     const { data, isLoading, error } = useDashboardProducts()
@@ -44,8 +41,14 @@ const ProductTable: FC = () => {
 }
 
 const ProductRow: FC<DashboardProducts> = ({id, name, price, thumbnail, category}) => {
+    const router = useRouter()
+
     const handleDelete = () => {
         // axios.delete(config.BASE_URL + config.API_VER + config.endpoints.category + `/${id}`)
+    }
+
+    const handleEdit = () => {
+        router.push("/dashboard/products/edit/" + id)
     }
     return (
         <TableRow>
@@ -57,6 +60,7 @@ const ProductRow: FC<DashboardProducts> = ({id, name, price, thumbnail, category
             <TableCell>{category}</TableCell>
             <TableCell>{price}</TableCell>
             <TableCell className="flex gap-4 justify-end">
+                <Pencil onClick={handleEdit}/>
                 <Trash2 onClick={handleDelete}/>
             </TableCell>
         </TableRow>

@@ -7,12 +7,14 @@ import { productCards } from "@/types/datatypes";
 import { useSession } from "next-auth/react";
 import { useGetProfile } from "@/hooks/useUser";
 import AlertDialog from "@/components/AlertDialog";
+import {useRouter} from "next/navigation";
 
-const Index: React.FC<productCards> = ({ thumbnail, name, price, stock }) => {
+const Index: React.FC<productCards> = ({ id, thumbnail, name, price, stock }) => {
   const { data: session, status } = useSession(); 
   const { profile, isLoading: isProfileLoading } = useGetProfile();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+  const router = useRouter();
 
   const isAuthenticated = status === "authenticated";
   const isVerified = profile?.verified; 
@@ -31,8 +33,15 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock }) => {
     setDialogOpen(false);
   };
 
+  const handleCardClick = () => {
+    router.push("/product/" + id)
+  }
+
   return (
-    <div className="flex flex-col gap-2 min-w-[150px] h-full max-w-[200px] hover:bg-white shadow-antiMetal shadow-transparent hover:scale-105 hover:shadow-gray-200 rounded-xl transition-all duration-500">
+    <div
+        className="flex flex-col gap-2 min-w-[150px] h-full max-w-[200px] hover:bg-white shadow-antiMetal shadow-transparent hover:scale-105 hover:shadow-gray-200 rounded-xl transition-all duration-500"
+        onClick={handleCardClick}
+    >
       <Image 
         src={thumbnail}
         width={200}

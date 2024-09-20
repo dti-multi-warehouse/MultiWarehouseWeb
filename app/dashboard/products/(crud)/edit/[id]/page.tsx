@@ -15,6 +15,7 @@ import Image from "next/image";
 import {BadgeX, ImageUp} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {config} from "@/constants/url";
+import {useRouter} from "next/navigation";
 
 interface Props {
     params: {
@@ -32,8 +33,8 @@ const productSchema = Yup.object().shape({
 const EditProductPage: FC<Props> = ({params}) => {
     const { data, isLoading, error } = useProductDetails(params.id)
     const [ prevImages, setPrevImages] = useState<string[]>([])
-
-    const [images, setImages] = useState<FileWithPreview[]>([]);
+    const [images, setImages] = useState<FileWithPreview[]>([])
+    const router = useRouter()
 
     const onDrop = useCallback((acceptedImages: File[]) => {
         setImages(prevImages => [
@@ -87,24 +88,35 @@ const EditProductPage: FC<Props> = ({params}) => {
         if (images.length > 0) {
             images.forEach(image => formData.append("images", image))
         }
-        axios.put(config.BASE_URL + config.API_VER + config.endpoints.product + `/${params.id}`, formData)
+        axios
+            .put(config.BASE_URL + config.API_VER + config.endpoints.product + `/${params.id}`, formData)
+            .then(r => {
+                if (r.status == 200) {
+                    router.back()
+                }
+            })
     }
+
+    if (!data || !data.name || !data.description || !data.price || !data.category) {
+        return null
+    }
+
     return <main className={"p-8"}>
         <h1 className={"text-3xl font-semibold"}>Edit product</h1>
         <Formik
             initialValues={{
-                name: data?.name,
-                description: data?.description,
-                price: data?.price,
+                name: data.name,
+                description: data.description,
+                price: data.price,
                 categoryId: undefined,
             }}
             validationSchema={productSchema}
             onSubmit={(values) => handleSubmit(values, images)}>
             <Form className={"flex flex-col gap-4 p-4 lg:px-64 lg:py-16"}>
-                <CustomInput name={"name"} label={"Product Name"} placeholder={data?.name || "What's the name of the product?"}/>
-                <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={data?.price?.toString() || "How much is it going to be?"}/>
-                <CategorySelector initialValue={data?.category}/>
-                <DescriptionInput placeholder={data?.description || "Tell more about the product"}/>
+                <CustomInput name={"name"} label={"Product Name"} placeholder={data.name || "What's the name of the product?"}/>
+                <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={data.price.toString() || "How much is it going to be?"}/>
+                <CategorySelector initialValue={data.category}/>
+                <DescriptionInput placeholder={data.description || "Tell more about the product"}/>
 
                 {/*Image Uploader*/}
                 <div className={"flex flex-col gap-3 lg:grid lg:grid-cols-3"}>
