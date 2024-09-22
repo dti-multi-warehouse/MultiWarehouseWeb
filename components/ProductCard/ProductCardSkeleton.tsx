@@ -9,8 +9,8 @@ const ProductCardSkeleton:FC = () => {
             <Skeleton className={"w-[200px] min-h-[200px]"} />
             <div className="flex flex-col gap-2 p-5 h-full justify-between">
                 <div className={"space-y-2"}>
-                    <Skeleton className={"w-36 h-4"} />
                     <Skeleton className={"w-36 h-8"} />
+                    <Skeleton className={"w-36 h-4"} />
                 </div>
                 <Skeleton className={"w-36 h-12"}/>
             </div>

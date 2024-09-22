@@ -4,7 +4,7 @@ import ProductCardSkeleton from "@/components/ProductCard/ProductCardSkeleton";
 
 
 const ProductRowSkeleton: FC = () => {
-    const array = Array.from({ length: 20 }, (_, i) => i);
+    const array = Array.from({ length: 20 }, (_, i) => i)
 
     return (
         <div className={'col-span-4 overflow-visible'}>

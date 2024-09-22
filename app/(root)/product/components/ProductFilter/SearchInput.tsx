@@ -13,7 +13,7 @@ const SearchInput: FC = () => {
             <Input
                 {...field}
                 type="text"
-                placeholder="Search for products..."
+                placeholder="Find product"
                 className={"border-0 focus-visible:ring-0 focus-visible:ring-offset-0"}
                 onFocus={() => setIsFocused(true)}
                 onBlur={() => setIsFocused(false)}
