@@ -1,14 +1,14 @@
-import {FC, useMemo, useState} from "react";
+'use client'
+import { FC, useMemo, useState} from "react";
 import {Button} from "@/components/ui/button";
 import SearchInput from "@/app/(root)/product/components/ProductFilter/SearchInput";
 import CategoryFilters from "@/app/(root)/product/components/ProductFilter/CategoryFilter";
-import PriceInput from "@/app/(root)/product/components/ProductFilter/PriceInput";
-import {Form, Formik} from "formik";
+import {Form, Formik, FormikValues} from "formik";
 import * as Yup from "yup";
 import {debounce} from "lodash";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import {Drawer, DrawerContent, DrawerTrigger} from "@/components/ui/drawer";
-import {Filter} from "lucide-react";
+import {useRouter} from "next/navigation";
 
 const ProductFilterSchema = Yup.object().shape({
     query: Yup.string(),
@@ -20,10 +20,17 @@ const ProductFilterSchema = Yup.object().shape({
 const ProductFilter:FC = () => {
     const [Open, setOpen] = useState(false)
     const isDesktop = useMediaQuery("(min-width: 768px)")
+    const router = useRouter()
 
-    // const debounceSearch = useMemo(
-    //     () => debounce( values =>)
-    // )
+    const debouncedSearch = useMemo(
+        () => debounce( (values) => {
+            const newParams = new URLSearchParams()
+            Object.entries(values).forEach(([key, value]) => {
+                if (value) newParams.set(key, value.toString());
+            })
+            router.push(`?${newParams}`, {scroll: false})
+        }, 300), [router]
+    )
 
     if (!isDesktop) {
         return (
@@ -32,7 +39,7 @@ const ProductFilter:FC = () => {
                     <Button variant={"outline"}>Filter</Button>
                 </DrawerTrigger>
                 <DrawerContent>
-                    <FilterForm />
+                    <FilterForm debouncedSearch={debouncedSearch} />
                 </DrawerContent>
             </Drawer>
         )
@@ -40,14 +47,18 @@ const ProductFilter:FC = () => {
 
     return (
         <div className={"col-span-1 p-4 rounded-lg shadow border h-fit"}>
-            <FilterForm />
+            <FilterForm debouncedSearch={debouncedSearch} />
         </div>
     )
 }
 
 export default ProductFilter;
 
-const FilterForm: FC = () => {
+interface FilterFormProps {
+    debouncedSearch: (values: FormikValues) => void
+}
+
+const FilterForm: FC<FilterFormProps> = ({debouncedSearch}) => {
     return (
         <Formik
             initialValues={{
@@ -59,8 +70,11 @@ const FilterForm: FC = () => {
                 console.log(values);
             }}
         >
-            {({ resetForm }) => (
-                <Form className={"space-y-6"}>
+            {({ values, resetForm }) => (
+                <Form
+                    className={"space-y-6"}
+                    onChange={() => debouncedSearch(values)}
+                >
                     <SearchInput />
                     <CategoryFilters />
                     {/*<PriceInput />*/}
