@@ -7,15 +7,12 @@ import {
     CarouselNext,
     CarouselPrevious,
 } from "@/components/ui/carousel"
-import useMediaQuery from "@/hooks/useMediaQuery";
-
 
 interface ProductImageProps {
     imageUrls: string[]
 }
 
 const ProductImage: FC<ProductImageProps> = ({imageUrls}) => {
-    const isDesktop = useMediaQuery("(min-width: 768px)")
 
     return (
         <Carousel className={"col-span-1 w-48 h-48 sm:w-80 sm:h-80 md:w-[400px] md:h-[400px]"}>
