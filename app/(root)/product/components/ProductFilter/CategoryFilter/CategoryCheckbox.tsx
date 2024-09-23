@@ -4,10 +4,13 @@ import {FC} from "react";
 import {Category} from "@/types/category";
 import {useField} from "formik";
 
+interface CategoryCheckboxProps extends Category{
+    updateValue: (value: any[]) => void;
+}
 
-const CategoryCheckbox: FC<Category> = ({id, name}) => {
+const CategoryCheckbox: FC<CategoryCheckboxProps> = ({id, name, updateValue}) => {
     const [field, meta, helper] = useField({
-        name: "categories",
+        name: "category",
         type: "checkbox",
         value: name
     })
@@ -21,7 +24,7 @@ const CategoryCheckbox: FC<Category> = ({id, name}) => {
         const newSelectedCategories = isChecked
             ? selectedCategories.filter((category: string) => category !== name)
             : [...selectedCategories, name];
-        setValue(newSelectedCategories);
+        updateValue(newSelectedCategories);
     };
 
     return (

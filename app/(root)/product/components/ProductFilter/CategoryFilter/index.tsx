@@ -3,9 +3,12 @@ import useCategories from "@/hooks/useCategories";
 import CategoryCheckbox from "@/app/(root)/product/components/ProductFilter/CategoryFilter/CategoryCheckbox";
 import {Skeleton} from "@/components/ui/skeleton";
 
+interface ProductFilterInputProps {
+    onChange: (value: any[]) => void;
+}
 
 
-const CategoryFilters: FC = () => {
+const CategoryFilters: FC<ProductFilterInputProps> = ({onChange}) => {
     const {data, isLoading, error} = useCategories()
     const skeletonArray = Array.from({ length: 2 }, (_, i) => i)
     return (
@@ -14,7 +17,7 @@ const CategoryFilters: FC = () => {
             {isLoading || !data ?
                 skeletonArray.map( i => <Skeleton key={i} className={"h-4 w-64"}/> )
                 : data.map( category => (
-                    <CategoryCheckbox key={category.id} {...category} />
+                    <CategoryCheckbox key={category.id} {...category} updateValue={onChange} />
                 ))
             }
             {}
