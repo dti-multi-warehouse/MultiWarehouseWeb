@@ -1,3 +1,5 @@
+import {date} from "yup";
+
 export interface productCards{
     id: number;
     thumbnail: string;
@@ -91,4 +93,13 @@ export interface Stock {
     thumbnail: string;
     name: string;
     stock: number
+}
+
+export interface StockMutation {
+    id: number;
+    warehouseToId: number;
+    warehouseFromId: number;
+    name: string;
+    quantity: number;
+    created_at: Date;
 }

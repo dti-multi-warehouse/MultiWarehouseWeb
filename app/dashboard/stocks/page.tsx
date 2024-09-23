@@ -1,6 +1,6 @@
 import {FC} from "react";
-import StockTable from "@/app/dashboard/stocks/components/StockTable";
-import StockHeader from "@/app/dashboard/stocks/components/StockHeader";
+import StockTable from "./components/StockTable";
+import StockHeader from "./components/header";
 
 const StocksDashboardPage: FC = () => {
     return (

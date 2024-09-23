@@ -1,3 +1,4 @@
+'use client'
 import {FC, ReactNode, useState} from "react";
 import useMediaQuery from "@/hooks/useMediaQuery";
 import {Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger} from "@/components/ui/dialog";
