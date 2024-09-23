@@ -9,14 +9,13 @@ interface CategoryCheckboxProps extends Category{
 }
 
 const CategoryCheckbox: FC<CategoryCheckboxProps> = ({id, name, updateValue}) => {
-    const [field, meta, helper] = useField({
+    const [_, meta] = useField({
         name: "category",
         type: "checkbox",
         value: name
     })
 
     const { value: selectedCategories } = meta
-    const { setValue } = helper
 
     const isChecked = Array.isArray(selectedCategories) && selectedCategories.includes(name);
 

@@ -6,7 +6,7 @@ import SearchInput from "../SearchInput";
 import CategoryFilters from "../CategoryFilter";
 import {Button} from "@/components/ui/button";
 import * as Yup from "yup";
-import {useRouter} from "next/navigation";
+import {useRouter, useSearchParams} from "next/navigation";
 import {debounce} from "lodash";
 import {InferType} from "yup";
 
@@ -20,6 +20,7 @@ const ProductFilterSchema = Yup.object().shape({
 type FormValues = InferType<typeof ProductFilterSchema>;
 
 const FilterForm: FC = () => {
+    const initialParams = useSearchParams()
     const router = useRouter()
 
     const debouncedSearch = useMemo(
@@ -35,15 +36,13 @@ const FilterForm: FC = () => {
     return (
         <Formik
             initialValues={{
-                query: '',
-                category: [],
+                query: initialParams.get("query") || '',
+                category: initialParams.getAll("category") || [],
             }}
             validationSchema={ProductFilterSchema}
-            onSubmit={values => {
-                console.log(values);
-            }}
+            onSubmit={ () => {}}
         >
-            {({ values, resetForm }) => (
+            {({ resetForm }) => (
                 <Form
                     className={"space-y-6"}
                 >
