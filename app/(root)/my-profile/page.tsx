@@ -2,7 +2,7 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import ProfileInformation from "./components/ProfileInformatio";
+import ProfileInformation from "./components/ProfileInformation";
 import { useEffect } from "react";
 
 const MyProfile: React.FC = () => {

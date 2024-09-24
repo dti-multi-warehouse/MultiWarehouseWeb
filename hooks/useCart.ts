@@ -42,11 +42,12 @@ export const useAddToCart = () => {
 
   return useMutation(
     async (item: AddItemDto) => {
+      const config = await attachToken({});
       try {
-        const config = await attachToken({});
-        await apiClient.post('/api/v1/cart', item, config);
-      } catch (error) {
-        console.error('Failed to add item to cart:', error);
+        const response = await apiClient.post('/api/v1/cart', item, config);
+        console.log('Item added to cart successfully:', response.data);
+      } catch (error: any) {
+        console.error('Error adding item to cart:', error.response?.data || error.message);
         throw error;
       }
     },
@@ -54,9 +55,13 @@ export const useAddToCart = () => {
       onSuccess: () => {
         queryClient.invalidateQueries('cart'); 
       },
+      onError: (error) => {
+        console.error('Failed to add item to cart:', error);
+      },
     }
   );
 };
+
 
 export const useRemoveFromCart = () => {
   const queryClient = useQueryClient();
@@ -84,13 +89,8 @@ export const useIncrementQuantity = () => {
 
   return useMutation(
     async (productId: number) => {
-      try {
-        const config = await attachToken({});
-        await apiClient.put(`/api/v1/cart/increment/${productId}`, {}, config);
-      } catch (error) {
-        console.error('Failed to increment item quantity:', error);
-        throw error;
-      }
+      const config = await attachToken({});
+      await apiClient.put(`/api/v1/cart/increment/${productId}`, {}, config);
     },
     {
       onSuccess: () => {
@@ -105,13 +105,8 @@ export const useDecrementQuantity = () => {
 
   return useMutation(
     async (productId: number) => {
-      try {
-        const config = await attachToken({});
-        await apiClient.put(`/api/v1/cart/decrement/${productId}`, {}, config);
-      } catch (error) {
-        console.error('Failed to decrement item quantity:', error);
-        throw error;
-      }
+      const config = await attachToken({});
+      await apiClient.put(`/api/v1/cart/decrement/${productId}`, {}, config);
     },
     {
       onSuccess: () => {

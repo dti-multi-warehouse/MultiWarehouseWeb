@@ -1,3 +1,20 @@
+export interface userAddress {
+    data?: {
+        id: number;
+        name: string;
+        phoneNumber: string;
+        label: string;
+        address: {
+          street: string;
+          city: string;
+          province: string;
+          latitude: number;
+          longitude: number;
+        };
+        primary: boolean;
+    }
+}  
+
 export interface AddItemDto {
     productId: number;
     quantity: number;
@@ -12,11 +29,14 @@ export interface cartItems {
 }
 
 export interface CartResponse {
-    cartItems: cartItems[];
-    totalPrice: number;
+    data: {
+        cartItems: cartItems[];
+        totalPrice: number;
+    }
 }
 
 export interface productCards{
+    id: number;
     thumbnail: string;
     name: string;
     price: number;
@@ -109,3 +129,93 @@ export interface Stock {
     name: string;
     stock: number
 }
+
+export enum PaymentMethod {
+    MIDTRANS = 'MIDTRANS',
+    BANK_TRANSFER = 'BANK_TRANSFER',
+}
+  
+export enum BankTransfer {
+    BCA = 'BCA',
+    BRI = 'BRI',
+    BNI = 'BNI',
+    CIMB = 'CIMB',
+}
+  
+export interface CreateOrderItemRequestDto {
+    productId: number;
+    quantity: number;
+}
+  
+export interface CreateOrderRequestDto {
+    paymentMethod: PaymentMethod;
+    bankTransfer?: BankTransfer; 
+    shippingMethod: string; 
+}
+  
+export interface CreateOrderResponseDto {
+    transactionId: string;
+    currency: string;
+    price: string;
+    transactionTime: string;
+    transactionStatus: string;
+    paymentType: string;
+    bank: string;
+    vaNumber: string;
+    message: string;
+}
+  
+export interface Order {
+    id: number;
+    userId: number;
+    warehouseId: number;
+    price: number;
+    paymentProof: string | null;
+    status: string;
+    paymentMethod: PaymentMethod;
+    orderItems: OrderItem[];
+    createdAt: string;
+    updatedAt: string;
+}
+  
+export interface OrderItem {
+    id: number;
+    productId: number;
+    quantity: number;
+    price: number; 
+}
+  
+export interface CreateOrderResponseDto {
+    orderId: number;
+    totalAmount: number;
+    orderItems: OrderItem[];
+    paymentUrl: string;
+}
+  
+export interface MidtransError {
+    statusCode: number;
+    message: string;
+    error: string;
+}
+
+export interface WarehouseDTO {
+    id: number;
+    street: string;
+    city: string;
+    province: string;
+    latitude: number;
+    longitude: number;
+  }
+  
+  export interface CreateWarehouseDto {
+    street: string;
+    city: string;
+    province: string;
+    latitude: number;
+    longitude: number;
+  }
+  
+  export interface AssignWarehouseAdminDTO {
+    warehouseId: number;
+    userId: number;
+  }

@@ -1,7 +1,11 @@
 import {FC} from "react";
 
 const WarehouseDashboardPage: FC = () => {
-    return <></>
+    return(
+        <>
+        
+        </>
+    ) 
 }
 
 export default WarehouseDashboardPage

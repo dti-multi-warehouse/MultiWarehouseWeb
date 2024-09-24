@@ -1,13 +1,13 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import Buttons from "@/components/Buttons";
-import CartItems from "./components/CartItems";
-import { useEffect, useState } from "react";
-import { useGetProfile } from "@/hooks/useUser";
-import AlertDialog from "@/components/AlertDialog";
-import { useCart } from "@/hooks/useCart";
+import { useRouter } from 'next/navigation';
+import { useCart } from '@/hooks/useCart';
+import CartItems from './components/CartItems';
+import Buttons from '@/components/Buttons';
+import { useSession } from 'next-auth/react';
+import { useGetProfile } from '@/hooks/useUser';
+import AlertDialog from '@/components/AlertDialog';
+import { useEffect, useState } from 'react';
 
 const Cart: React.FC = () => {
   const { data: session, status } = useSession();
@@ -43,6 +43,15 @@ const Cart: React.FC = () => {
     return <div>Error loading cart data</div>; 
   }
 
+  const handleCheckout = () => {
+    if (isVerified) {
+      router.push("/checkout");
+    } else {
+      setDialogMessage("You need to verify your account before proceeding to checkout.");
+      setDialogOpen(true);
+    }
+  };
+
   const handleDialogClose = () => {
     setDialogOpen(false);
     router.push("/");
@@ -64,13 +73,12 @@ const Cart: React.FC = () => {
               <hr className="border-gray-900 border-dashed" />
               <div className="flex items-center justify-between">
                 <p className="text-gray-700 font-semibold">Subtotal</p>
-                <p className="text-xl font-semibold">
-                  Rp {cart?.totalPrice || 0} 
-                </p>
+                <p className="text-xl font-semibold">Rp {cart?.data?.totalPrice || 0}</p>
               </div>
               <Buttons
                 className={`py-2 text-sm font-semibold mt-2 ${!isVerified ? "!bg-gray-300 !text-gray-800" : ""}`}
                 disabled={!isVerified}
+                onClick={handleCheckout}
               >
                 Checkout Sekarang
               </Buttons>

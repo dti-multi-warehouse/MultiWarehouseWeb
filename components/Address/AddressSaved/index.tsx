@@ -73,10 +73,10 @@ const AddressSaved: React.FC = () => {
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogTrigger asChild>
           <button
-            className="flex items-center gap-2 bg-white text-red-400 px-2 rounded-xl font-semibold"
+            className="flex items-center text-sm gap-2 bg-white text-red-400 px-2 rounded-xl font-semibold"
             onClick={handleClick}
           >
-            <FaLocationDot /> Your Location
+            <FaLocationDot /> Set Your Location
           </button>
         </DialogTrigger>
         <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
@@ -128,7 +128,7 @@ const AddressSaved: React.FC = () => {
                     </div>
                     <p
                       className={`${
-                        address.isPrimary ? "block" : "hidden"
+                        address.primary === true ? "block" : "hidden"
                       } font-bold text-sm text-gray-600`}
                     >
                       Alamat Utama

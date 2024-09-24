@@ -194,7 +194,7 @@ export const useRequestPasswordReset = (): UseMutationResult<
   return useMutation(
     (data: ResetPasswordRequest) => {
       return apiClient
-        .post<ResetPasswordResponse>('/api/v1/reset-password/request', data)
+        .post<ResetPasswordResponse>('/api/v1/auth/reset-password/request', data)
         .then((response) => response.data)
         .catch((error) => {
           console.error('API Error during password reset request:', error.response?.status, error.response?.data);
@@ -220,7 +220,7 @@ export const useConfirmPasswordReset = (): UseMutationResult<
 > => {
   return useMutation(
     (data: ConfirmResetPasswordRequest) => {
-      return apiClient.post<ResetPasswordResponse>('/api/v1/reset-password/confirm', data)
+      return apiClient.post<ResetPasswordResponse>('/api/v1/auth/reset-password/confirm', data)
       .then((response) => response.data)
       .catch((error) => {
         console.error('API Error during password reset confirmation:', error.response?.status, error.response?.data);

@@ -76,6 +76,7 @@ const ResetPasswordForm: React.FC = () => {
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         title={dialogMessage}
+        cancelVisibility="hidden"
       />
     </>
   );
