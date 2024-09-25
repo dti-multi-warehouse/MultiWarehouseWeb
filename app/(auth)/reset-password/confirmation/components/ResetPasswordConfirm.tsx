@@ -100,6 +100,7 @@ const ResetPasswordConfirmForm: React.FC<{ email: string; token: string }> = ({
         open={dialogOpen}
         onOpenChange={setDialogOpen}
         title={dialogMessage}
+        cancelVisibility="hidden"
       />
     </>
   );
