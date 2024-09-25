@@ -14,6 +14,7 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) =>
   const { profile, isLoading: isProfileLoading } = useGetProfile();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+  const router = useRouter();
 
   const addToCart = useAddToCart();
 
@@ -53,8 +54,12 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) =>
     setDialogOpen(false);
   };
 
+  const handleCardClick = () => {
+    router.push("/product/" + id)
+  }
+
   return (
-    <div className="flex flex-col gap-2 min-w-[150px] h-full max-w-[200px] hover:bg-white shadow-antiMetal shadow-transparent hover:scale-105 hover:shadow-gray-200 rounded-xl transition-all duration-500">
+<div className="flex flex-col gap-2 min-w-[150px] h-full max-w-[200px] hover:bg-white shadow-antiMetal shadow-transparent hover:scale-105 hover:shadow-gray-200 rounded-xl transition-all duration-500">
       <Image
         src={thumbnail}
         width={200}

@@ -11,6 +11,7 @@ import { FaKitchenSet } from "react-icons/fa6";
 import { MdOutlinePets } from "react-icons/md";
 import { GiShop, GiInnerSelf, GiMeat } from "react-icons/gi";
 import useCategories from "@/hooks/useCategories";
+import Image from "next/image";
 
 const category = [
   { name: "Minuman", icon: <BiDrink /> },
@@ -27,6 +28,7 @@ const category = [
 const CategoryComponent: React.FC = () => {
   const {data, isLoading, error} = useCategories()
 
+  console.log(data)
   return (
     <Swiper
       spaceBetween={30}
@@ -40,6 +42,7 @@ const CategoryComponent: React.FC = () => {
         <SwiperSlide key={index} className="py-5 !w-fit">
           <button className="flex gap-2 items-center bg-white rounded-xl w-fit py-1 px-2 shadow-airbnbSoft text-sm md:text-base hover:scale-105 hover:shadow-antiMetal transition-all duration-500">
             {/*<span className="text-red-500">{item.icon}</span>*/}
+            <Image src={item.logoUrl} alt={"logo of " + item.name} width={15} height={15} />
             <h2 className="text-gray-500 whitespace-nowrap w-fit">{item.name}</h2>
           </button>
         </SwiperSlide>
