@@ -15,8 +15,6 @@ import RequestItem from "@/app/dashboard/stocks/components/header/RequestItem";
 
 const RequestSheet: FC = () => {
     const { data, isLoading, error } = useActiveStockMutationRequest()
-
-    console.log(data)
     return (
         <Sheet>
             <SheetTrigger asChild>

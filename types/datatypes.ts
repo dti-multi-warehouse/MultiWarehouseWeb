@@ -103,3 +103,10 @@ export interface StockMutation {
     quantity: number;
     created_at: Date;
 }
+
+export interface ProductAndStockAvailablity {
+    productId: number;
+    name: string;
+    stock: number;
+    thumbnail: string;
+}

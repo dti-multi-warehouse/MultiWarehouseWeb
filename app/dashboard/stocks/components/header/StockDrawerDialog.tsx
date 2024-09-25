@@ -12,6 +12,7 @@ import {
     DrawerTrigger
 } from "@/components/ui/drawer";
 import {Button} from "@/components/ui/button";
+import StockMutationForm from "./StockMutationForm";
 
 interface StockDrawerDialogProps {
     children: ReactNode
@@ -29,8 +30,10 @@ const StockDrawerDialog: FC<StockDrawerDialogProps> = ({children}) => {
                 </DialogTrigger>
                 <DialogContent className={"sm:max-w-[425px]"}>
                     <DialogHeader>
-                        <DialogTitle>Restock</DialogTitle>
+                        <DialogTitle>Manage Stock</DialogTitle>
+                        <p className={"text-gray-500 text-sm"}>Warehouse Name</p>
                     </DialogHeader>
+                    <StockMutationForm setOpen={setOpen} />
                 </DialogContent>
             </Dialog>
         )
@@ -43,16 +46,18 @@ const StockDrawerDialog: FC<StockDrawerDialogProps> = ({children}) => {
             </DrawerTrigger>
             <DrawerContent>
                 <DrawerHeader className={"text-left"}>
-                    <DrawerTitle>Restock</DrawerTitle>
+                    <DrawerTitle>Manage Stock</DrawerTitle>
+                </DrawerHeader>
+                <StockMutationForm setOpen={setOpen}/>
                     <DrawerFooter className={"pt-2"}>
                         <DrawerClose asChild>
                             <Button variant={"outline"}>Cancel</Button>
                         </DrawerClose>
                     </DrawerFooter>
-                </DrawerHeader>
             </DrawerContent>
         </Drawer>
     )
 }
 
 export default StockDrawerDialog
+
