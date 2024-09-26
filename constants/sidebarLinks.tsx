@@ -1,16 +1,11 @@
 import {SidebarLinkProps} from "@/components/DashboardSidebar/types";
-import {Building, ChartNoAxesCombined, Library, Mail, Package2, Tag, Truck, UsersRound, Warehouse} from "lucide-react";
+import {Building, ChartNoAxesCombined, Library, Package2, Tag, Truck, UsersRound, Warehouse} from "lucide-react";
 
 export const sidebarLinks: SidebarLinkProps[] = [
     {
         icon: <ChartNoAxesCombined />,
         text: "Dashboard",
         link: ""
-    },
-    {
-        icon: <Mail />,
-        text: "Inbox",
-        link: "inbox"
     },
     {
         icon: <Truck />,
