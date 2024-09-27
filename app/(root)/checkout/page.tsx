@@ -65,7 +65,7 @@ const Checkout: React.FC = () => {
   }, [selectedShippingMethod]);
 
   const handleCheckout = () => {
-    const primaryAddress = addresses?.data.find((address) => address.primary);
+    const primaryAddress = addresses?.data.find((address) => address.primary === true);
 
     if (!primaryAddress) {
       alert("No primary address found.");
@@ -113,6 +113,7 @@ const Checkout: React.FC = () => {
 
         <div className="flex gap-10">
           <div className="w-[60%] flex flex-col gap-5">
+          <div className="h-2 w-full bg-gray-200 rounded-lg "></div>
             <div className="flex flex-col gap-5 py-3">
               <h3 className="font-semibold">Detail Pembeli</h3>
               {primaryAddress ? (

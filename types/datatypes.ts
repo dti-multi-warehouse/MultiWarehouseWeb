@@ -226,6 +226,7 @@ export interface WarehouseDTO {
   }
 
   export interface CreateWarehouseDto {
+    name: string;
     street: string;
     city: string;
     province: string;
