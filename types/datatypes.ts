@@ -1,3 +1,5 @@
+import {date} from "yup";
+
 export interface userAddress {
     data?: {
         id: number;
@@ -13,7 +15,7 @@ export interface userAddress {
         };
         primary: boolean;
     }
-}  
+}
 
 export interface AddItemDto {
     productId: number;
@@ -25,7 +27,7 @@ export interface cartItems {
     name: string;
     price: number;
     quantity: number;
-    imageUrl: string; 
+    imageUrl: string;
 }
 
 export interface CartResponse {
@@ -130,29 +132,45 @@ export interface Stock {
     stock: number
 }
 
+export interface StockMutation {
+    id: number;
+    warehouseToId: number;
+    warehouseFromId: number;
+    name: string;
+    quantity: number;
+    created_at: Date;
+}
+
+export interface ProductAndStockAvailablity {
+    productId: number;
+    name: string;
+    stock: number;
+    thumbnail: string;
+}
+
 export enum PaymentMethod {
     MIDTRANS = 'MIDTRANS',
     BANK_TRANSFER = 'BANK_TRANSFER',
 }
-  
+
 export enum BankTransfer {
     BCA = 'BCA',
     BRI = 'BRI',
     BNI = 'BNI',
     CIMB = 'CIMB',
 }
-  
+
 export interface CreateOrderItemRequestDto {
     productId: number;
     quantity: number;
 }
-  
+
 export interface CreateOrderRequestDto {
     paymentMethod: PaymentMethod;
-    bankTransfer?: BankTransfer; 
-    shippingMethod: string; 
+    bankTransfer?: BankTransfer;
+    shippingMethod: string;
 }
-  
+
 export interface CreateOrderResponseDto {
     transactionId: string;
     currency: string;
@@ -164,7 +182,7 @@ export interface CreateOrderResponseDto {
     vaNumber: string;
     message: string;
 }
-  
+
 export interface Order {
     id: number;
     userId: number;
@@ -177,21 +195,21 @@ export interface Order {
     createdAt: string;
     updatedAt: string;
 }
-  
+
 export interface OrderItem {
     id: number;
     productId: number;
     quantity: number;
-    price: number; 
+    price: number;
 }
-  
+
 export interface CreateOrderResponseDto {
     orderId: number;
     totalAmount: number;
     orderItems: OrderItem[];
     paymentUrl: string;
 }
-  
+
 export interface MidtransError {
     statusCode: number;
     message: string;
@@ -206,7 +224,7 @@ export interface WarehouseDTO {
     latitude: number;
     longitude: number;
   }
-  
+
   export interface CreateWarehouseDto {
     name: string;
     street: string;
@@ -215,7 +233,7 @@ export interface WarehouseDTO {
     latitude: number;
     longitude: number;
   }
-  
+
   export interface AssignWarehouseAdminDTO {
     warehouseId: number;
     userId: number;

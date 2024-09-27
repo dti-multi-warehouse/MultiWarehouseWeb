@@ -17,7 +17,7 @@ const getData = async (params: ReadonlyURLSearchParams) : Promise<ProductSearchR
             {
                 headers: {
                     accept: 'application/json',
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'applcation/json',
                 },
             }
         );
