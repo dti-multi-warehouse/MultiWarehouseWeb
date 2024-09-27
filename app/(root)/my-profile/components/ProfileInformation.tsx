@@ -50,7 +50,7 @@ const ProfileInformation: React.FC = () => {
       <div className="flex gap-10 w-full">
         <div className="flex flex-col items-center gap-5">
           <Image
-            src={profile?.avatar || "/default-avatar.jpg"}
+            src={profile?.avatar || "/default-user.png"}
             alt="Profile picture"
             height={200}
             width={200}

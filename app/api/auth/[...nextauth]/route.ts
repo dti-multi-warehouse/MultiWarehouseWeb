@@ -15,9 +15,7 @@ export const authOptions: NextAuthOptions = {
         social: { label: "Social", type: "text" },
       },
       async authorize(credentials) {
-        if (!credentials?.email) {
-          return null;
-        }
+        if (!credentials?.email) return null;
 
         if (credentials.social) {
           try {
@@ -32,28 +30,32 @@ export const authOptions: NextAuthOptions = {
                 token: response.data.accessToken,
                 email: response.data.email,
                 social: true,
+                role: response.data.role || "user",
               };
             }
           } catch (error) {
             console.error("Error during social login:", error);
             return null;
           }
-        }
+        } else if (credentials.password) {
+          try {
+            const response = await apiClient.post<LoginResponse>("/api/v1/auth/login", {
+              email: credentials.email,
+              password: credentials.password,
+            });
 
-        else if (credentials.password) {
-          const response = await apiClient.post<LoginResponse>("/api/v1/auth/login", {
-            email: credentials.email,
-            password: credentials.password,
-          });
-
-          if (response.data && response.data.accessToken) {
-            return {
-              id: response.data.userId, 
-              token: response.data.accessToken,
-              email: response.data.email,
-              role: response.data.role,
-              social: false,
-            };
+            if (response.data && response.data.accessToken) {
+              return {
+                id: response.data.userId, 
+                token: response.data.accessToken,
+                email: response.data.email,
+                role: response.data.role || "user", 
+                social: false,
+              };
+            }
+          } catch (error) {
+            console.error("Error during login:", error);
+            return null;
           }
         }
 
@@ -85,6 +87,7 @@ export const authOptions: NextAuthOptions = {
         token.id = user.id;
         token.email = user.email;
         token.social = user.social;
+        token.role = user.role;
       }
       return token;
     },
@@ -95,7 +98,7 @@ export const authOptions: NextAuthOptions = {
       session.user = {
         id: token.id, 
         email: token.email,
-        role: token.role,
+        role: token.role || "user", 
         social: token.social,
       };
 

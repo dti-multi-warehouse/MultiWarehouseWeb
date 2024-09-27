@@ -30,7 +30,7 @@ const ProductInput: FC = () => {
     const [open, setOpen] = useState(false)
     const [value, setValue] = useState<string>("")
     const { values, setFieldValue } = useFormikContext<ProductInputValue>()
-    const { data, isLoading, error } = useProductAndStockAvailability(3)
+    const { data, isLoading, error } = useProductAndStockAvailability(values.warehouseToId)
 
     return (
         <Popover open={open} onOpenChange={setOpen} modal={true}>

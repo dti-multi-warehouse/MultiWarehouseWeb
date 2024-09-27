@@ -14,7 +14,7 @@ import RequestItem from "@/app/dashboard/stocks/components/header/RequestItem";
 
 
 const RequestSheet: FC = () => {
-    const { data, isLoading, error } = useActiveStockMutationRequest()
+    const { data, isLoading, error, refetch } = useActiveStockMutationRequest()
     return (
         <Sheet>
             <SheetTrigger asChild>
@@ -28,7 +28,7 @@ const RequestSheet: FC = () => {
                     </SheetDescription>
                 </SheetHeader>
                 <div>
-                    {data?.map( request => <RequestItem key={request.id} {...request} />)}
+                    {data?.map( request => <RequestItem key={request.id} {...request} refetch={refetch} />)}
                 </div>
             </SheetContent>
         </Sheet>

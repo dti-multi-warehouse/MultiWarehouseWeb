@@ -5,18 +5,30 @@ import { IoCartOutline } from "react-icons/io5";
 import { useSession } from "next-auth/react";
 import { useState, useEffect } from "react";
 import { useGetProfile } from "@/hooks/useUser";
+import { useCart } from "@/hooks/useCart";
 import AlertDialog from "@/components/AlertDialog";
 
 const CartHeader: React.FC = () => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { profile, isLoading: isProfileLoading } = useGetProfile();
+  const { cart } = useCart(); 
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+  const [totalItems, setTotalItems] = useState(0);
 
   const isAuthenticated = status === "authenticated";
   const isVerified = profile?.verified;
+
+  useEffect(() => {
+    if (isAuthenticated && cart?.data?.cartItems) {
+      const totalQuantity = cart.data.cartItems.reduce((total, item) => total + item.quantity, 0);
+      setTotalItems(totalQuantity);
+    } else {
+      setTotalItems(0);
+    }
+  }, [cart, isAuthenticated]);
 
   const handleCartClick = () => {
     if (!isAuthenticated) {
@@ -41,13 +53,15 @@ const CartHeader: React.FC = () => {
           className="flex items-center text-red-600 gap-1 hover:scale-105 transition-all"
           onClick={handleCartClick}
         >
-          <IoCartOutline className=" text-3xl" />
-          <span className="absolute -top-1 -right-2 bg-red-200 px-2 rounded-full text-sm font-bold">
-            5
-          </span>
+          <IoCartOutline className="text-3xl" />
+          {totalItems > 0 && (
+            <span className="absolute -top-1 -right-2 bg-red-200 px-2 rounded-full text-sm font-bold">
+              {totalItems}
+            </span>
+          )}
         </button>
       </div>
-      
+
       <AlertDialog
         open={dialogOpen}
         onOpenChange={setDialogOpen}

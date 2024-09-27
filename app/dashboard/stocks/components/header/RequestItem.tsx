@@ -5,21 +5,28 @@ import {config} from "@/constants/url";
 import axios from "axios";
 
 
-const RequestItem: FC<StockMutation> = ({
+interface RequestItemProps extends StockMutation {
+    refetch: () => void;
+}
+
+const RequestItem: FC<RequestItemProps> = ({
     id,
     warehouseToId,
     warehouseFromId,
     name,
     quantity,
-    created_at
+    created_at,
+    refetch
                                         }) => {
     const url = config.BASE_URL + config.API_VER + config.endpoints.stockMutation + `/${id}`
     const handleAccept = () => {
         axios.put(url + "/accept")
+        refetch()
     }
 
     const handleReject = () => {
         axios.put(url + "/reject")
+        refetch()
     }
     return (
         <div className="mb-4 p-4 border rounded-lg">

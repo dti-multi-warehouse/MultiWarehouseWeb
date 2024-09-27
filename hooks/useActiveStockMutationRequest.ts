@@ -6,13 +6,15 @@ const useActiveStockMutationRequest = () => {
     const {
         data,
         isLoading,
-        error
+        error,
+        refetch
     } = useQuery( {
         queryKey: ['stock-mutation'],
-        queryFn: async () => getActiveStockMutationRequest()
+        queryFn: async () => getActiveStockMutationRequest(),
+        staleTime: 60 * 1000
     })
 
-    return { data, isLoading, error }
+    return { data, isLoading, error, refetch }
 }
 
 export default useActiveStockMutationRequest;
