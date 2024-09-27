@@ -26,7 +26,7 @@ export const authOptions: NextAuthOptions = {
 
             if (response.data && response.data.accessToken) {
               return {
-                id: response.data.userId, 
+                id: response.data.userId,
                 token: response.data.accessToken,
                 email: response.data.email,
                 social: true,
@@ -46,10 +46,10 @@ export const authOptions: NextAuthOptions = {
 
             if (response.data && response.data.accessToken) {
               return {
-                id: response.data.userId, 
+                id: response.data.userId,
                 token: response.data.accessToken,
                 email: response.data.email,
-                role: response.data.role || "user", 
+                role: response.data.role || "user",
                 social: false,
               };
             }
@@ -96,9 +96,9 @@ export const authOptions: NextAuthOptions = {
       session.accessToken = token.accessToken;
 
       session.user = {
-        id: token.id, 
+        id: token.id,
         email: token.email,
-        role: token.role || "user", 
+        role: token.role || "user",
         social: token.social,
       };
 

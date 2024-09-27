@@ -1,6 +1,6 @@
 "use client";
 
-import React from 'react';
+import React from "react";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState } from "react";
@@ -8,9 +8,8 @@ import { useRouter } from "next/navigation";
 import { useLoginUser } from "@/hooks/useUser";
 import AlertDialog from "@/components/AlertDialog";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import SocialButtonLogin from './SocialButtonLogin';
 
-const SignInForm: React.FC = () => {
+const AdminSignInForm: React.FC = () => {
   const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const login = useLoginUser();
@@ -39,19 +38,18 @@ const SignInForm: React.FC = () => {
             { email: values.email, password: values.password },
             {
               onSuccess: (data) => {
-                if (data.role === "admin" || data.role === "warehouse_admin") {
-                  setDialogMessage("Admins must log in via the dashboard.");
+                console.log('Login success data:', data);
+                if (data.role === "ADMIN") {
+                  router.push("/dashboard");
+                } else if (data.role === "WAREHOUSE_ADMIN") {
+                  router.push("/dashboard/stocks");
+                } else {
+                  setDialogMessage("This login is restricted to admins.");
                   setDialogOpen(true);
                   setSubmitting(false);
                   return;
                 }
-
-                setDialogMessage("Successfully logged in!");
-                setDialogOpen(true);
-                setTimeout(() => {
-                  setDialogOpen(false);
-                  router.push("/");
-                }, 2000);
+                setSubmitting(false);
               },
               onError: (error: any) => {
                 setDialogMessage("Login failed. Please check your credentials.");
@@ -64,11 +62,11 @@ const SignInForm: React.FC = () => {
       >
         <Form className="flex flex-col gap-y-5 items-center justify-center w-full">
           <div className="flex flex-col gap-y-1 w-full">
-            <label className="text-sm font-medium">Registered Email</label>
+            <label className="text-sm font-medium">Admin Email</label>
             <Field
               type="email"
               name="email"
-              placeholder="Input your email"
+              placeholder="Input your admin email"
               className="w-full p-1 border-2 rounded-lg border-gray-300"
             />
             <ErrorMessage
@@ -104,12 +102,8 @@ const SignInForm: React.FC = () => {
             type="submit"
             className="w-full bg-red-600 text-white py-2 rounded-lg transition-all duration-500 hover:shadow-lg"
           >
-            Sign In
+            Admin Sign In
           </button>
-          <div className="">
-            <span className="text-center text-sm text-gray-500">Or</span>
-          </div>
-          <SocialButtonLogin />
         </Form>
       </Formik>
 
@@ -117,10 +111,9 @@ const SignInForm: React.FC = () => {
         open={dialogOpen}
         onOpenChange={handleDialogClose}
         title={dialogMessage}
-        cancelVisibility='hidden'
       />
     </>
   );
 };
 
-export default SignInForm;
+export default AdminSignInForm;
