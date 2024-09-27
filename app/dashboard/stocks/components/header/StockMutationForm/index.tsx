@@ -24,7 +24,7 @@ interface StockMutationFormProps {
 const StockMutationForm: FC<StockMutationFormProps> = ({setOpen}) => {
     const [type, setType] = useState<'restock' | 'mutation'>('restock')
 
-    const handleSubmit = (values) => {
+    const handleSubmit = (values: { productId: number; warehouseToId: number; warehouseFromId: number; quantity: number; maxQuantity: number; }) => {
         const url = config.BASE_URL + config.API_VER + config.endpoints.stock + `/${type}`
         axios.post(url, values)
             .then(() => {

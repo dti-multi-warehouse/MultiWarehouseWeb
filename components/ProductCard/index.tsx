@@ -8,6 +8,7 @@ import { useSession } from "next-auth/react";
 import { useGetProfile } from "@/hooks/useUser";
 import AlertDialog from "@/components/AlertDialog";
 import { useAddToCart } from "@/hooks/useCart";
+import {useRouter} from "next/navigation";
 
 const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) => {
   const { data: session, status } = useSession(); 

@@ -23,6 +23,7 @@ import {useFormikContext} from "formik";
 
 interface ProductInputValue {
     productId: number
+    warehouseToId: number
 }
 
 
@@ -42,7 +43,7 @@ const ProductInput: FC = () => {
                     className="w-full justify-between"
                 >
                     {value
-                        ? data.find((product) => product.name === value)?.name
+                        ? data?.find((product) => product.name === value)?.name
                         : "Select product..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -59,7 +60,7 @@ const ProductInput: FC = () => {
                                         value={product.name}
                                         onSelect={(currentValue) => {
                                             setFieldValue("productId", product.productId)
-                                            setValue(currentValue === value ? null : currentValue)
+                                            setValue(currentValue === value ? '' : currentValue)
                                             setOpen(false)
                                         }}
                                         className={"flex justify-between h-20"}
