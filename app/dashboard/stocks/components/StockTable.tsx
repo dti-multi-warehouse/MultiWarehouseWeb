@@ -20,10 +20,12 @@ const StockTable: FC = () => {
         <Table className={"w-full"}>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="">#</TableHead>
-                    <TableHead>Image</TableHead>
+                    <TableHead className={"hidden"}>#</TableHead>
+                    <TableHead className={"hidden"}>Image</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead>In Stock</TableHead>
+                    <TableHead>In</TableHead>
+                    <TableHead>Out</TableHead>
+                    <TableHead>Stock</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -39,14 +41,16 @@ interface StockRowProps extends Stock {
     index: number;
 }
 
-const StockRow: FC<StockRowProps> = ({id, thumbnail, name, warehouseId, stock, index}) => {
+const StockRow: FC<StockRowProps> = ({id, thumbnail, name, incoming, outgoing, stock, index}) => {
     return (
         <TableRow>
-            <TableCell className="font-medium">{index}</TableCell>
-            <TableCell>
+            <TableCell className={"hidden font-medium"}>{index}</TableCell>
+            <TableCell className={"hidden"}>
                 <Image src={thumbnail} alt={`thumbnail of ${name}`} width={60} height={60} />
             </TableCell>
             <TableCell>{name}</TableCell>
+            <TableCell>{incoming}</TableCell>
+            <TableCell>{outgoing}</TableCell>
             <TableCell>{stock}</TableCell>
         </TableRow>
     )

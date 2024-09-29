@@ -12,6 +12,10 @@ const getData = async (): Promise<Stock[]> => {
                     accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
+                params: {
+                    warehouseId: 2,
+                    date: new Date().toISOString().split('T')[0]
+                }
             }
         )
         return response.data.data;
