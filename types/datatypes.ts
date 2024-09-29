@@ -133,6 +133,13 @@ export interface Stock {
     outgoing: number;
 }
 
+export interface StockDetails {
+    date: Date;
+    quantity: number;
+    source: 'order' | 'restock' | 'mutation_in' | 'mutation_out';
+    note: number
+}
+
 export interface StockMutation {
     id: number;
     warehouseToId: number;

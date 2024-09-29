@@ -17,14 +17,14 @@ const StockTable: FC = () => {
     const {data, isLoading, error} = useAllStocks()
 
     return (
-        <Table className={"w-full overflow-hidden"}>
+        <Table className={"overflow-hidden"}>
             <TableHeader>
                 <TableRow>
-                    <TableHead className={"max-md:hidden"}>#</TableHead>
-                    <TableHead className={"max-md:hidden"}>Image</TableHead>
+                    <TableHead className={"w-12 max-md:hidden"}>#</TableHead>
+                    <TableHead className={"w-20 max-md:hidden"}>Image</TableHead>
                     <TableHead className={"max-w-24"}>Name</TableHead>
-                    <TableHead>In</TableHead>
-                    <TableHead>Out</TableHead>
+                    <TableHead className={"text-green-600"}>In</TableHead>
+                    <TableHead className={"text-red-600"}>Out</TableHead>
                     <TableHead>Stock</TableHead>
                 </TableRow>
             </TableHeader>
@@ -44,13 +44,13 @@ interface StockRowProps extends Stock {
 const StockRow: FC<StockRowProps> = ({id, thumbnail, name, incoming, outgoing, stock, index}) => {
     return (
         <TableRow>
-            <TableCell className={"max-md:hidden font-medium"}>{index}</TableCell>
-            <TableCell className={"max-md:hidden"}>
+            <TableCell className={"max-md:hidden w-12 font-medium"}>{index}</TableCell>
+            <TableCell className={"max-md:hidden w-20"}>
                 <Image src={thumbnail} alt={`thumbnail of ${name}`} width={60} height={60} />
             </TableCell>
             <TableCell className={"max-w-24"}>{name}</TableCell>
-            <TableCell>{incoming}</TableCell>
-            <TableCell>{outgoing}</TableCell>
+            <TableCell className={"text-green-600"}>{incoming}</TableCell>
+            <TableCell className={"text-red-600"}>{outgoing}</TableCell>
             <TableCell>{stock}</TableCell>
         </TableRow>
     )
