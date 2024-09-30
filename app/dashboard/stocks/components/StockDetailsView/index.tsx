@@ -4,16 +4,29 @@ import useStockDetails from "@/hooks/useStockDetails";
 import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon} from "lucide-react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {StockDetails} from "@/types/datatypes";
+import {StockMovementsChart} from "@/app/dashboard/stocks/components/StockDetailsView/StockChart";
+import useDashboardStore from "@/hooks/useDashboardStore";
 
 
 const StockDetailsView: FC = () => {
-    const {data, isLoading, error} = useStockDetails()
+    const warehouseId = useDashboardStore( state => state.warehouseId)
+    const product = useDashboardStore( state => state.product)
+    const {data, isLoading, error} = useStockDetails(warehouseId, product.id)
+
+    if (product.id == 0) {
+        return (
+            <h1>Nothing!</h1>
+        )
+    }
 
     return (
         <section className={"col-span-1"}>
-            Stock details
+            <StockMovementsChart />
             <div className={"flex flex-col gap-2"}>
-                {data?.map((details, index) => <StockDetailsCard key={index} {...details} />)}
+                {data && data.length > 0
+                    ? data.map((details, index) => <StockDetailsCard key={index} {...details} />)
+                    : <h1>This is product has no movement during this time period!</h1>
+                }
             </div>
         </section>
     )

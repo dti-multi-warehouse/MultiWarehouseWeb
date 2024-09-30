@@ -1,5 +1,4 @@
 'use client'
-
 import {
     Table,
     TableBody,
@@ -12,6 +11,7 @@ import {FC} from "react";
 import {Stock} from "@/types/datatypes";
 import useAllStocks from "@/hooks/useAllStocks";
 import Image from "next/image";
+import useDashboardStore from "@/hooks/useDashboardStore";
 
 const StockTable: FC = () => {
     const {data, isLoading, error} = useAllStocks()
@@ -42,8 +42,9 @@ interface StockRowProps extends Stock {
 }
 
 const StockRow: FC<StockRowProps> = ({id, thumbnail, name, incoming, outgoing, stock, index}) => {
+    const setProductId = useDashboardStore(state => state.setProduct)
     return (
-        <TableRow>
+        <TableRow onClick={() => setProductId({id, name, stock})}>
             <TableCell className={"max-md:hidden w-12 font-medium"}>{index}</TableCell>
             <TableCell className={"max-md:hidden w-20"}>
                 <Image src={thumbnail} alt={`thumbnail of ${name}`} width={60} height={60} />

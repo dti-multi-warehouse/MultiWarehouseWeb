@@ -1,3 +1,4 @@
+'use client'
 import {FC} from "react";
 import StockTable from "./components/StockTable";
 import StockHeader from "./components/header";
@@ -8,7 +9,7 @@ const StocksDashboardPage: FC = () => {
         <main className={"grid grid-cols-2 gap-4"}>
             <div className={"col-span-1 border-r"}>
                 <StockHeader />
-                <StockTable />
+                <StockTable/>
             </div>
             <StockDetailsView />
         </main>

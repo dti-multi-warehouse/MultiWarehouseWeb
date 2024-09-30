@@ -246,3 +246,15 @@ export interface WarehouseDTO {
     warehouseId: number;
     userId: number;
   }
+
+  export interface DashboardStore {
+    warehouseId: number;
+    product: ProductStockDetails;
+    setProduct: (product: ProductStockDetails) => void;
+  }
+
+  export interface ProductStockDetails {
+    id: number;
+    name: string;
+    stock: number;
+  }
