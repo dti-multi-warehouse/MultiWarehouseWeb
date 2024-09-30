@@ -62,7 +62,7 @@ const Checkout: React.FC = () => {
     if (selectedShippingMethod) {
       fetchShippingCost(selectedShippingMethod);
     }
-  }, [selectedShippingMethod]);
+  }, [fetchShippingCost, selectedShippingMethod]);
 
   const handleCheckout = () => {
     const primaryAddress = addresses?.data.find((address) => address.primary === true);
