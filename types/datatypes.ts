@@ -126,10 +126,18 @@ export interface ConfirmResetPasswordRequest {
 
 export interface Stock {
     id: number;
-    warehouseId: number;
-    thumbnail: string;
     name: string;
     stock: number
+    thumbnail: string;
+    incoming: number;
+    outgoing: number;
+}
+
+export interface StockDetails {
+    date: Date;
+    quantity: number;
+    source: 'order' | 'restock' | 'mutation_in' | 'mutation_out';
+    note: number
 }
 
 export interface StockMutation {

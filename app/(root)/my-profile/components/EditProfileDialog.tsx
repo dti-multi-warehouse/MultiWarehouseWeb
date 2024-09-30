@@ -138,7 +138,7 @@ const EditProfileDialog: React.FC = () => {
                 />
                 {!isSocialUser && (
                   <p className="text-xs font-semibold text-red-500">
-                    * If you change the email, you'll need to verify your new email.
+                    * If you change the email, you&apos;ll need to verify your new email.
                   </p>
                 )}
               </div>

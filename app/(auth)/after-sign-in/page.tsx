@@ -51,7 +51,7 @@ const AfterSignIn: React.FC = () => {
           .catch((err) => setError("Error retrieving token: " + err));
       }
     }
-  }, [isLoaded, user, getToken]);
+  }, [isLoaded, user, getToken, syncSocialLogin]);
 
   return (
     <div>
