@@ -13,9 +13,13 @@ const useDashboardStore = create<DashboardStore>((set) => ({
         name: 'Gudang'
     },
     date: new Date(),
+    isStockDrawerOpen: false,
     setProduct: (product: ProductStockDetails) => set((state) => ({ product })),
     setWarehouse: (warehouse: WarehouseList) => set((state) => ({ warehouse: warehouse })),
     setDate: (date: Date) => set((state) => ({ date })),
+    setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => {
+        set((state) => ({isStockDrawerOpen}))
+    }
 }))
 
 export default useDashboardStore

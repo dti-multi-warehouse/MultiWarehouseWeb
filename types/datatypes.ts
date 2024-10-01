@@ -265,9 +265,11 @@ export interface WarehouseDTO {
     product: ProductStockDetails;
     warehouse: WarehouseList;
     date: Date;
+    isStockDrawerOpen: boolean;
     setProduct: (product: ProductStockDetails) => void;
     setWarehouse: (warehouse: WarehouseList) => void;
     setDate: (date: Date) => void;
+    setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => void;
   }
 
   export interface ProductStockDetails {

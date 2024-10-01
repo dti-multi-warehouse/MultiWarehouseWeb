@@ -59,15 +59,12 @@ const StockMovementsChart:FC<StockMovementsChartProps> = ({chartData}) => {
     }
 
     return (
-        <Card>
-            <CardHeader>
+        <Card className={"shadow-none lg:border-none max-lg:max-h-80"}>
+            <CardHeader className={"max-lg:px-0"}>
                 <CardTitle>{product.name} Movements</CardTitle>
                 <p className={"text-gray-500"}>{product.stock} currently in stock</p>
-                <CardDescription className={"text-right"}>
-                    Showing stock movements for the last X
-                </CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className={"max-lg:p-0"}>
                 <ChartContainer config={chartConfig}>
                     <AreaChart
                         accessibilityLayer
@@ -129,18 +126,6 @@ const StockMovementsChart:FC<StockMovementsChartProps> = ({chartData}) => {
                     </AreaChart>
                 </ChartContainer>
             </CardContent>
-            <CardFooter>
-                <div className="flex w-full items-start gap-2 text-sm">
-                    <div className="grid gap-2">
-                        <div className="flex items-center gap-2 font-medium leading-none">
-                            Stock trend analysis <TrendingUp className="h-4 w-4" />
-                        </div>
-                        <div className="flex items-center gap-2 leading-none text-muted-foreground">
-                            January - May 2023
-                        </div>
-                    </div>
-                </div>
-            </CardFooter>
         </Card>
     )
 }

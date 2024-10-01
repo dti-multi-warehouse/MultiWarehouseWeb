@@ -45,8 +45,14 @@ interface StockRowProps extends Stock {
 
 const StockRow: FC<StockRowProps> = ({id, thumbnail, name, incoming, outgoing, stock, index}) => {
     const setProductId = useDashboardStore(state => state.setProduct)
+    const  setIsStockDrawerOpen = useDashboardStore(state => state.setIsStockDrawerOpen)
+
+    const handleClick = () => {
+        setProductId({id, name, stock})
+        setIsStockDrawerOpen(true)
+    }
     return (
-        <TableRow onClick={() => setProductId({id, name, stock})}>
+        <TableRow onClick={handleClick}>
             <TableCell className={"max-md:hidden w-12 font-medium"}>{index}</TableCell>
             <TableCell className={"max-md:hidden w-20"}>
                 <Image src={thumbnail} alt={`thumbnail of ${name}`} width={60} height={60} />

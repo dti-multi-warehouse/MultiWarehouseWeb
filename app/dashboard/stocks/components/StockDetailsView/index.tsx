@@ -1,11 +1,23 @@
 'use client'
 import {FC} from "react";
+import {
+    Drawer,
+    DrawerClose,
+    DrawerContent,
+    DrawerDescription,
+    DrawerFooter,
+    DrawerHeader,
+    DrawerTitle,
+    DrawerTrigger,
+} from "@/components/ui/drawer"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import useStockDetails from "@/hooks/useStockDetails";
 import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon} from "lucide-react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {StockDetails} from "@/types/datatypes";
 import useDashboardStore from "@/hooks/useDashboardStore";
 import StockMovementsChart from "@/app/dashboard/stocks/components/StockDetailsView/StockChart";
+import useMediaQuery from "@/hooks/useMediaQuery";
 
 
 const StockDetailsView: FC = () => {
@@ -13,9 +25,32 @@ const StockDetailsView: FC = () => {
     const product = useDashboardStore( state => state.product)
     const date = useDashboardStore(state => state.date)
     const {data, isLoading, error} = useStockDetails(warehouse.id, product.id, date)
+    const isDesktop = useMediaQuery("(min-width: 1024px)")
+    const isStockDrawerOpen = useDashboardStore(state => state.isStockDrawerOpen)
+    const setIsStockDrawerOpen = useDashboardStore(state => state.setIsStockDrawerOpen)
+
+    if (!isDesktop) {
+        return (
+            <Drawer open={isStockDrawerOpen} onOpenChange={setIsStockDrawerOpen}>
+                <DrawerContent>
+                    <DrawerHeader>
+                        <DrawerTitle className={"hidden"}>{product.name} Stock Movements</DrawerTitle>
+                        <DrawerDescription className={"hidden"}>The movements of {product.name} stock</DrawerDescription>
+                        <StockMovementsChart chartData={data?.stockMovementChartData} />
+                    </DrawerHeader>
+                    <ScrollArea className="h-[40vh] px-4">
+                        {data?.stockMovements && data.stockMovements.length > 0
+                            ? data.stockMovements.map((details, index) => <StockDetailsCard key={index} {...details} />)
+                            : <h1>This is product has no movement during this time period!</h1>
+                        }
+                    </ScrollArea>
+                </DrawerContent>
+            </Drawer>
+        )
+    }
 
     return (
-        <section className={"col-span-1"}>
+        <section className={"col-span-1 space-y-2"}>
             <StockMovementsChart chartData={data?.stockMovementChartData} />
             <div className={"flex flex-col gap-2"}>
                 {data?.stockMovements && data.stockMovements.length > 0
