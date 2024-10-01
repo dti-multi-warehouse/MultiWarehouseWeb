@@ -5,6 +5,7 @@ export const config = {
         product: 'product',
         category: 'category',
         stock: 'stock',
-        stockMutation: 'stock/mutation'
+        stockMutation: 'stock/mutation',
+        warehouse: 'warehouse',
     },
 }

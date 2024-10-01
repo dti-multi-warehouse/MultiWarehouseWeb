@@ -9,9 +9,10 @@ import StockMovementsChart from "@/app/dashboard/stocks/components/StockDetailsV
 
 
 const StockDetailsView: FC = () => {
-    const warehouseId = useDashboardStore( state => state.warehouseId)
+    const warehouse = useDashboardStore( state => state.warehouse)
     const product = useDashboardStore( state => state.product)
-    const {data, isLoading, error} = useStockDetails(warehouseId, product.id)
+    const date = useDashboardStore(state => state.date)
+    const {data, isLoading, error} = useStockDetails(warehouse.id, product.id, date)
 
     return (
         <section className={"col-span-1"}>

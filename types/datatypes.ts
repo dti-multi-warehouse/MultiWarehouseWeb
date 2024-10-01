@@ -1,4 +1,5 @@
 import {date} from "yup";
+import {WarehouseList} from "@/types/warehouse";
 
 export interface userAddress {
     data?: {
@@ -261,9 +262,12 @@ export interface WarehouseDTO {
   }
 
   export interface DashboardStore {
-    warehouseId: number;
     product: ProductStockDetails;
+    warehouse: WarehouseList;
+    date: Date;
     setProduct: (product: ProductStockDetails) => void;
+    setWarehouse: (warehouse: WarehouseList) => void;
+    setDate: (date: Date) => void;
   }
 
   export interface ProductStockDetails {

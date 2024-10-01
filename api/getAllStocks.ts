@@ -3,7 +3,7 @@ import {config} from "@/constants/url";
 import {Stock} from "@/types/datatypes";
 
 
-const getData = async (): Promise<Stock[]> => {
+const getData = async (warehouseId: number, date: Date): Promise<Stock[]> => {
     try {
         const response: AxiosResponse = await axios.get(
             config.BASE_URL + config.API_VER + config.endpoints.stock,
@@ -13,8 +13,8 @@ const getData = async (): Promise<Stock[]> => {
                     'Content-Type': 'application/json',
                 },
                 params: {
-                    warehouseId: 2,
-                    date: new Date().toISOString().split('T')[0]
+                    warehouseId: warehouseId,
+                    date: date.toISOString().split('T')[0]
                 }
             }
         )
@@ -25,6 +25,6 @@ const getData = async (): Promise<Stock[]> => {
     }
 }
 
-export const getAllStocks = async (): Promise<Stock[]> => {
-    return await getData();
+export const getAllStocks = async (warehouseId: number, date: Date): Promise<Stock[]> => {
+    return await getData(warehouseId, date);
 }

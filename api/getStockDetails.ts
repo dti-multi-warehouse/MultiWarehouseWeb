@@ -3,7 +3,7 @@ import {config} from "@/constants/url";
 import {StockDetailsResponse} from "@/types/datatypes";
 
 
-const getData = async (warehouseId: number, productId: number): Promise<StockDetailsResponse> => {
+const getData = async (warehouseId: number, productId: number, date: Date): Promise<StockDetailsResponse> => {
     try {
         const response: AxiosResponse = await axios.get(
             config.BASE_URL + config.API_VER + config.endpoints.stock + '/details',
@@ -14,7 +14,8 @@ const getData = async (warehouseId: number, productId: number): Promise<StockDet
                 },
                 params: {
                     warehouseId,
-                    productId
+                    productId,
+                    date: date.toISOString().split('T')[0],
                 }
             }
         )
@@ -25,6 +26,6 @@ const getData = async (warehouseId: number, productId: number): Promise<StockDet
     }
 }
 
-export const getStockDetails = async (warehouseId: number, productId: number): Promise<StockDetailsResponse> => {
-    return await getData(warehouseId, productId);
+export const getStockDetails = async (warehouseId: number, productId: number, date: Date): Promise<StockDetailsResponse> => {
+    return await getData(warehouseId, productId, date);
 }

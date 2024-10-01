@@ -14,7 +14,9 @@ import Image from "next/image";
 import useDashboardStore from "@/hooks/useDashboardStore";
 
 const StockTable: FC = () => {
-    const {data, isLoading, error} = useAllStocks()
+    const warehouse = useDashboardStore(state => state.warehouse)
+    const date = useDashboardStore(state => state.date)
+    const {data, isLoading, error} = useAllStocks(warehouse.id, date)
 
     return (
         <Table className={"overflow-hidden"}>
