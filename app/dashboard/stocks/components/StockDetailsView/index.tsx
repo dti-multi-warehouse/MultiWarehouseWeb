@@ -4,8 +4,8 @@ import useStockDetails from "@/hooks/useStockDetails";
 import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon} from "lucide-react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {StockDetails} from "@/types/datatypes";
-import {StockMovementsChart} from "@/app/dashboard/stocks/components/StockDetailsView/StockChart";
 import useDashboardStore from "@/hooks/useDashboardStore";
+import StockMovementsChart from "@/app/dashboard/stocks/components/StockDetailsView/StockChart";
 
 
 const StockDetailsView: FC = () => {
@@ -13,18 +13,12 @@ const StockDetailsView: FC = () => {
     const product = useDashboardStore( state => state.product)
     const {data, isLoading, error} = useStockDetails(warehouseId, product.id)
 
-    if (product.id == 0) {
-        return (
-            <h1>Nothing!</h1>
-        )
-    }
-
     return (
         <section className={"col-span-1"}>
-            <StockMovementsChart />
+            <StockMovementsChart chartData={data?.stockMovementChartData} />
             <div className={"flex flex-col gap-2"}>
-                {data && data.length > 0
-                    ? data.map((details, index) => <StockDetailsCard key={index} {...details} />)
+                {data?.stockMovements && data.stockMovements.length > 0
+                    ? data.stockMovements.map((details, index) => <StockDetailsCard key={index} {...details} />)
                     : <h1>This is product has no movement during this time period!</h1>
                 }
             </div>
@@ -76,7 +70,7 @@ const StockDetailsCard: FC<StockDetails> = ({date, source, note , quantity}) => 
                 <div className={"flex justify-between items-center"}>
                     <div>
                         <p className={"text-lg font-semibold"}>
-                            Quantity: {quantity > 0 ? '+' : ''}{quantity}
+                            Quantity: {quantity}
                         </p>
                         <p className={"text-sm text-muted-foreground"}>{addendum}: {note}</p>
                     </div>

@@ -1,8 +1,8 @@
 "use client"
 
+import {FC} from "react";
 import { TrendingUp } from "lucide-react"
 import { Area, AreaChart, CartesianGrid, XAxis, YAxis } from "recharts"
-
 import {
     Card,
     CardContent,
@@ -18,14 +18,15 @@ import {
     ChartTooltipContent,
 } from "@/components/ui/chart"
 import useDashboardStore from "@/hooks/useDashboardStore";
+import {StockMovementChartData} from "@/types/datatypes";
 
-const chartData = [
-    { date: '2023-01', restock: 100, mutationIn: 20, mutationOut: 30, order: 50 },
-    { date: '2023-02', restock: 80, mutationIn: 25, mutationOut: 20, order: 60 },
-    { date: '2023-03', restock: 120, mutationIn: 30, mutationOut: 25, order: 70 },
-    { date: '2023-04', restock: 90, mutationIn: 35, mutationOut: 35, order: 55 },
-    { date: '2023-05', restock: 110, mutationIn: 40, mutationOut: 30, order: 65 },
-]
+// const chartData = [
+//     { date: '2023-01', restock: 100, mutationIn: 20, mutationOut: 30, order: 50 },
+//     { date: '2023-02', restock: 80, mutationIn: 25, mutationOut: 20, order: 60 },
+//     { date: '2023-03', restock: 120, mutationIn: 30, mutationOut: 25, order: 70 },
+//     { date: '2023-04', restock: 90, mutationIn: 35, mutationOut: 35, order: 55 },
+//     { date: '2023-05', restock: 110, mutationIn: 40, mutationOut: 30, order: 65 },
+// ]
 
 const chartConfig = {
     restock: {
@@ -46,8 +47,16 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-export function StockMovementsChart() {
+interface StockMovementsChartProps {
+    chartData: StockMovementChartData[] | undefined
+}
+
+const StockMovementsChart:FC<StockMovementsChartProps> = ({chartData}) => {
     const product = useDashboardStore(state => state.product)
+
+    if (!chartData) {
+        return <></>
+    }
 
     return (
         <Card>
@@ -135,3 +144,5 @@ export function StockMovementsChart() {
         </Card>
     )
 }
+
+export default StockMovementsChart

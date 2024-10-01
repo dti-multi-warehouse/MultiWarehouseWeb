@@ -133,11 +133,24 @@ export interface Stock {
     outgoing: number;
 }
 
+export interface StockDetailsResponse {
+    stockMovements: StockDetails[];
+    stockMovementChartData: StockMovementChartData[]
+}
+
 export interface StockDetails {
     date: Date;
     quantity: number;
     source: 'order' | 'restock' | 'mutation_in' | 'mutation_out';
     note: number
+}
+
+export interface StockMovementChartData {
+    period: number;
+    restock: number;
+    mutationIn: number;
+    mutationOut: number;
+    order: number;
 }
 
 export interface StockMutation {
