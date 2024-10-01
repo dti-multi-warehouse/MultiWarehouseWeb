@@ -7,5 +7,6 @@ export const config = {
         stock: 'stock',
         stockMutation: 'stock/mutation',
         warehouse: 'warehouse',
+        dashboard: 'dashboard',
     },
 }
