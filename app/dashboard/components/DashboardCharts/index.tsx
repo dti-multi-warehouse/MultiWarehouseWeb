@@ -1,6 +1,7 @@
 import {FC} from "react";
 import TotalSalesChart from "@/app/dashboard/components/DashboardCharts/TotalSalesChart";
 import CategorySalesChart from "@/app/dashboard/components/DashboardCharts/CategorySalesChart";
+import ProductSalesChart from "@/app/dashboard/components/DashboardCharts/ProductSalesChart";
 
 
 const DashboardCharts: FC = () => {
@@ -8,6 +9,7 @@ const DashboardCharts: FC = () => {
         <div>
             <TotalSalesChart />
             <CategorySalesChart />
+            <ProductSalesChart />
         </div>
     )
 }

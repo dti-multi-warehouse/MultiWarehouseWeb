@@ -1,9 +1,9 @@
-import {ProductCategorySalesResponse} from "@/types/dashboard";
 import axios from "axios";
 import {config} from "@/constants/url";
+import {CategorySalesResponse} from "@/types/dashboard";
 
 
-const getDate = async (warehouseId: number, date: Date): Promise<ProductCategorySalesResponse[]> => {
+const getDate = async (warehouseId: number, date: Date): Promise<CategorySalesResponse[]> => {
     try {
         const response = await axios.get(
             config.BASE_URL + config.API_VER + config.endpoints.dashboard + "/category",
@@ -24,6 +24,6 @@ const getDate = async (warehouseId: number, date: Date): Promise<ProductCategory
     }
 }
 
-export const getCategorySales = async (warehouseId: number, date: Date): Promise<ProductCategorySalesResponse[]> => {
+export const getCategorySales = async (warehouseId: number, date: Date): Promise<CategorySalesResponse[]> => {
     return await getDate(warehouseId, date)
 }

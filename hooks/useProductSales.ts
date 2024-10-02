@@ -10,6 +10,7 @@ const useProductSales = (warehouseId: number, date: Date) => {
         queryKey: ['product-sales', warehouseId, date],
         queryFn: async () => getProductSales(warehouseId, date),
     })
+
     return { data, isLoading, error }
 }
 

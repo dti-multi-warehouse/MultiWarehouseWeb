@@ -8,8 +8,13 @@ export interface TotalSalesResponse {
     sales: Sales[]
 }
 
-export interface ProductCategorySalesResponse {
+export interface CategorySalesResponse {
     name: string;
     revenue: number;
     fill: string
+}
+
+export interface ProductSalesResponse {
+    name: string;
+    revenue: number;
 }
