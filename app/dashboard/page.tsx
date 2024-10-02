@@ -5,10 +5,7 @@ import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 import WarehousePicker from "@/app/dashboard/components/WarehousePicker";
 import MonthPicker from "@/app/dashboard/components/MonthPicker";
-import useTotalSales from "@/hooks/useTotalSales";
-import useDashboardStore from "@/hooks/useDashboardStore";
-import useCategorySales from "@/hooks/useCategorySales";
-import useProductSales from "@/hooks/useProductSales";
+import DashboardCharts from "@/app/dashboard/components/DashboardCharts";
 
 const Dashboard: FC = () => {
   // const { data: session, status } = useSession();
@@ -27,11 +24,6 @@ const Dashboard: FC = () => {
   // if (status === "loading") {
   //   return <div>Loading...</div>;
   // }
-  const warehouse = useDashboardStore(state => state.warehouse)
-  const date = useDashboardStore(state => state.date)
-
-  const {data, isLoading, error} = useCategorySales(warehouse.id, date)
-  console.log(data)
   return (
     <main>
       <div>
@@ -43,6 +35,7 @@ const Dashboard: FC = () => {
           </div>
         </div>
       </div>
+      <DashboardCharts />
     </main>
   );
 };

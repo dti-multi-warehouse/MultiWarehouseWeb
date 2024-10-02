@@ -11,4 +11,5 @@ export interface TotalSalesResponse {
 export interface ProductCategorySalesResponse {
     name: string;
     revenue: number;
+    fill: string
 }
