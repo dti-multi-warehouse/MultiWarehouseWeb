@@ -16,6 +16,7 @@ import { useCreateWarehouse, useAssignWarehouseAdmin } from "@/hooks/useWarehous
 import Buttons from "@/components/Buttons";
 import AdminAssignee from "./AdminAssignee";
 import Image from "next/image";
+import React from "react";
 
 const AddWarehouse: React.FC = () => {
   const [coordinates, setCoordinates] = useState({
