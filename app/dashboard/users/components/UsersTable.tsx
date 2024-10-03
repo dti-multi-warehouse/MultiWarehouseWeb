@@ -82,8 +82,8 @@ const UsersTable: React.FC = () => {
                 <TableCell>{user.username}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.role}</TableCell>
-                <TableCell className={`text-right justify-end gap-5 ${user.role === "user" ? "hidden" : "flex"}`}>
-                  <UpdateWarehouseAdmin />
+                <TableCell className={`text-right justify-end gap-5 ${user.role !== "warehouse_admin" ? "hidden" : "flex"}`}>
+                  <UpdateWarehouseAdmin adminId={user.id} />
                   <Buttons
                     onClick={() => handleDelete(user.id)}
                     className="bg-white !text-red-600 border border-red-600"

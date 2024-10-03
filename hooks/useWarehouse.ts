@@ -58,16 +58,16 @@ export const useCreateWarehouse = (): UseMutationResult<void, unknown, { name: s
 
 export const useUpdateWarehouse = (): UseMutationResult<void, unknown, { id: number, data: any }> => {
   const queryClient = useQueryClient();
-  
+
   return useMutation(
     async ({ id, data }) => {
       const response = await apiClient.put(`/api/v1/warehouse/update/${id}`, data);
       return response.data;
     },
     {
-      onSuccess: () => {
-        queryClient.invalidateQueries('warehouses'); 
-        queryClient.invalidateQueries(['warehouse', id]); 
+      onSuccess: (_, { id }) => {
+        queryClient.invalidateQueries(['warehouse', id]);
+        queryClient.invalidateQueries('warehouses');
       },
       onError: (error) => {
         console.error('Error updating warehouse:', error);
@@ -95,12 +95,17 @@ export const useDeleteWarehouse = (): UseMutationResult<void, unknown, number> =
 };
 
 export const useAssignWarehouseAdmin = (): UseMutationResult<void, unknown, { warehouseId: number, userId: number }> => {
+  const queryClient = useQueryClient();
+
   return useMutation(
-    async (data) => {
-      const response = await apiClient.post(`/api/v1/warehouse/assign-admin`, data);
+    async ({ warehouseId, userId }) => {
+      const response = await apiClient.post(`/api/v1/warehouse/assign-admin`, { warehouseId, userId });
       return response.data;
     },
     {
+      onSuccess: () => {
+        queryClient.invalidateQueries('warehouses');
+      },
       onError: (error) => {
         console.error('Error assigning warehouse admin:', error);
       },

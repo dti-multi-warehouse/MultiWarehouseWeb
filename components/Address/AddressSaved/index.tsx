@@ -17,13 +17,16 @@ import { RiDeleteBin6Line } from "react-icons/ri";
 import { useSession } from "next-auth/react";
 import { useGetUserAddresses, useDeleteUserAddress } from "@/hooks/useAddress";
 import AlertDialog from "@/components/AlertDialog";
+import React from "react";
 
 const AddressSaved: React.FC = () => {
   const [isAddAddressOpen, setIsAddAddressOpen] = useState(false);
-  const [isEditAddressOpen, setIsEditAddressOpen] = useState(false); 
+  const [isEditAddressOpen, setIsEditAddressOpen] = useState(false);
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null); 
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false); // For delete confirmation
+  const [addressToDelete, setAddressToDelete] = useState<number | null>(null); // Track the address to delete
   const { data: session } = useSession();
 
   const { addresses = [], isLoading, error, refetch } = useGetUserAddresses();
@@ -45,18 +48,25 @@ const AddressSaved: React.FC = () => {
     }
   }, [session, isDialogOpen]);
 
-  const handleDelete = (addressId: number) => {
-    setSelectedAddressId(addressId); 
-    deleteAddress(addressId, {
-      onSuccess: () => {
-        refetch(); 
-        setSelectedAddressId(null); 
-      },
-      onError: (err) => {
-        console.error("Error deleting address:", err);
-        setSelectedAddressId(null);
-      },
-    });
+  const handleDeleteClick = (addressId: number) => {
+    setAddressToDelete(addressId);  // Set the address to be deleted
+    setIsConfirmDeleteOpen(true);   // Open the confirmation dialog
+  };
+
+  const handleDeleteConfirm = () => {
+    if (addressToDelete) {
+      deleteAddress(addressToDelete, {
+        onSuccess: () => {
+          refetch(); 
+          setAddressToDelete(null); 
+          setIsConfirmDeleteOpen(false); 
+        },
+        onError: (err) => {
+          console.error("Error deleting address:", err);
+          setAddressToDelete(null);
+        },
+      });
+    }
   };
 
   const handleEdit = (addressId: number) => {
@@ -81,9 +91,7 @@ const AddressSaved: React.FC = () => {
         </DialogTrigger>
         <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="pt-5 text-center">
-              Alamat Tersimpan
-            </DialogTitle>
+            <DialogTitle className="pt-5 text-center">Alamat Tersimpan</DialogTitle>
           </DialogHeader>
           <div className="flex flex-col gap-5">
             <hr className="border-dashed border-gray-800" />
@@ -106,7 +114,7 @@ const AddressSaved: React.FC = () => {
                               ? "opacity-50 cursor-not-allowed"
                               : ""
                           }`}
-                          onClick={() => handleDelete(address.id)}
+                          onClick={() => handleDeleteClick(address.id)} // Trigger delete confirmation
                           disabled={isDeleting && selectedAddressId === address.id}
                         >
                           {isDeleting && selectedAddressId === address.id ? (
@@ -133,11 +141,6 @@ const AddressSaved: React.FC = () => {
                     >
                       Alamat Utama
                     </p>
-                    <div
-                      className={`h-2 w-full bg-gray-200 rounded-lg mt-5 ${
-                        index === index.length - 1 ? "hidden" : "block"
-                      }`}
-                    ></div>
                   </div>
                 ))
               ) : (
@@ -154,16 +157,19 @@ const AddressSaved: React.FC = () => {
         </DialogContent>
       </Dialog>
 
-      {isAddAddressOpen && (
-        <AddAddress onClose={() => setIsAddAddressOpen(false)} />
-      )}
+      {isAddAddressOpen && <AddAddress onClose={() => setIsAddAddressOpen(false)} />}
+      {isEditAddressOpen && selectedAddressId && <EditAddress addressId={selectedAddressId} onClose={() => setIsEditAddressOpen(false)} />}
 
-      {isEditAddressOpen && selectedAddressId && (
-        <EditAddress
-          addressId={selectedAddressId}
-          onClose={() => setIsEditAddressOpen(false)}
-        />
-      )}
+      {/* Delete confirmation dialog */}
+      <AlertDialog
+        open={isConfirmDeleteOpen}
+        onOpenChange={setIsConfirmDeleteOpen}
+        title="Delete Address"
+        description="Are you sure you want to delete this address? This action cannot be undone."
+        actionLabel="Delete"
+        onAction={handleDeleteConfirm}  // Confirm delete
+        cancelLabel="Cancel"
+      />
 
       <AlertDialog
         open={isAlertOpen}
