@@ -16,20 +16,22 @@ import {
 } from "@/components/ui/popover";
 import { Check, ChevronsUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
-import { useGetWarehouseAdmins } from "@/hooks/useAdmin"; // Hook to fetch warehouse admins
+import { useState } from "react";
+import { useGetWarehouseAdmins } from "@/hooks/useAdmin";
+import React from "react";
 
 const AdminAssignee: React.FC<{ onSelectAdmin: (admin: any) => void }> = ({ onSelectAdmin }) => {
   const [open, setOpen] = useState(false);
   const [selectedAdmin, setSelectedAdmin] = useState<any>(null);
 
-  const { data: admins, isLoading } = useGetWarehouseAdmins(); // Fetch admins
-
+  const { data: admins, isLoading } = useGetWarehouseAdmins();
   const handleSelect = (admin: any) => {
     setSelectedAdmin(admin);
-    onSelectAdmin(admin); // Pass selected admin back to the parent
+    onSelectAdmin(admin);
     setOpen(false);
   };
+
+  console.log("admins ",admins)
 
   return (
     <>
@@ -51,7 +53,6 @@ const AdminAssignee: React.FC<{ onSelectAdmin: (admin: any) => void }> = ({ onSe
           <Command>
             <CommandInput placeholder="Search name..." />
             <CommandList>
-              <CommandEmpty>No name found.</CommandEmpty>
               <CommandGroup>
                 {!isLoading && admins?.data?.length > 0 ? (
                   admins.data.map((admin: any) => (

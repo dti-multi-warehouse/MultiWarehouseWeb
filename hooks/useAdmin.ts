@@ -22,7 +22,7 @@ export const useGetWarehouseAdminById = (id: number) => {
     const response = await apiClient.get(`/api/v1/admin/warehouse-admins/${id}`);
     return response.data;
   }, {
-    enabled: !!id,  
+    enabled: !!id,
     onError: (error) => {
       console.error(`Error fetching warehouse admin with ID ${id}:`, error);
     }
@@ -34,7 +34,8 @@ export const useGetWarehouseAdmins = () => {
     'warehouseAdmins',
     async () => {
       const response = await apiClient.get(`/api/v1/admin/warehouse-admins`);
-      return response.data;
+      const warehouseAdmins = response.data.filter((user: any) => user.role === 'warehouse_admin');
+      return warehouseAdmins; 
     },
     {
       retry: 1,
@@ -72,27 +73,15 @@ export const useCreateWarehouseAdmin = (): UseMutationResult<
   );
 };
 
-export const useUpdateWarehouseAdmin = (): UseMutationResult<void, unknown, { id: number, data: { username?: string, email?: string, password?: string, avatar?: File } }> => {
-  const queryClient = useQueryClient();
-  
+export const useUpdateWarehouseAdmin = () => {
   return useMutation(
-    async ({ id, data }) => {
-      const formData = new FormData();
-      if (data.username) formData.append('username', data.username);
-      if (data.email) formData.append('email', data.email);
-      if (data.password) formData.append('password', data.password);
-      if (data.avatar) formData.append('avatar', data.avatar);
-
-      const response = await apiClient.put(`/api/v1/admin/warehouse-admins/${id}`, formData);
+    async ({ id, data }: { id: number; data: FormData }) => {
+      const response = await apiClient.put(`/api/v1/admin/warehouse-admins/${id}`, data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       return response.data;
-    },
-    {
-      onSuccess: () => {
-        queryClient.invalidateQueries('warehouseAdmins');
-      },
-      onError: (error) => {
-        console.error('Error updating warehouse admin:', error);
-      },
     }
   );
 };
