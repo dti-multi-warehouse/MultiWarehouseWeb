@@ -85,6 +85,8 @@ export interface LoginResponse {
     userId: string;
     email: string;
     role: string;
+    warehouseId?: number;
+    warehouseName?: string;
 }
   
 export interface LogoutRequest {
