@@ -1,12 +1,12 @@
+import {TotalSalesResponse} from "@/types/dashboard";
 import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
-import {StockDetailsResponse} from "@/types/datatypes";
 
 
-const getData = async (warehouseId: number, productId: number, date: Date): Promise<StockDetailsResponse> => {
+const getData = async (warehouseId: number, date: Date): Promise<TotalSalesResponse> => {
     try {
         const response: AxiosResponse = await axios.get(
-            config.BASE_URL + config.API_VER + config.endpoints.stock + '/details',
+            config.BASE_URL + config.API_VER + config.endpoints.dashboard,
             {
                 headers: {
                     accept: 'application/json',
@@ -14,18 +14,16 @@ const getData = async (warehouseId: number, productId: number, date: Date): Prom
                 },
                 params: {
                     warehouseId,
-                    productId,
                     date: date.toISOString().split('T')[0],
                 }
             }
         )
         return response.data.data;
     } catch (error) {
-        console.error('Error fetching data:', error);
         throw error;
     }
 }
 
-export const getStockDetails = async (warehouseId: number, productId: number, date: Date): Promise<StockDetailsResponse> => {
-    return await getData(warehouseId, productId, date);
+export const getTotalSales = async (warehouseId: number, date: Date): Promise<TotalSalesResponse> => {
+    return await getData(warehouseId, date);
 }
