@@ -5,10 +5,10 @@ import StockDetailsView from "@/app/dashboard/stocks/components/StockDetailsView
 
 const StocksDashboardPage: FC = () => {
     return (
-        <main className={"grid grid-cols-2 gap-4"}>
+        <main className={"lg:grid grid-cols-2 gap-2"}>
             <div className={"col-span-1 border-r"}>
                 <StockHeader />
-                <StockTable />
+                <StockTable/>
             </div>
             <StockDetailsView />
         </main>

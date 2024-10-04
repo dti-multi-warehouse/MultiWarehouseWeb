@@ -18,7 +18,7 @@ const StockMutationSchema = Yup.object().shape({
 })
 
 interface StockMutationFormProps {
-    setOpen: (open: boolean) => Dispatch<SetStateAction<boolean>>;
+    setOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 const StockMutationForm: FC<StockMutationFormProps> = ({setOpen}) => {

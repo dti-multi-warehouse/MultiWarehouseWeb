@@ -1,4 +1,5 @@
 import {date} from "yup";
+import {WarehouseList} from "@/types/warehouse";
 
 export interface userAddress {
     data?: {
@@ -133,11 +134,24 @@ export interface Stock {
     outgoing: number;
 }
 
+export interface StockDetailsResponse {
+    stockMovements: StockDetails[];
+    stockMovementChartData: StockMovementChartData[]
+}
+
 export interface StockDetails {
     date: Date;
     quantity: number;
     source: 'order' | 'restock' | 'mutation_in' | 'mutation_out';
     note: number
+}
+
+export interface StockMovementChartData {
+    period: number;
+    restock: number;
+    mutationIn: number;
+    mutationOut: number;
+    order: number;
 }
 
 export interface StockMutation {
@@ -245,4 +259,21 @@ export interface WarehouseDTO {
   export interface AssignWarehouseAdminDTO {
     warehouseId: number;
     userId: number;
+  }
+
+  export interface DashboardStore {
+    product: ProductStockDetails;
+    warehouse: WarehouseList;
+    date: Date;
+    isStockDrawerOpen: boolean;
+    setProduct: (product: ProductStockDetails) => void;
+    setWarehouse: (warehouse: WarehouseList) => void;
+    setDate: (date: Date) => void;
+    setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => void;
+  }
+
+  export interface ProductStockDetails {
+    id: number;
+    name: string;
+    stock: number;
   }
