@@ -34,23 +34,31 @@ const formatDate = (dateString: string) => {
 const TotalSalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
     const {data, isLoading, error} = useTotalSales(warehouse.id, date)
 
+    const month = `${date.toLocaleString('default', {month: "long"})} ${date.toLocaleString('default', {year: "numeric"})}`
+
     if (isLoading) return (
-        <Card className={"col-span-1"}>
+        <Card className={"col-span-1 h-64"}>
             <CardContent className="flex items-center justify-center h-64">
                 <Loader2 className="h-8 w-8 animate-spin" />
             </CardContent>
         </Card>
     )
 
-    if (error) return (
-        <Card className={"col-span-1"}>
+    if (error || !data) return (
+        <Card className={"col-span-1 h-64"}>
             <CardContent className="flex items-center justify-center h-64 text-red-500">
-                Error loading data
+                Error loading total sales data for {month}
             </CardContent>
         </Card>
     )
 
-    if (!data) return null;
+    if (data.sales.length <= 0) return (
+        <Card className={"col-span-1 h-64 flex items-center justify-center"}>
+            <CardContent>
+                We haven&apos;t made any sales in {month} :(
+            </CardContent>
+        </Card>
+    );
 
     return (
         <Card className={"col-span-1"}>
@@ -95,7 +103,7 @@ const TotalSalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
                     <TrendingUp className="h-4 w-4" />
                 </div>
                 <div className="leading-none text-muted-foreground">
-                    Showing total sales for {date.toLocaleString('default', {month: "long"})} {date.toLocaleString('default', {year: "numeric"})}
+                    Showing total sales for {month}
                 </div>
             </CardFooter>
         </Card>

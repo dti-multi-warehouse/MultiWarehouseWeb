@@ -1,6 +1,6 @@
 "use client"
 import {FC} from "react";
-import { TrendingUp } from "lucide-react"
+import {Loader2, TrendingUp} from "lucide-react"
 import {Bar, BarChart, CartesianGrid, Legend, Rectangle, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts"
 import {
     Card,
@@ -15,6 +15,32 @@ import {DashboardChartProps} from "@/app/dashboard/components/DashboardCharts/ty
 
 const ProductSalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
     const {data, isLoading, error} = useProductSales(warehouse.id, date)
+
+    const month = `${date.toLocaleString('default', {month: "long"})} ${date.toLocaleString('default', {year: "numeric"})}`
+
+    if (isLoading) return (
+        <Card className={"h-64"}>
+            <CardContent className="flex items-center justify-center h-64">
+                <Loader2 className="h-8 w-8 animate-spin" />
+            </CardContent>
+        </Card>
+    )
+
+    if (error || !data) return (
+        <Card className={"h-64"}>
+            <CardContent className="flex items-center justify-center h-64 text-red-500">
+                Error loading total sales data for {month}
+            </CardContent>
+        </Card>
+    )
+
+    if (data.length <= 0) return (
+        <Card className={"flex items-center justify-center h-64"}>
+            <CardContent>
+                We haven&apos;t made any sales in {month} :(
+            </CardContent>
+        </Card>
+    );
 
     return (
         <Card className={"col-span-2"}>
