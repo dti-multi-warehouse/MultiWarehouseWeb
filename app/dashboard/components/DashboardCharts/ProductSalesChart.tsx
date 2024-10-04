@@ -10,20 +10,17 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import useDashboardStore from "@/hooks/useDashboardStore";
 import useProductSales from "@/hooks/useProductSales";
+import {DashboardChartProps} from "@/app/dashboard/components/DashboardCharts/type";
 
-const ProductSalesChart: FC = () => {
-    const warehouse = useDashboardStore(state => state.warehouse)
-    const date = useDashboardStore(state => state.date)
+const ProductSalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
     const {data, isLoading, error} = useProductSales(warehouse.id, date)
-    console.log(data)
 
     return (
-        <Card>
+        <Card className={"col-span-2"}>
             <CardHeader>
-                <CardTitle>Bar Chart</CardTitle>
-                <CardDescription>January - June 2024</CardDescription>
+                <CardTitle>Product Sales</CardTitle>
+                <CardDescription>{date.toLocaleString('default', {month: "long"})} {date.toLocaleString('default', {year: "numeric"})}</CardDescription>
             </CardHeader>
             <CardContent className={"h-96"}>
                 <ResponsiveContainer width="100%" height="100%">
@@ -48,11 +45,8 @@ const ProductSalesChart: FC = () => {
                 </ResponsiveContainer>
             </CardContent>
             <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="flex gap-2 font-medium leading-none">
-                    Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
-                </div>
                 <div className="leading-none text-muted-foreground">
-                    Showing total visitors for the last 6 months
+                    Showing total visitors for {date.toLocaleString('default', {month: "long"})} {date.toLocaleString('default', {year: "numeric"})}
                 </div>
             </CardFooter>
         </Card>

@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/chart"
 import useDashboardStore from "@/hooks/useDashboardStore";
 import useTotalSales from "@/hooks/useTotalSales";
+import {DashboardChartProps} from "@/app/dashboard/components/DashboardCharts/type";
 
 const chartConfig = {
     revenue: {
@@ -30,13 +31,11 @@ const formatDate = (dateString: string) => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 };
 
-const TotalSalesChart: FC = () => {
-    const warehouse = useDashboardStore(state => state.warehouse)
-    const date = useDashboardStore(state => state.date)
+const TotalSalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
     const {data, isLoading, error} = useTotalSales(warehouse.id, date)
 
     if (isLoading) return (
-        <Card>
+        <Card className={"col-span-1"}>
             <CardContent className="flex items-center justify-center h-64">
                 <Loader2 className="h-8 w-8 animate-spin" />
             </CardContent>
@@ -44,7 +43,7 @@ const TotalSalesChart: FC = () => {
     )
 
     if (error) return (
-        <Card>
+        <Card className={"col-span-1"}>
             <CardContent className="flex items-center justify-center h-64 text-red-500">
                 Error loading data
             </CardContent>
@@ -54,7 +53,7 @@ const TotalSalesChart: FC = () => {
     if (!data) return null;
 
     return (
-        <Card>
+        <Card className={"col-span-1"}>
             <CardHeader>
                 <CardTitle>Total Sales</CardTitle>
             </CardHeader>
@@ -96,7 +95,7 @@ const TotalSalesChart: FC = () => {
                     <TrendingUp className="h-4 w-4" />
                 </div>
                 <div className="leading-none text-muted-foreground">
-                    Showing total sales for the selected period
+                    Showing total sales for {date.toLocaleString('default', {month: "long"})} {date.toLocaleString('default', {year: "numeric"})}
                 </div>
             </CardFooter>
         </Card>
