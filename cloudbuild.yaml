@@ -21,7 +21,7 @@ steps:
       - '--image'
       - 'gcr.io/sanguine-willow-436015-k8/alphamarch:$COMMIT_SHA'
       - '--region'
-      - 'us-central1'
+      - 'asia-southeast2'
     id: 'deploy-to-cloud-run'
 
 images:
