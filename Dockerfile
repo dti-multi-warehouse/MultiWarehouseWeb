@@ -19,5 +19,5 @@ COPY --from=builder /usr/src/app/public ./public
 # Run the app
 USER bun
 EXPOSE 3000
-ENV NODE_ENV=development
+ENV NODE_ENV=developme
 CMD ["bun", "run", "server.js"]
