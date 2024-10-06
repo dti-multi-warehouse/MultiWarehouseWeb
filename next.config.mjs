@@ -7,6 +7,10 @@ const nextConfig = {
     typescript: {
       ignoreBuildErrors: true,
     },
+    webpack: (config) => {
+      config.resolve.alias['@'] = path.resolve(__dirname, './'); // or './' if you're not using 'src'
+      return config;
+    },
   };
   
   export default nextConfig;
