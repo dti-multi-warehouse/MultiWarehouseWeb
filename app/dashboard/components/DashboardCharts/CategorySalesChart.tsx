@@ -1,4 +1,3 @@
-"use client"
 import {FC} from "react";
 import { Pie, PieChart } from "recharts"
 import {
@@ -14,9 +13,7 @@ import {
     ChartLegend,
     ChartLegendContent,
 } from "@/components/ui/chart"
-import useCategorySales from "@/hooks/useCategorySales";
-import {DashboardChartProps} from "@/app/dashboard/components/DashboardCharts/type";
-import {Loader2} from "lucide-react";
+import {CategorySalesResponse} from "@/types/dashboard";
 
 const chartConfig = {
     Beverages: {
@@ -25,40 +22,17 @@ const chartConfig = {
     },
 } satisfies ChartConfig
 
-const CategorySalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
-    const {data, isLoading, error} = useCategorySales(warehouse.id, date)
+interface CategorySalesChartProps {
+    categorySales: CategorySalesResponse[]
+    month: string
+}
 
-    const month = `${date.toLocaleString('default', {month: "long"})} ${date.toLocaleString('default', {year: "numeric"})}`
-
-    if (isLoading) return (
-        <Card className={"col-span-1 h-64"}>
-            <CardContent className="flex items-center justify-center h-64">
-                <Loader2 className="h-8 w-8 animate-spin" />
-            </CardContent>
-        </Card>
-    )
-
-    if (error || !data) return (
-        <Card className={"col-span-1 h-64"}>
-            <CardContent className="flex items-center justify-center h-64 text-red-500">
-                Error loading total sales data for {month}
-            </CardContent>
-        </Card>
-    )
-
-    if (data.length <= 0) return (
-        <Card className={"col-span-1 flex items-center justify-center h-64"}>
-            <CardContent>
-                We haven&apos;t made any sales in {month} :(
-            </CardContent>
-        </Card>
-    );
-
+const CategorySalesChart: FC<CategorySalesChartProps> = ({categorySales, month}) => {
     return (
         <Card className="col-span-1 flex flex-col">
             <CardHeader className="items-center pb-0">
                 <CardTitle>Category Sales</CardTitle>
-                <CardDescription>{date.toLocaleString('default', {month: "long"})} {date.toLocaleString('default', {year: "numeric"})}</CardDescription>
+                <CardDescription>{month}</CardDescription>
             </CardHeader>
             <CardContent className="flex-1 pb-0">
                 <ChartContainer
@@ -66,7 +40,7 @@ const CategorySalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
                     className="mx-auto aspect-square max-h-[300px]"
                 >
                     <PieChart>
-                        <Pie data={data} dataKey="revenue" />
+                        <Pie data={categorySales} dataKey="revenue" />
                         <ChartLegend
                             content={<ChartLegendContent nameKey="name" />}
                             className="-translate-y-2 flex-wrap gap-2 [&>*]:basis-1/4 [&>*]:justify-center"

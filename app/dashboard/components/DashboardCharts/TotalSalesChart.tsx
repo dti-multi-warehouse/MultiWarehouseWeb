@@ -15,9 +15,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-import useDashboardStore from "@/hooks/useDashboardStore";
-import useTotalSales from "@/hooks/useTotalSales";
-import {DashboardChartProps} from "@/app/dashboard/components/DashboardCharts/type";
+import {TotalSalesResponse} from "@/types/dashboard";
 
 const chartConfig = {
     revenue: {
@@ -31,35 +29,12 @@ const formatDate = (dateString: string) => {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
 };
 
-const TotalSalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
-    const {data, isLoading, error} = useTotalSales(warehouse.id, date)
+interface TotalSalesChartProps {
+    totalSales: TotalSalesResponse;
+    month: string
+}
 
-    const month = `${date.toLocaleString('default', {month: "long"})} ${date.toLocaleString('default', {year: "numeric"})}`
-
-    if (isLoading) return (
-        <Card className={"col-span-1 h-64"}>
-            <CardContent className="flex items-center justify-center h-64">
-                <Loader2 className="h-8 w-8 animate-spin" />
-            </CardContent>
-        </Card>
-    )
-
-    if (error || !data) return (
-        <Card className={"col-span-1 h-64"}>
-            <CardContent className="flex items-center justify-center h-64 text-red-500">
-                Error loading total sales data for {month}
-            </CardContent>
-        </Card>
-    )
-
-    if (data.sales.length <= 0) return (
-        <Card className={"col-span-1 h-64 flex items-center justify-center"}>
-            <CardContent>
-                We haven&apos;t made any sales in {month} :(
-            </CardContent>
-        </Card>
-    );
-
+const TotalSalesChart: FC<TotalSalesChartProps> = ({totalSales, month}) => {
     return (
         <Card className={"col-span-1"}>
             <CardHeader>
@@ -69,7 +44,7 @@ const TotalSalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
                 <ChartContainer config={chartConfig}>
                     <ResponsiveContainer width="100%" height={300}>
                         <LineChart
-                            data={data.sales}
+                            data={totalSales.sales}
                             margin={{
                                 top: 5,
                                 right: 30,
@@ -99,7 +74,7 @@ const TotalSalesChart: FC<DashboardChartProps> = ({warehouse, date}) => {
             </CardContent>
             <CardFooter className="flex-col items-start gap-2 text-sm">
                 <div className="flex gap-2 font-medium leading-none">
-                    Total Revenue: Rp.{data.totalRevenue.toLocaleString()}
+                    Total Revenue: Rp.{totalSales.totalRevenue.toLocaleString()}
                     <TrendingUp className="h-4 w-4" />
                 </div>
                 <div className="leading-none text-muted-foreground">

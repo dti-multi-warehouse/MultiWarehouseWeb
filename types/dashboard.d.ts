@@ -18,3 +18,9 @@ export interface ProductSalesResponse {
     name: string;
     revenue: number;
 }
+
+export interface SalesReport {
+    totalSales: TotalSalesResponse;
+    categorySales: CategorySalesResponse[];
+    productSales: ProductSalesResponse[];
+}
