@@ -5,7 +5,7 @@ WORKDIR /usr/src/app
 # Install dependencies and build the application
 FROM base AS builder
 COPY package.json package-lock.json ./
-RUN npm ci --production
+RUN npm install --development
 COPY . .
 RUN npm run build
 
@@ -19,5 +19,5 @@ COPY --from=builder /usr/src/app/public ./public
 
 # Run the app
 EXPOSE 3000
-ENV NODE_ENV=production
+ENV NODE_ENV=development
 CMD ["npm", "run", "start"]

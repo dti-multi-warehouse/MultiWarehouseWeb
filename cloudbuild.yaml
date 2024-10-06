@@ -1,6 +1,28 @@
 steps:
+  # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/sanguine-willow-436015-k8/alphamarch', '.'] 
+    args: ['build', '-t', 'gcr.io/sanguine-willow-436015-k8/alphamarch:$COMMIT_SHA', '.']
+    env:
+      - 'DOCKER_BUILDKIT=1'
+    id: 'build-image'
+
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/sanguine-willow-436015-k8/alphamarch:$COMMIT_SHA']
+    id: 'push-image'
+
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'deploy'
+      - 'multiwarehouse-web'
+      - '--image'
+      - 'gcr.io/sanguine-willow-436015-k8/alphamarch:$COMMIT_SHA'
+      - '--region'
+      - 'us-central1'
+    id: 'deploy-to-cloud-run'
 
 images:
-  - 'gcr.io/sanguine-willow-436015-k8/alphamarch'
+  - 'gcr.io/sanguine-willow-436015-k8/alphamarch:$COMMIT_SHA'
