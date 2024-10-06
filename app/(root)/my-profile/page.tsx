@@ -4,6 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import ProfileInformation from "./components/ProfileInformation";
 import { useEffect } from "react";
+import React from "react";
 
 const MyProfile: React.FC = () => {
   const { data: session, status } = useSession();

@@ -1,6 +1,7 @@
 import {FC} from "react";
 import WarehouseTable from "./components/WarehouseTable";
 import AddWarehouse from "./components/AddWarehouse";
+import React from "react";
 
 const WarehouseDashboardPage: FC = () => {
     return(
