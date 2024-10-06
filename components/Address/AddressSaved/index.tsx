@@ -25,8 +25,8 @@ const AddressSaved: React.FC = () => {
   const [isAlertOpen, setIsAlertOpen] = useState(false);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
-  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false); // For delete confirmation
-  const [addressToDelete, setAddressToDelete] = useState<number | null>(null); // Track the address to delete
+  const [isConfirmDeleteOpen, setIsConfirmDeleteOpen] = useState(false);
+  const [addressToDelete, setAddressToDelete] = useState<number | null>(null);
   const { data: session } = useSession();
 
   const { addresses = [], isLoading, error, refetch } = useGetUserAddresses();
@@ -49,8 +49,8 @@ const AddressSaved: React.FC = () => {
   }, [session, isDialogOpen]);
 
   const handleDeleteClick = (addressId: number) => {
-    setAddressToDelete(addressId);  // Set the address to be deleted
-    setIsConfirmDeleteOpen(true);   // Open the confirmation dialog
+    setAddressToDelete(addressId); 
+    setIsConfirmDeleteOpen(true);  
   };
 
   const handleDeleteConfirm = () => {
@@ -114,7 +114,7 @@ const AddressSaved: React.FC = () => {
                               ? "opacity-50 cursor-not-allowed"
                               : ""
                           }`}
-                          onClick={() => handleDeleteClick(address.id)} // Trigger delete confirmation
+                          onClick={() => handleDeleteClick(address.id)}
                           disabled={isDeleting && selectedAddressId === address.id}
                         >
                           {isDeleting && selectedAddressId === address.id ? (

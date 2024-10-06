@@ -39,12 +39,6 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
   const { data: warehouse, isLoading: isFetchingWarehouse } =
     useGetWarehouseById(warehouseId);
   const updateWarehouseMutation = useUpdateWarehouse();
-  const [selectedAdmin, setSelectedAdmin] = useState<any>(null);
-  const assignWarehouseAdminMutation = useAssignWarehouseAdmin();
-
-  const handleAdminSelection = (admin: any) => {
-    setSelectedAdmin(admin); // Set selected admin
-  };
 
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
@@ -241,25 +235,6 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
                         <MapClickHandler setFieldValue={setFieldValue} />
                       </MapContainer>
                     )}
-                  </div>
-                  <div className="flex flex-col gap-2 ">
-                    <label>Assign Admin</label>
-                    <AdminAssignee onSelectAdmin={handleAdminSelection} />
-                    <div className="flex items-center gap-3 border shadow-airbnbSoft py-1 px-2 rounded-xl w-fit">
-                      <Image
-                        src="/default-user.png"
-                        width={30}
-                        height={30}
-                        alt="warehouse admin avatar"
-                        className="rounded-full"
-                      />
-                      <p>
-                        {warehouse?.warehouseAdmins &&
-                        warehouse.warehouseAdmins.length > 0
-                          ? warehouse.warehouseAdmins[0]?.user?.username
-                          : "Unassigned"}
-                      </p>
-                    </div>
                   </div>
 
                   <Buttons type="submit" disabled={isSubmitting || isLoading}>

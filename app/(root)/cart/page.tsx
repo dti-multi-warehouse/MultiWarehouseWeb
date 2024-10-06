@@ -8,6 +8,7 @@ import { useSession } from 'next-auth/react';
 import { useGetProfile } from '@/hooks/useUser';
 import AlertDialog from '@/components/AlertDialog';
 import { useEffect, useState } from 'react';
+import React from 'react';
 
 const Cart: React.FC = () => {
   const { data: session, status } = useSession();

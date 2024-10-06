@@ -34,8 +34,13 @@ export const useGetWarehouseAdmins = () => {
     'warehouseAdmins',
     async () => {
       const response = await apiClient.get(`/api/v1/admin/warehouse-admins`);
-      const warehouseAdmins = response.data.filter((user: any) => user.role === 'warehouse_admin');
-      return warehouseAdmins; 
+      console.log('Full Response:', response.data);
+      const warehouseAdmins = response.data.data;
+
+      if (!Array.isArray(warehouseAdmins)) {
+        throw new Error("Expected an array of warehouse admins.");
+      }
+      return warehouseAdmins;
     },
     {
       retry: 1,
