@@ -1,0 +1,6 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/sanguine-willow5-k8].  You can change this set-436015-k8/alphamarch', '.'] 
+
+images:
+  - 'gcr.io/sanguine-willow5-k8].  You can change this set-436015-k8/alphamarch'
