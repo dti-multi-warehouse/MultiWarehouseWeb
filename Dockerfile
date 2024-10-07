@@ -19,6 +19,5 @@ COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
 
 # Run the app
-ENV NEXT_PUBLIC_API_BASE_URL="https://be.alphamarch.shop"
 EXPOSE 3000
 CMD ["node", "server.js","npm", "start"]
