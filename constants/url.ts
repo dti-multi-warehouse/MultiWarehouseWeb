@@ -1,5 +1,5 @@
 export const config = {
-    BASE_URL: '/api',
+    BASE_URL: '/api', //api
     API_VER: '/v1/',
     endpoints: {
         product: 'product',
