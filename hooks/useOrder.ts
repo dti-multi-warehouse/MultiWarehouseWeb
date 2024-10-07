@@ -21,7 +21,7 @@ export const useCreateOrder = () => {
   return useMutation(
     async (data: CreateOrderRequestDto) => {
       const config = await attachToken({});
-      const response = await apiClient.post<CreateOrderResponseDto>('/api/v1/order', data, config);
+      const response = await apiClient.post<CreateOrderResponseDto>('/v1/order', data, config);
       return response.data;
     },
     {
@@ -43,7 +43,7 @@ export const useUploadPaymentProof = () => {
       const formData = new FormData();
       formData.append('paymentProof', paymentProof);
 
-      const response = await apiClient.post(`/api/v1/order/payment/${orderId}`, formData, {
+      const response = await apiClient.post(`/v1/order/payment/${orderId}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       return response.data;
@@ -64,7 +64,7 @@ export const useCancelOrder = () => {
 
   return useMutation(
     async (orderId: number) => {
-      const response = await apiClient.put(`/api/v1/order/cancel/${orderId}`);
+      const response = await apiClient.put(`/v1/order/cancel/${orderId}`);
       return response.data;
     },
     {
@@ -83,7 +83,7 @@ export const useConfirmPayment = () => {
 
   return useMutation(
     async (orderId: number) => {
-      const response = await apiClient.put(`/api/v1/order/confirm/${orderId}`);
+      const response = await apiClient.put(`/v1/order/confirm/${orderId}`);
       return response.data;
     },
     {
@@ -102,7 +102,7 @@ export const useSendOrder = () => {
 
   return useMutation(
     async (orderId: number) => {
-      const response = await apiClient.put(`/api/v1/order/send/${orderId}`);
+      const response = await apiClient.put(`/v1/order/send/${orderId}`);
       return response.data;
     },
     {
@@ -121,7 +121,7 @@ export const useFinalizeOrder = () => {
 
   return useMutation(
     async (orderId: number) => {
-      const response = await apiClient.put(`/api/v1/order/finalize/${orderId}`);
+      const response = await apiClient.put(`/v1/order/finalize/${orderId}`);
       return response.data;
     },
     {
