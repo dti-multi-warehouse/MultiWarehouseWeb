@@ -158,8 +158,7 @@ export interface StockMovementChartData {
 
 export interface StockMutation {
     id: number;
-    warehouseToId: number;
-    warehouseFromId: number;
+    warehouseToName: string
     name: string;
     quantity: number;
     created_at: Date;

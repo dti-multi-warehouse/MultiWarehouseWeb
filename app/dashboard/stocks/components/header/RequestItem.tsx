@@ -3,12 +3,10 @@ import {StockMutation} from "@/types/datatypes";
 import {Button} from "@/components/ui/button";
 import {config} from "@/constants/url";
 import axios from "axios";
-import {useQueryClient} from "react-query";
 
 const RequestItem: FC<StockMutation> = ({
     id,
-    warehouseToId,
-    warehouseFromId,
+    warehouseToName,
     name,
     quantity,
     created_at
@@ -23,8 +21,7 @@ const RequestItem: FC<StockMutation> = ({
     }
     return (
         <div className="mb-4 p-4 border rounded-lg">
-            <p><strong>From:</strong> {warehouseFromId}</p>
-            <p><strong>To:</strong> {warehouseToId}</p>
+            <p><strong>Requester:</strong> {warehouseToName}</p>
             <p><strong>Item:</strong> {name}</p>
             <p><strong>Quantity:</strong> {quantity}</p>
             <div className="mt-2">

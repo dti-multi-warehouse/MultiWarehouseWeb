@@ -7,17 +7,20 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {FC} from "react";
+import {FC, useState} from "react";
 import {Stock} from "@/types/datatypes";
 import useAllStocks from "@/hooks/useAllStocks";
 import Image from "next/image";
 import useDashboardStore from "@/hooks/useDashboardStore";
 
-const StockTable: FC = () => {
+const StockTable: FC<{query: string}> = ({query}) => {
     const warehouse = useDashboardStore(state => state.warehouse)
     const date = useDashboardStore(state => state.date)
-    const {data, isLoading, error} = useAllStocks(warehouse.id, date)
+    const {data, isLoading, error} = useAllStocks(warehouse.id, date, query, 0, 10)
 
+    if (!data) {
+        return <></>
+    }
     return (
         <Table className={"overflow-hidden"}>
             <TableHeader>
@@ -31,7 +34,7 @@ const StockTable: FC = () => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data?.map((stock, index) => <StockRow key={index} {...stock} index={index + 1} />)}
+                {data.stocks.map((stock, index) => <StockRow key={index} {...stock} index={index + 1} />)}
             </TableBody>
         </Table>
     )

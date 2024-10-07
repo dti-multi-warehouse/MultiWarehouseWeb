@@ -1,9 +1,9 @@
 import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
-import {Stock} from "@/types/datatypes";
+import {StockDto} from "@/types/Stock";
 
 
-const getData = async (warehouseId: number, date: Date): Promise<Stock[]> => {
+const getData = async (warehouseId: number, date: Date, query: string, page: number, perPage: number): Promise<StockDto> => {
     try {
         const response: AxiosResponse = await axios.get(
             config.BASE_URL + config.API_VER + config.endpoints.stock,
@@ -14,7 +14,10 @@ const getData = async (warehouseId: number, date: Date): Promise<Stock[]> => {
                 },
                 params: {
                     warehouseId: warehouseId,
-                    date: date.toISOString().split('T')[0]
+                    date: date.toISOString().split('T')[0],
+                    query,
+                    page,
+                    perPage
                 }
             }
         )
@@ -25,6 +28,6 @@ const getData = async (warehouseId: number, date: Date): Promise<Stock[]> => {
     }
 }
 
-export const getAllStocks = async (warehouseId: number, date: Date): Promise<Stock[]> => {
-    return await getData(warehouseId, date);
+export const getAllStocks = async (warehouseId: number, date: Date, query: string, page: number, perPage: number): Promise<StockDto> => {
+    return await getData(warehouseId, date, query, page, perPage);
 }

@@ -4,6 +4,7 @@ import {config} from "@/constants/url";
 
 
 const getData = async (warehouseId: number): Promise<StockMutation[]> => {
+    console.log(warehouseId)
     try {
         const res: AxiosResponse = await axios.get(
             config.BASE_URL + config.API_VER + config.endpoints.stockMutation + `/${warehouseId}`,

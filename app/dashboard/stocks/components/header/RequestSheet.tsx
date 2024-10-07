@@ -17,10 +17,15 @@ import useDashboardStore from "@/hooks/useDashboardStore";
 const RequestSheet: FC = () => {
     const warehouse = useDashboardStore(state => state.warehouse)
     const { data, isLoading, error } = useActiveStockMutationRequest(warehouse.id)
+
+    if (!data || data.length <= 0 ) {
+        return <Button variant={"ghost"} disabled>View Requests</Button>
+    }
+
     return (
         <Sheet>
             <SheetTrigger asChild>
-                <Button>View Requests</Button>
+                <Button className={"bg-red-600"}>View Requests</Button>
             </SheetTrigger>
             <SheetContent>
                 <SheetHeader>
