@@ -2,7 +2,7 @@ import {useQuery} from "react-query";
 import {getActiveStockMutationRequest} from "@/api/getActiveStockMutationRequest";
 
 
-const useActiveStockMutationRequest = () => {
+const useActiveStockMutationRequest = (warehouseId: number) => {
     const {
         data,
         isLoading,
@@ -10,7 +10,7 @@ const useActiveStockMutationRequest = () => {
         refetch
     } = useQuery( {
         queryKey: ['stock-mutation'],
-        queryFn: async () => getActiveStockMutationRequest(),
+        queryFn: async () => getActiveStockMutationRequest(warehouseId),
         staleTime: 60 * 1000
     })
 

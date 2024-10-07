@@ -11,10 +11,12 @@ import {
 import {Button} from "@/components/ui/button";
 import useActiveStockMutationRequest from "@/hooks/useActiveStockMutationRequest";
 import RequestItem from "@/app/dashboard/stocks/components/header/RequestItem";
+import useDashboardStore from "@/hooks/useDashboardStore";
 
 
 const RequestSheet: FC = () => {
-    const { data, isLoading, error } = useActiveStockMutationRequest()
+    const warehouse = useDashboardStore(state => state.warehouse)
+    const { data, isLoading, error } = useActiveStockMutationRequest(warehouse.id)
     return (
         <Sheet>
             <SheetTrigger asChild>

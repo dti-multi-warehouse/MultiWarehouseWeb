@@ -3,10 +3,10 @@ import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
 
 
-const getData = async (): Promise<StockMutation[]> => {
+const getData = async (warehouseId: number): Promise<StockMutation[]> => {
     try {
         const res: AxiosResponse = await axios.get(
-            config.BASE_URL + config.API_VER + config.endpoints.stockMutation,
+            config.BASE_URL + config.API_VER + config.endpoints.stockMutation + `/${warehouseId}`,
             {
                 headers: {
                     accept: 'application/json',
@@ -20,6 +20,6 @@ const getData = async (): Promise<StockMutation[]> => {
     }
 }
 
-export const getActiveStockMutationRequest = async (): Promise<StockMutation[]> => {
-    return await getData();
+export const getActiveStockMutationRequest = async (warehouseId: number): Promise<StockMutation[]> => {
+    return await getData(warehouseId);
 }
