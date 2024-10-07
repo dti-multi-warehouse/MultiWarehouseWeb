@@ -5,7 +5,7 @@ export const useGetWarehouseById = (id: number) => {
   return useQuery(
     ['warehouse', id],
     async () => {
-      const response = await apiClient.get(`/v1/warehouse/${id}`);
+      const response = await apiClient.get(`/api/v1/warehouse/${id}`);
       return response.data;
     },
     {
@@ -23,7 +23,7 @@ export const useSearchWarehouses = (params: { name?: string; city?: string; prov
   return useQuery(
     ['warehouses', { name, city, province, page, size }],
     async () => {
-      const response = await apiClient.get(`/v1/warehouse/search`, {
+      const response = await apiClient.get(`/api/v1/warehouse/search`, {
         params: { name, city, province, page, size }
       });
       return response.data;
@@ -42,7 +42,7 @@ export const useCreateWarehouse = (): UseMutationResult<void, unknown, { name: s
   
   return useMutation(
     async (data) => {
-      const response = await apiClient.post(`/v1/warehouse/create`, data);
+      const response = await apiClient.post(`/api/v1/warehouse/create`, data);
       return response.data;
     },
     {
@@ -61,7 +61,7 @@ export const useUpdateWarehouse = (): UseMutationResult<void, unknown, { id: num
 
   return useMutation(
     async ({ id, data }) => {
-      const response = await apiClient.put(`/v1/warehouse/update/${id}`, data);
+      const response = await apiClient.put(`/api/v1/warehouse/update/${id}`, data);
       return response.data;
     },
     {
@@ -81,7 +81,7 @@ export const useDeleteWarehouse = (): UseMutationResult<void, unknown, number> =
   
   return useMutation(
     async (id: number) => {
-      await apiClient.delete(`/v1/warehouse/delete/${id}`);
+      await apiClient.delete(`/api/v1/warehouse/delete/${id}`);
     },
     {
       onSuccess: () => {
@@ -99,7 +99,7 @@ export const useAssignWarehouseAdmin = (): UseMutationResult<void, unknown, { wa
 
   return useMutation(
     async ({ warehouseId, userId }) => {
-      const response = await apiClient.post(`/v1/warehouse/assign-admin`, { warehouseId, userId });
+      const response = await apiClient.post(`/api/v1/warehouse/assign-admin`, { warehouseId, userId });
       return response.data;
     },
     {

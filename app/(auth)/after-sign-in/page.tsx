@@ -15,7 +15,7 @@ const AfterSignIn: React.FC = () => {
 
   const syncSocialLogin = async (email: string, token: string) => {
     try {
-      const response = await apiClient.post("/v1/auth/social-login", { email, token });
+      const response = await apiClient.post("/api/v1/auth/social-login", { email, token });
       
       localStorage.setItem("jwt", response.data.accessToken);
 
