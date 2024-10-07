@@ -20,4 +20,4 @@ COPY --from=builder /app/public ./public
 
 # Run the app
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["node", "server.js","npm", "start"]
