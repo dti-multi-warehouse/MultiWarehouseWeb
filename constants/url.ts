@@ -1,5 +1,5 @@
 export const config = {
-    BASE_URL: '/',
+    BASE_URL: 'dev.alphamarch.shop',
     API_VER: '/api/v1/',
     endpoints: {
         product: 'product',
