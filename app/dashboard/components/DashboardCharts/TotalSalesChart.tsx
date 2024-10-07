@@ -15,7 +15,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-import {TotalSalesResponse} from "@/types/dashboard";
+import {TotalSales} from "@/types/dashboard";
 
 const chartConfig = {
     revenue: {
@@ -30,7 +30,7 @@ const formatDate = (dateString: string) => {
 };
 
 interface TotalSalesChartProps {
-    totalSales: TotalSalesResponse;
+    totalSales: TotalSales;
     month: string
 }
 

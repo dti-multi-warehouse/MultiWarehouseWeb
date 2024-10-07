@@ -13,7 +13,7 @@ import {
     ChartLegend,
     ChartLegendContent,
 } from "@/components/ui/chart"
-import {CategorySalesResponse} from "@/types/dashboard";
+import {CategorySales} from "@/types/dashboard";
 
 const chartConfig = {
     Beverages: {
@@ -23,7 +23,7 @@ const chartConfig = {
 } satisfies ChartConfig
 
 interface CategorySalesChartProps {
-    categorySales: CategorySalesResponse[]
+    categorySales: CategorySales[]
     month: string
 }
 

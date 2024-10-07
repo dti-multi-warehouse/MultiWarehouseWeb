@@ -3,24 +3,24 @@ export interface Sales {
     revenue: number;
 }
 
-export interface TotalSalesResponse {
+export interface TotalSales {
     totalRevenue: number;
     sales: Sales[]
 }
 
-export interface CategorySalesResponse {
+export interface CategorySales {
     name: string;
     revenue: number;
     fill: string
 }
 
-export interface ProductSalesResponse {
+export interface ProductSales {
     name: string;
     revenue: number;
 }
 
 export interface SalesReport {
-    totalSales: TotalSalesResponse;
-    categorySales: CategorySalesResponse[];
-    productSales: ProductSalesResponse[];
+    totalSales: TotalSales;
+    categorySales: CategorySales[];
+    productSales: ProductSales[];
 }

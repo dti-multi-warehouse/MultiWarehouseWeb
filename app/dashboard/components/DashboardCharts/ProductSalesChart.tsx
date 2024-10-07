@@ -8,10 +8,10 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
-import {ProductSalesResponse} from "@/types/dashboard";
+import {ProductSales} from "@/types/dashboard";
 
 interface ProductSalesChartProps {
-    productSales: ProductSalesResponse[];
+    productSales: ProductSales[];
     month: string
 }
 
