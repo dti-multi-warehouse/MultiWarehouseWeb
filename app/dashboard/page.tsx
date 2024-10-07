@@ -33,7 +33,7 @@ const Dashboard: FC = () => {
     return <div>Loading...</div>;
   }
   return (
-    <main>
+    <main className={"p-8 space-y-4"}>
       <div>
         <h1 className={"text-3xl font-semibold"}>Sales report</h1>
         <div className={"flex max-lg:flex-col justify-between"}>
