@@ -18,7 +18,7 @@ export const authOptions: NextAuthOptions = {
         if (!credentials?.email) return null;
         if (credentials.social) {
           try {
-            const response = await apiClient.post<LoginResponse>("/api/v1/auth/social-login", {
+            const response = await apiClient.post<LoginResponse>("/v1/auth/social-login", {
               email: credentials.email,
               token: credentials.token,
             });
