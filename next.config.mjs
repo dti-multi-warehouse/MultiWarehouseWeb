@@ -14,7 +14,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   env: {
-    API_URL: process.env.NEXT_PUBLIC_API_URL,
+    API_URL: process.env.NEXT_PUBLIC_API_BASE_URL,
   },
   webpack: (config) => {
     config.resolve.alias['@'] = path.resolve(__dirname, './');
