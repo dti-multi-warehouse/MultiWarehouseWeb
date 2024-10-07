@@ -2,7 +2,7 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+  baseURL: 'https://alphamarch-be-816169614036.asia-southeast2.run.app',
   timeout: 30000,
   headers: {
     'Content-Type': 'application/json',
