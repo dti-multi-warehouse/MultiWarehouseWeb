@@ -35,7 +35,7 @@ const StockDrawerDialog: FC<StockDrawerDialogProps> = ({children}) => {
                         <DialogTitle>Manage Stock</DialogTitle>
                         <p className={"text-gray-500 text-sm"}>{warehouse.name}</p>
                     </DialogHeader>
-                    <StockMutationForm setOpen={setOpen} />
+                    <StockMutationForm setOpen={setOpen} warehouseId={warehouse.id} />
                 </DialogContent>
             </Dialog>
         )
@@ -50,7 +50,7 @@ const StockDrawerDialog: FC<StockDrawerDialogProps> = ({children}) => {
                 <DrawerHeader className={"text-left"}>
                     <DrawerTitle>Manage Stock</DrawerTitle>
                 </DrawerHeader>
-                <StockMutationForm setOpen={setOpen}/>
+                <StockMutationForm setOpen={setOpen} warehouseId={warehouse.id}/>
                     <DrawerFooter className={"pt-2"}>
                         <DrawerClose asChild>
                             <Button variant={"outline"}>Cancel</Button>

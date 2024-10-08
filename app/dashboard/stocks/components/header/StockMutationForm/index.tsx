@@ -20,11 +20,11 @@ const StockMutationSchema = Yup.object().shape({
 
 interface StockMutationFormProps {
     setOpen: Dispatch<SetStateAction<boolean>>;
+    warehouseId: number;
 }
 
-const StockMutationForm: FC<StockMutationFormProps> = ({setOpen}) => {
+const StockMutationForm: FC<StockMutationFormProps> = ({setOpen, warehouseId}) => {
     const [type, setType] = useState<'restock' | 'mutation'>('restock')
-    const warehouse = useDashboardStore(state => state.warehouse)
 
     const handleSubmit = (values: { productId: number; warehouseToId: number; warehouseFromId: number; quantity: number; maxQuantity: number; }) => {
         const url = config.BASE_URL + config.API_VER + config.endpoints.stock + `/${type}`
@@ -40,12 +40,14 @@ const StockMutationForm: FC<StockMutationFormProps> = ({setOpen}) => {
                 <Button
                     className={"w-24"}
                     onClick={() => setType("restock")}
+                    variant={type === 'restock' ? "default" : "outline"}
                 >
                     Restock
                 </Button>
                 <Button
                     className={"w-24"}
                     onClick={() => setType("mutation")}
+                    variant={type === 'mutation' ? "default" : "outline"}
                 >
                     Mutate
                 </Button>
@@ -53,7 +55,7 @@ const StockMutationForm: FC<StockMutationFormProps> = ({setOpen}) => {
             <Formik
                 initialValues={{
                     productId: 0,
-                    warehouseToId: warehouse.id,
+                    warehouseToId: warehouseId,
                     warehouseFromId: 0,
                     quantity: 1,
                     maxQuantity: 999
