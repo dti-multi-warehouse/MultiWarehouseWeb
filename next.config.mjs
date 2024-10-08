@@ -20,6 +20,14 @@ const nextConfig = {
     config.resolve.alias['@'] = path.resolve(__dirname, './');
     return config;
   },
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: '/api/:path*',
+      },
+    ]
+  },
 };
 
 export default nextConfig;
