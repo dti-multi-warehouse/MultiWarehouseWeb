@@ -11,7 +11,7 @@ export const useGetUserAddresses = () => {
     async () => {
       if (!session?.user?.id) throw new Error('User is not logged in');
       try {
-        const response = await apiClient.get<userAddress[]>(`/v1/address/user/${session.user.id}`);
+        const response = await apiClient.get<userAddress[]>(`/api/v1/address/user/${session.user.id}`);
         return response.data;
       } catch (err) {
         console.error('Failed to fetch addresses:', err);
@@ -42,7 +42,7 @@ export const useCreateUserAddress = (): UseMutationResult<userAddress, unknown, 
   return useMutation(
     async (data: userAddress) => {
       if (!session?.user?.id) throw new Error('User is not logged in');
-      const response = await apiClient.post<userAddress>(`/v1/address/user/${session.user.id}/add`, data);
+      const response = await apiClient.post<userAddress>(`/api/v1/address/user/${session.user.id}/add`, data);
       return response.data;
     },
     {
@@ -63,7 +63,7 @@ export const useUpdateUserAddress = (): UseMutationResult<userAddress, unknown, 
   return useMutation(
     async ({ addressId, data }: { addressId: number, data: userAddress }) => {
       if (!session?.user?.id) throw new Error('User is not logged in');
-      const response = await apiClient.put<userAddress>(`/v1/address/user/${session.user.id}/update/${addressId}`, data);
+      const response = await apiClient.put<userAddress>(`/api/v1/address/user/${session.user.id}/update/${addressId}`, data);
       return response.data;
     },
     {
@@ -84,7 +84,7 @@ export const useDeleteUserAddress = (): UseMutationResult<void, unknown, number>
   return useMutation(
     async (addressId: number) => {
       if (!session?.user?.id) throw new Error('User is not logged in');
-      await apiClient.delete(`/v1/address/delete/${addressId}`);
+      await apiClient.delete(`/api/v1/address/delete/${addressId}`);
     },
     {
       onSuccess: () => {
@@ -104,7 +104,7 @@ export const useGetUserAddressById = (id: number) => {
     ['userAddress', id],
     async () => {
       if (!session?.user?.id) throw new Error('User is not logged in');
-      const response = await apiClient.get<userAddress>(`/v1/address/userAddress/${id}`);
+      const response = await apiClient.get<userAddress>(`/api/v1/address/userAddress/${id}`);
       return response.data;
     },
     {

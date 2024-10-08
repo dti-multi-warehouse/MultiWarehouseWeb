@@ -23,7 +23,7 @@ export const useRegisterUser = (): UseMutationResult<
   const queryClient = useQueryClient();
   return useMutation(
     (data: RegisterUserRequest) =>
-      apiClient.post<RegisterUserResponse>('/v1/auth/register', data).then((response) => response.data),
+      apiClient.post<RegisterUserResponse>('/api/v1/auth/register', data).then((response) => response.data),
     {
       onSuccess: () => {
         queryClient.invalidateQueries('user');
@@ -43,7 +43,7 @@ export const useConfirmRegistration = (): UseMutationResult<
   return useMutation(
     (data: ConfirmRegistrationRequest) => {
       return apiClient
-        .post<ConfirmRegistrationResponse>('/v1/auth/register/confirm', data)
+        .post<ConfirmRegistrationResponse>('/api/v1/auth/register/confirm', data)
         .then((response) => response.data)
         .catch((error) => {
           console.error('API Error:', error.response?.status, error.response?.data);
@@ -106,7 +106,7 @@ export const useLoginUser = (): UseMutationResult<LoginResponse, unknown, LoginR
 export const useLogoutUser = (): UseMutationResult<void, unknown, LogoutRequest> => {
   return useMutation(
     (data: LogoutRequest) =>
-      apiClient.post('/v1/auth/logout', { token: data.token }).then((response) => {
+      apiClient.post('/api/v1/auth/logout', { token: data.token }).then((response) => {
         signOut({ redirect: false });
         return response.data;
       }),
@@ -122,11 +122,11 @@ export const useLogoutUser = (): UseMutationResult<void, unknown, LogoutRequest>
 };
 
 export const saveEmailToBackend = async (email: string) => {
-  return await apiClient.post('/v1/auth/save-email', { email });
+  return await apiClient.post('/api/v1/auth/save-email', { email });
 };
 
 export const checkEmailExists = async (email: string) => {
-  const response = await apiClient.post<{ exists: boolean }>('/v1/auth/check-email', { email });
+  const response = await apiClient.post<{ exists: boolean }>('/api/v1/auth/check-email', { email });
   return response.data.exists;
 };
 
@@ -139,7 +139,7 @@ export const useGetProfile = () => {
     async () => {
       if (!session?.user?.id) throw new Error("User is not logged in");
 
-      const response = await apiClient.get<UserProfileDTO>("/v1/profile", {
+      const response = await apiClient.get<UserProfileDTO>("/api/v1/profile", {
         params: { userId: session.user.id },
       });
 
@@ -168,7 +168,7 @@ export const useUpdateProfile = (): UseMutationResult<void, unknown, FormData> =
         throw new Error("No access token");
       }
 
-      await apiClient.put('/v1/updateProfile', data, {
+      await apiClient.put('/api/v1/updateProfile', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${session.accessToken}`,
@@ -194,7 +194,7 @@ export const useRequestPasswordReset = (): UseMutationResult<
   return useMutation(
     (data: ResetPasswordRequest) => {
       return apiClient
-        .post<ResetPasswordResponse>('/v1/auth/reset-password/request', data)
+        .post<ResetPasswordResponse>('/api/v1/auth/reset-password/request', data)
         .then((response) => response.data)
         .catch((error) => {
           console.error('API Error during password reset request:', error.response?.status, error.response?.data);
@@ -220,7 +220,7 @@ export const useConfirmPasswordReset = (): UseMutationResult<
 > => {
   return useMutation(
     (data: ConfirmResetPasswordRequest) => {
-      return apiClient.post<ResetPasswordResponse>('/v1/auth/reset-password/confirm', data)
+      return apiClient.post<ResetPasswordResponse>('/api/v1/auth/reset-password/confirm', data)
       .then((response) => response.data)
       .catch((error) => {
         console.error('API Error during password reset confirmation:', error.response?.status, error.response?.data);
@@ -244,7 +244,7 @@ export const useResendVerificationEmail = () => {
 
   return useMutation(
     async ({ email }: { email: string }) => {
-      const response = await apiClient.post(`/v1/auth/resend-verification-email?email=${encodeURIComponent(email)}`);
+      const response = await apiClient.post(`/api/v1/auth/resend-verification-email?email=${encodeURIComponent(email)}`);
       if (response.status !== 200) {
         throw new Error("Failed to resend verification email");
       }

@@ -6,7 +6,7 @@ export const useSearchUsers = (params: { role?: string, username?: string, email
   return useQuery(
     ['users', { role, username, email, page, size }],
     async () => {
-      const response = await apiClient.get(`/v1/admin/users/search`, {
+      const response = await apiClient.get(`/api/v1/admin/users/search`, {
         params: { role, username, email, page, size }
       });
       return response.data;
@@ -19,7 +19,7 @@ export const useSearchUsers = (params: { role?: string, username?: string, email
 
 export const useGetWarehouseAdminById = (id: number) => {
   return useQuery(['warehouseAdmin', id], async () => {
-    const response = await apiClient.get(`/v1/admin/warehouse-admins/${id}`);
+    const response = await apiClient.get(`/api/v1/admin/warehouse-admins/${id}`);
     return response.data;
   }, {
     enabled: !!id,
@@ -33,7 +33,7 @@ export const useGetWarehouseAdmins = () => {
   return useQuery(
     'warehouseAdmins',
     async () => {
-      const response = await apiClient.get(`/v1/admin/warehouse-admins`);
+      const response = await apiClient.get(`/api/v1/admin/warehouse-admins`);
       console.log('Full Response:', response.data);
       const warehouseAdmins = response.data.data;
 
@@ -60,7 +60,7 @@ export const useCreateWarehouseAdmin = (): UseMutationResult<
 
   return useMutation(
     async (formData: FormData) => {
-      const response = await apiClient.post(`/v1/admin/warehouse-admins`, formData, {
+      const response = await apiClient.post(`/api/v1/admin/warehouse-admins`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -81,7 +81,7 @@ export const useCreateWarehouseAdmin = (): UseMutationResult<
 export const useUpdateWarehouseAdmin = () => {
   return useMutation(
     async ({ id, data }: { id: number; data: FormData }) => {
-      const response = await apiClient.put(`/v1/admin/warehouse-admins/${id}`, data, {
+      const response = await apiClient.put(`/api/v1/admin/warehouse-admins/${id}`, data, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -96,7 +96,7 @@ export const useDeleteWarehouseAdmin = (): UseMutationResult<void, unknown, numb
   
   return useMutation(
     async (id: number) => {
-      await apiClient.delete(`/v1/admin/warehouse-admins/${id}`);
+      await apiClient.delete(`/api/v1/admin/warehouse-admins/${id}`);
     },
     {
       onSuccess: () => {

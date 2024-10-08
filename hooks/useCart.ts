@@ -22,7 +22,7 @@ export const useCart = () => {
     async () => {
       try {
         const config = await attachToken({});
-        const response = await apiClient.get<CartResponse>('/v1/cart', config);
+        const response = await apiClient.get<CartResponse>('/api/v1/cart', config);
         return response.data;
       } catch (error) {
         console.error('Failed to fetch cart:', error);
@@ -44,7 +44,7 @@ export const useAddToCart = () => {
     async (item: AddItemDto) => {
       const config = await attachToken({});
       try {
-        const response = await apiClient.post('/v1/cart', item, config);
+        const response = await apiClient.post('/api/v1/cart', item, config);
         console.log('Item added to cart successfully:', response.data);
       } catch (error: any) {
         console.error('Error adding item to cart:', error.response?.data || error.message);
@@ -70,7 +70,7 @@ export const useRemoveFromCart = () => {
     async (productId: number) => {
       try {
         const config = await attachToken({});
-        await apiClient.delete(`/v1/cart/${productId}`, config);
+        await apiClient.delete(`/api/v1/cart/${productId}`, config);
       } catch (error) {
         console.error('Failed to remove item from cart:', error);
         throw error;
@@ -90,7 +90,7 @@ export const useIncrementQuantity = () => {
   return useMutation(
     async (productId: number) => {
       const config = await attachToken({});
-      await apiClient.put(`/v1/cart/increment/${productId}`, {}, config);
+      await apiClient.put(`/api/v1/cart/increment/${productId}`, {}, config);
     },
     {
       onSuccess: () => {
@@ -106,7 +106,7 @@ export const useDecrementQuantity = () => {
   return useMutation(
     async (productId: number) => {
       const config = await attachToken({});
-      await apiClient.put(`/v1/cart/decrement/${productId}`, {}, config);
+      await apiClient.put(`/api/v1/cart/decrement/${productId}`, {}, config);
     },
     {
       onSuccess: () => {
