@@ -38,7 +38,7 @@ const StockTable: FC<{query: string}> = ({query}) => {
                     <TableHead className={"max-w-24"}>Name</TableHead>
                     <TableHead className={"text-green-600"}>In</TableHead>
                     <TableHead className={"text-red-600"}>Out</TableHead>
-                    <TableHead>Stock</TableHead>
+                    <TableHead>In Stock</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
