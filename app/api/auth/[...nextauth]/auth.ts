@@ -80,8 +80,10 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV !== 'development',
-        domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'dev.alphamarch.shop',
+        // secure: process.env.NODE_ENV !== 'development',
+        // domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'dev.alphamarch.shop',
+        secure: true,
+        domain: 'dev.alphamarch.shop',
       },
     },
     csrfToken: {
@@ -90,7 +92,8 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV !== 'development', // Secure only in production
+        // secure: process.env.NODE_ENV !== 'development',
+        secure: true,
       },
     },
   },  
