@@ -5,3 +5,9 @@ interface StockDto {
     totalPage: number;
     stocks: Stock[];
 }
+
+interface WarehouseAndStockAvailabilityDto {
+    warehouseId: number;
+    warehouseName: string;
+    stock: number;
+}
