@@ -75,26 +75,25 @@ export const authOptions: NextAuthOptions = {
   ],
   cookies: {
     sessionToken: {
-      name: `__Secure-next-auth.session-token`,
+      name: `next-auth.session-token`,
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        domain:  'dev.alphamarch.shop', 
+        secure: process.env.NODE_ENV !== 'development',
+        domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'dev.alphamarch.shop',
       },
     },
     csrfToken: {
-      name: `__Host-next-auth.csrf-token`,
+      name: `next-auth.csrf-token`,
       options: {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        secure: process.env.NODE_ENV === 'production',
-        domain: 'dev.alphamarch.shop',
+        secure: process.env.NODE_ENV !== 'development', // Secure only in production
       },
     },
-  },
+  },  
   session: {
     strategy: "jwt",
     maxAge: 10 * 60 * 60,
