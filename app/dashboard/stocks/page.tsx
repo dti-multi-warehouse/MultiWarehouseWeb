@@ -9,7 +9,7 @@ const StocksDashboardPage: FC = () => {
     return (
         <main className={"lg:grid grid-cols-2 gap-2"}>
             <div className={"col-span-1 border-r"}>
-                <StockHeader setQuery={setQuery} />
+                <StockHeader setQuery={setQuery}  query={query}/>
                 <StockTable query={query}/>
             </div>
             <StockDetailsView />
