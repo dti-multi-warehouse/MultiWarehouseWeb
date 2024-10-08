@@ -56,10 +56,6 @@ interface StockMovementsChartProps {
 const StockMovementsChart:FC<StockMovementsChartProps> = ({chartData, isLoading}) => {
     const product = useDashboardStore(state => state.product)
 
-    if (!chartData) {
-        return <></>
-    }
-
     if (isLoading) {
         return (
             <Card className={"shadow-none lg:border-none max-lg:max-h-80"}>
@@ -70,6 +66,10 @@ const StockMovementsChart:FC<StockMovementsChartProps> = ({chartData, isLoading}
                 <Skeleton className={"w-full h-96 max-lg:h-40"} />
             </Card>
         )
+    }
+
+    if (!chartData) {
+        return <></>
     }
 
     return (
