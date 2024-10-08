@@ -8,7 +8,7 @@ const ProductsDashboardPage: FC = () => {
     return (
         <main className={"gap-2"}>
             <Header query={query} setQuery={setQuery}/>
-            <ProductTable />
+            <ProductTable query={query}/>
         </main>
     )
 }

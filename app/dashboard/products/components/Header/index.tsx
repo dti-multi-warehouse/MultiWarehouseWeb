@@ -13,7 +13,7 @@ const Header: FC<HeaderProps> = ({query, setQuery}) => {
         <div className={"flex flex-col lg:flex-row gap-4 justify-between px-8 pt-4 pb-2 border-b"}>
             <h1 className={"text-3xl font-semibold"}>Products</h1>
             <div className={"flex flex-col justify-end gap-2"}>
-                <Button>Add product</Button>
+                <Button onClick={() => console.log(query)}>Add product</Button>
                 <Input
                     value={query}
                     onChange={(e) => setQuery(e.target.value)}

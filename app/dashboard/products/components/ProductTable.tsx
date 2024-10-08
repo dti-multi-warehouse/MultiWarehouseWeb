@@ -1,8 +1,9 @@
-import {FC} from "react";
+'use client'
+import React, {FC, useState} from "react";
 import {
     Table,
     TableBody,
-    TableCell,
+    TableCell, TableFooter,
     TableHead,
     TableHeader,
     TableRow,
@@ -12,9 +13,21 @@ import useDashboardProducts from "@/hooks/useDashboardProducts";
 import {DashboardProducts} from "@/types/product";
 import Image from "next/image";
 import {useRouter} from "next/navigation";
+import {
+    Pagination,
+    PaginationContent,
+    PaginationItem,
+    PaginationLink, PaginationNext,
+    PaginationPrevious
+} from "@/components/ui/pagination";
 
 const ProductTable: FC<{query: string}> = ({query}) => {
-    const { data, isLoading, error } = useDashboardProducts()
+    const [page, setPage] = useState(0)
+    const { data, isLoading, error } = useDashboardProducts(query, page)
+
+    if (!data) {
+        return <></>
+    }
 
     return (
         <Table>
@@ -28,10 +41,44 @@ const ProductTable: FC<{query: string}> = ({query}) => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data?.map( (product, index) => (
+                {data.products.map( (product, index) => (
                     <ProductRow key={index} {...product} />
                 ))}
             </TableBody>
+            <TableFooter>
+                <TableRow>
+                    <TableCell colSpan={5}>
+                        <Pagination>
+                            <PaginationContent>
+                                <PaginationItem>
+                                    <PaginationPrevious
+                                        href="#"
+                                        onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+                                    />
+                                </PaginationItem>
+                                {Array.from({ length: data.totalPage }).map((_, index) => (
+                                    <PaginationItem key={index}>
+                                        <PaginationLink
+                                            href="#"
+                                            onClick={() => setPage(index)}
+                                        >
+                                            {index + 1}
+                                        </PaginationLink>
+                                    </PaginationItem>
+                                ))}
+                                <PaginationItem>
+                                    <PaginationNext
+                                        href="#"
+                                        onClick={() =>
+                                            setPage((prev) => Math.min(prev + 1, data.totalPage - 1))
+                                        }
+                                    />
+                                </PaginationItem>
+                            </PaginationContent>
+                        </Pagination>
+                    </TableCell>
+                </TableRow>
+            </TableFooter>
         </Table>
 
     )
