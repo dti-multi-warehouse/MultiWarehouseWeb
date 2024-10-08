@@ -91,10 +91,10 @@ const StockDetailsCard: FC<StockDetails> = ({date, source, note , quantity}) => 
     }[source]
 
     const addendum = {
-        order: 'Order Id',
+        order: `Order Id: ${note}`,
         restock: '',
-        mutation_in: 'From warehouse',
-        mutation_out: 'To warehouse'
+        mutation_in: `From: ${note}`,
+        mutation_out: `To: ${note}`
     }[source]
 
     return (
@@ -119,7 +119,7 @@ const StockDetailsCard: FC<StockDetails> = ({date, source, note , quantity}) => 
                         <p className={"text-lg font-semibold"}>
                             Quantity: {quantity}
                         </p>
-                        <p className={"text-sm text-muted-foreground"}>{addendum}: {note}</p>
+                        <p className={"text-sm text-muted-foreground"}>{addendum}</p>
                     </div>
                 </div>
             </CardContent>
