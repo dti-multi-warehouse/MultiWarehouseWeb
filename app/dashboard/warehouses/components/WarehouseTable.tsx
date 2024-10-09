@@ -21,11 +21,15 @@ import {
   PaginationPrevious,
 } from "@/components/ui/pagination";
 import WarehouseUpdate from "./WarehouseUpdate";
-import { useSearchWarehouses, useDeleteWarehouse } from "@/hooks/useWarehouse"; 
-import { toast } from "sonner";
+import { useSearchWarehouses, useDeleteWarehouse } from "@/hooks/useWarehouse";
+import AdminAssignee from "./AdminAssignee";
+import { useToast } from "@/hooks/use-toast"; 
+import { ToastAction } from "@/components/ui/toast";
 
 const WarehouseTable: React.FC = () => {
   const [page, setPage] = useState(0);
+  const { toast } = useToast();
+
   const { data, isLoading, isError, refetch } = useSearchWarehouses({
     page,
     size: 10,
@@ -37,18 +41,18 @@ const WarehouseTable: React.FC = () => {
     if (window.confirm("Are you sure you want to delete this warehouse?")) {
       deleteWarehouseMutation.mutate(id, {
         onSuccess: () => {
-          toast("Warehouse deleted", {
+          toast({
+            title: "Warehouse deleted",
             description: "The warehouse has been successfully deleted.",
-            action: {
-              label: "Undo",
-              onClick: () => console.log("Undo Delete"),
-            },
+            action: <ToastAction altText="Undo">Undo</ToastAction>,
           });
           refetch();
         },
         onError: (error) => {
-          toast("Failed to delete warehouse", {
-            description: "An error occurred while deleting the warehouse.",
+          toast({
+            title: "Error",
+            description: "Failed to delete warehouse.",
+            variant: "destructive",
           });
           console.error("Error deleting warehouse:", error);
         },
@@ -91,7 +95,12 @@ const WarehouseTable: React.FC = () => {
                 <TableCell>{warehouse.street}</TableCell>
                 <TableCell>{warehouse.city}</TableCell>
                 <TableCell>{warehouse.province}</TableCell>
-                <TableCell>{warehouse.adminUsername}</TableCell>
+                <TableCell className="">
+                <div className="flex flex-col gap-1">
+                  <p className="font-bold py-1 px-3 border border-red-600 text-red-600 rounded-full text-center">{warehouse.adminUsername}</p>
+                  <AdminAssignee warehouseId={warehouse.id} />
+                </div>
+                </TableCell>
                 <TableCell className="text-right flex justify-end gap-5">
                   <WarehouseUpdate warehouseId={warehouse.id} />
                   <Buttons
@@ -118,10 +127,7 @@ const WarehouseTable: React.FC = () => {
                   </PaginationItem>
                   {Array.from({ length: totalPages }).map((_, index) => (
                     <PaginationItem key={index}>
-                      <PaginationLink
-                        href="#"
-                        onClick={() => setPage(index)}
-                      >
+                      <PaginationLink href="#" onClick={() => setPage(index)}>
                         {index + 1}
                       </PaginationLink>
                     </PaginationItem>

@@ -6,6 +6,7 @@ import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import AlertDialog from "@/components/AlertDialog";
 import { useRouter } from "next/navigation";
+import React from "react";
 
 const EmailVerifSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),

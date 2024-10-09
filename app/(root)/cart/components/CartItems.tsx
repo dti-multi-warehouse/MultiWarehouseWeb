@@ -31,7 +31,7 @@ const CartItems: React.FC = () => {
   }, 300);
 
   const updateQuantity = (productId: number, newQuantity: number, action: "increment" | "decrement") => {
-    if (newQuantity < 1) return; // Prevent quantity from going below 1
+    if (newQuantity < 1) return;
 
     setLocalQuantities((prev) => ({
       ...prev,

@@ -15,6 +15,7 @@ import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useGetUserAddressById, useUpdateUserAddress } from "@/hooks/useAddress";
 import { userAddress } from "@/types/datatypes";
+import React from "react";
 
 interface EditAddressProps {
   onClose: () => void;
@@ -45,17 +46,17 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
   useEffect(() => {
     if (addressData) {
       setInitialValues({
-        name: addressData.name || "",
-        phoneNumber: addressData.phoneNumber || "",
-        label: addressData.label || "",
-        street: addressData.address?.street || "",
-        city: addressData.address?.city || "",
-        province: addressData.address?.province || "",
-        isPrimary: addressData.isPrimary || false,
+        name: addressData.data?.name || "",
+        phoneNumber: addressData.data?.phoneNumber || "",
+        label: addressData.data?.label || "",
+        street: addressData.data?.address?.street || "",
+        city: addressData.data?.address?.city || "",
+        province: addressData.data?.address?.province || "",
+        isPrimary: addressData.data?.isPrimary || false,
       });
       setCoordinates({
-        latitude: addressData.address?.latitude || -6.2,
-        longitude: addressData.address?.longitude || 106.816666,
+        latitude: addressData.data?.address?.latitude || -6.2,
+        longitude: addressData.data?.address?.longitude || 106.816666,
       });
     }
   }, [addressData]);
@@ -88,11 +89,14 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
     }
   };
 
+  const opencageapi = process.env.NEXT_PUBLIC_OPENCAGE_API_KEY;
+  console.log(opencageapi);
+
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${process.env.NEXT_PUBLIC_OPENCAGE_API_KEY}&language=id`
+        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${opencageapi}&language=id`
       );
       const data = response.data;
       if (data.results && data.results.length > 0) {

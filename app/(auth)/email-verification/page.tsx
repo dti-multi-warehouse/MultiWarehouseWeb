@@ -3,6 +3,7 @@
 import ReactQueryProvider from "@/lib/ReactQueryProvider";
 import EmailVerificationForm from "./components/EmailVerificationForm";
 import { useSearchParams } from "next/navigation";
+import React from "react";
 
 const EmailVerification: React.FC = () => {
   const searchParams = useSearchParams();

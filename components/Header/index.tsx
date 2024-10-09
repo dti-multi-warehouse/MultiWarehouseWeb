@@ -14,6 +14,7 @@ import Image from "next/image";
 import { useGetProfile } from "@/hooks/useUser";
 import AddressSaved from "../Address/AddressSaved";
 import {useRouter} from "next/navigation";
+import React from "react";
 
 const Header: React.FC = () => {
   const [isSearchOpen, setIsSearchOpen] = useState<Boolean>(false);

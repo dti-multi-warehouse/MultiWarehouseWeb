@@ -16,8 +16,13 @@ import axios from "axios";
 import Buttons from "@/components/Buttons";
 import AdminAssignee from "./AdminAssignee";
 import Image from "next/image";
-import { useGetWarehouseById, useUpdateWarehouse } from "@/hooks/useWarehouse";
+import {
+  useAssignWarehouseAdmin,
+  useGetWarehouseById,
+  useUpdateWarehouse,
+} from "@/hooks/useWarehouse";
 import { toast } from "sonner";
+import React from "react";
 
 interface WarehouseUpdateProps {
   warehouseId: number;
@@ -31,7 +36,8 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
   const [isLoading, setIsLoading] = useState(false);
   const mapRef = useRef<any>(null);
 
-  const { data: warehouse, isLoading: isFetchingWarehouse } = useGetWarehouseById(warehouseId);
+  const { data: warehouse, isLoading: isFetchingWarehouse } =
+    useGetWarehouseById(warehouseId);
   const updateWarehouseMutation = useUpdateWarehouse();
 
   const reverseGeocode = async (lat: number, lng: number) => {
@@ -72,12 +78,19 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
     return null;
   };
 
-  const handleUpdate = async (values: any, setSubmitting: (isSubmitting: boolean) => void) => {
+  const handleUpdate = async (
+    values: any,
+    setSubmitting: (isSubmitting: boolean) => void
+  ) => {
     try {
       updateWarehouseMutation.mutate(
         {
           id: warehouseId,
-          data: { ...values, latitude: coordinates.latitude, longitude: coordinates.longitude },
+          data: {
+            ...values,
+            latitude: coordinates.latitude,
+            longitude: coordinates.longitude,
+          },
         },
         {
           onSuccess: () => {
@@ -114,7 +127,9 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
         </DialogTrigger>
         <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-center p-5">Edit Warehouse</DialogTitle>
+            <DialogTitle className="text-center p-5">
+              Edit Warehouse
+            </DialogTitle>
             <hr className="border-dashed border-gray-800" />
             <Formik
               enableReinitialize
@@ -195,7 +210,6 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
                     </div>
                   </div>
 
-                  {/* Map container to select coordinates */}
                   <div className="w-full h-[200px] rounded-xl overflow-hidden">
                     {isLoading ? (
                       <p>Loading map...</p>
@@ -221,21 +235,6 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
                         <MapClickHandler setFieldValue={setFieldValue} />
                       </MapContainer>
                     )}
-                  </div>
-
-                  <div className="flex flex-col gap-2 ">
-                    <label>Assign Admin</label>
-                    <AdminAssignee />
-                    <div className="flex items-center gap-3 border shadow-airbnbSoft py-1 px-2 rounded-xl w-fit">
-                      <Image
-                        src="/default-user.png"
-                        width={30}
-                        height={30}
-                        alt="warehouse admin avatar"
-                        className="rounded-full"
-                      />
-                      <p>{warehouse?.warehouseAdmins[0]?.user?.username || "Unassigned"}</p>
-                    </div>
                   </div>
 
                   <Buttons type="submit" disabled={isSubmitting || isLoading}>

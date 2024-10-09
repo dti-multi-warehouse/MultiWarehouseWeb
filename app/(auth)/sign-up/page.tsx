@@ -1,5 +1,6 @@
 import ReactQueryProvider from "@/lib/ReactQueryProvider"; 
 import SignUpForm from "./components/SignUpForm";
+import React from "react";
 
 const SignUp: React.FC = () => {
   return (

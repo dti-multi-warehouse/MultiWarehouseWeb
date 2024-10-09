@@ -29,6 +29,7 @@ export interface cartItems {
     price: number;
     quantity: number;
     imageUrl: string;
+    stock: number;
 }
 
 export interface CartResponse {

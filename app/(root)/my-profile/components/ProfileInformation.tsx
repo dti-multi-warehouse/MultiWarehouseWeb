@@ -6,11 +6,12 @@ import { MdVerified } from "react-icons/md";
 import { GoUnverified } from "react-icons/go";
 import { useGetProfile, useResendVerificationEmail } from "@/hooks/useUser";
 import EditProfileDialog from "./EditProfileDialog";
-import { profileInf } from "@/data/data";
-import { RiEdit2Fill } from "react-icons/ri";
+import { useGetUserAddresses } from "@/hooks/useAddress";
+import React from "react";
 
 const ProfileInformation: React.FC = () => {
-  const { profile, isLoading, error } = useGetProfile();
+  const { profile, isLoading: profileLoading, error: profileError } = useGetProfile();
+  const { addresses, isLoading: addressesLoading, error: addressesError } = useGetUserAddresses();
   const [showResendButton, setShowResendButton] = useState(false);
   const resendVerificationEmail = useResendVerificationEmail();
 
@@ -37,12 +38,20 @@ const ProfileInformation: React.FC = () => {
     }
   }, [profile]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
+  if (profileLoading) {
+    return <p>Loading profile...</p>;
   }
 
-  if (error) {
+  if (profileError) {
     return <p>Error loading profile</p>;
+  }
+
+  if (addressesLoading) {
+    return <p>Loading addresses...</p>;
+  }
+
+  if (addressesError) {
+    return <p>Error loading addresses</p>;
   }
 
   return (
@@ -67,7 +76,6 @@ const ProfileInformation: React.FC = () => {
           </div>
 
           <div>
-
             <p className="text-sm font-medium text-gray-600">Email</p>
             <div className="flex items-center gap-10">
               <p className="font-semibold">{profile?.email}</p>
@@ -88,35 +96,35 @@ const ProfileInformation: React.FC = () => {
 
           <h3 className="font-bold text-lg">Alamat User</h3>
           <div className="flex flex-col gap-5 w-full">
-            {profileInf?.address?.map((address, index) => (
-              <div key={index} className="flex flex-col gap-2">
-                <div className="flex justify-between">
-                  <p className="font-semibold">{address.label}</p>
-                  <button className="bg-red-200 text-red-600 rounded-full p-2">
-                    <RiEdit2Fill />
-                  </button>
+            {addresses?.data?.length > 0 ? (
+              addresses.data.map((address, index) => (
+                <div key={index} className="flex flex-col gap-2">
+                  <div className="flex justify-between">
+                    <p className="font-semibold">{address.label}</p>
+                  </div>
+                  <div className="flex gap-3 font-medium">
+                    <p>{address.name}</p> - <p>{address.phoneNumber}</p>
+                  </div>
+                  <div>
+                    <p>{address.address.street}, {address.address.city}, {address.address.province}</p>
+                  </div>
+                  <p
+                    className={`${
+                      address.primary === true ? "block" : "hidden"
+                    } font-bold text-sm text-gray-600`}
+                  >
+                    Alamat Utama
+                  </p>
+                  <div
+                    className={`h-2 w-full bg-gray-200 rounded-lg mt-5 ${
+                      index === 2 ? "hidden" : "block"
+                    }`}
+                  ></div>
                 </div>
-                <div className="flex gap-3 font-medium">
-                  <p>{address.name}</p> - <p>{address.phone}</p>
-                </div>
-                <div>
-                  <p>{address.address}</p>
-                  <p>{address.country}</p>
-                </div>
-                <p
-                  className={`${
-                    address.isMainAddress ? "block" : "hidden"
-                  } font-bold text-sm text-gray-600`}
-                >
-                  Alamat Utama
-                </p>
-                <div
-                  className={`h-2 w-full bg-gray-200 rounded-lg mt-5 ${
-                    index === 2 ? "hidden" : "block"
-                  }`}
-                ></div>
-              </div>
-            ))}
+              ))
+            ) : (
+              <p>No addresses saved yet.</p>
+            )}
           </div>
         </div>
       </div>

@@ -16,6 +16,7 @@ import { useCreateWarehouse, useAssignWarehouseAdmin } from "@/hooks/useWarehous
 import Buttons from "@/components/Buttons";
 import AdminAssignee from "./AdminAssignee";
 import Image from "next/image";
+import React from "react";
 
 const AddWarehouse: React.FC = () => {
   const [coordinates, setCoordinates] = useState({
@@ -207,23 +208,6 @@ const AddWarehouse: React.FC = () => {
                         />
                         <MapClickHandler setFieldValue={setFieldValue} />
                       </MapContainer>
-                    )}
-                  </div>
-
-                  <div className="flex flex-col gap-2 ">
-                    <label>Assign Admin</label>
-                    <AdminAssignee onSelectAdmin={setSelectedAdmin} />
-                    {selectedAdmin && (
-                      <div className="flex items-center gap-3 border shadow-airbnbSoft py-1 px-2 rounded-xl w-fit">
-                        <Image 
-                          src="/default-user.png"
-                          width={30}
-                          height={30}
-                          alt="warehouse admin avatar"
-                          className="rounded-full"
-                        />
-                        <p>{selectedAdmin.name}</p>
-                      </div>
                     )}
                   </div>
 

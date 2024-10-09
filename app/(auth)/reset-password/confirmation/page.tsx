@@ -3,6 +3,7 @@
 import ReactQueryProvider from "@/lib/ReactQueryProvider";
 import ResetPasswordConfirmForm from "./components/ResetPasswordConfirm";
 import { useSearchParams } from "next/navigation";
+import React from "react";
 
 const ResetPasswordConfirmation: React.FC = () => {
   const searchParams = useSearchParams();
