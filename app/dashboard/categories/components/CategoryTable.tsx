@@ -19,6 +19,7 @@ const CategoryTable: FC = () => {
 
     return (
         <Table>
+            <TableCaption>Click on the category row to edit a category</TableCaption>
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">#</TableHead>
@@ -47,7 +48,6 @@ interface CategoryRowProps {
 const CategoryRow: FC<CategoryRowProps> = ({ id, name }) => {
     return (
         <CategoryDrawerDialog mode={'update'} id={id}>
-            <TableCaption>Click on the category row to edit a category</TableCaption>
             <TableRow className={"hover:cursor-pointer"}>
                 <TableCell className="font-medium">{id}</TableCell>
                 <TableCell>{name}</TableCell>
