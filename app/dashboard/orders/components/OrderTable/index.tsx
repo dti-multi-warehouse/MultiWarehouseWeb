@@ -1,4 +1,5 @@
-import React from "react";
+'use client'
+import React, {useState} from "react";
 import {
   Table,
   TableBody,
@@ -10,37 +11,32 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { orderlist } from "@/data/data";
-import PaymentStatus from "../PaymentStatus";
+import useDashboardStore from "@/hooks/useDashboardStore";
+import useAdminOrder from "@/hooks/order/useAdminOrder";
+import OrderTableRow from "@/app/dashboard/orders/components/OrderTable/OrderTableRow";
 
 const OrderTable: React.FC = () => {
+  const warehouse = useDashboardStore(state => state.warehouse)
+  const [page, setPage] = useState(0);
+  const {data, isLoading, error} = useAdminOrder(warehouse.id, page)
+
+  if (!data) return null;
+
   return (
     <>
       <Table className="border rounded-xl">
-        <TableCaption>A list of warehouses.</TableCaption>
+        <TableCaption>Click on an order row to view the details</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[50px]">ID</TableHead>
-            <TableHead>Name</TableHead>
-            <TableHead>Address</TableHead>
-            <TableHead>Date</TableHead>
-            <TableHead>Warehouse</TableHead>
-            <TableHead className="text-right">Status</TableHead>
+            {/*<TableHead>Name</TableHead>*/}
+            {/*<TableHead>Address</TableHead>*/}
+            <TableHead className={"w-[150px]"}>Date</TableHead>
+            <TableHead className={"text-center"}>Status</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-            {orderlist.map((order, index) => (
-
-          <TableRow key={order.id}>
-            <TableCell className="font-medium">#{order.id}</TableCell>
-            <TableCell>{order.name}</TableCell>
-            <TableCell>{order.Address}</TableCell>
-            <TableCell>{order.date}</TableCell>
-            <TableCell>{order.warehouse}</TableCell>
-            <TableCell className="text-right">
-              <PaymentStatus />
-            </TableCell>
-          </TableRow>
-            ))}
+          {data.orders.map( order => <OrderTableRow key={order.id} {...order} />)}
         </TableBody>
         <TableFooter>
           <TableRow>

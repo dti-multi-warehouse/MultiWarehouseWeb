@@ -1,5 +1,5 @@
 export const config = {
-    BASE_URL: 'https://be.alphamarch.shop', //api
+    BASE_URL: 'http://localhost:8080', //api
     API_VER: '/api/v1/',
     endpoints: {
         product: 'product',
@@ -8,5 +8,6 @@ export const config = {
         stockMutation: 'stock/mutation',
         warehouse: 'warehouse',
         dashboard: 'dashboard',
+        order: 'order'
     },
 }
