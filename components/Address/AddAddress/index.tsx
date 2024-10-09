@@ -36,7 +36,7 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
       const response = await axios.get(
         `https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(
           fullAddress
-        )}&key=${process.env.OPENCAGE_API_KEY}&language=id`
+        )}&key=${process.env.NEXT_PUBLIC_OPENCAGE_API_KEY}&language=id`
       );
       const data = response.data;
       if (data.results && data.results.length > 0) {
@@ -61,7 +61,7 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${process.env.OPENCAGE_API_KEY}&language=id`
+        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${process.env.NEXT_PUBLIC_OPENCAGE_API_KEY}&language=id`
       );
       const data = response.data;
       if (data.results && data.results.length > 0) {
