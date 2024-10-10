@@ -7,8 +7,11 @@ export interface Order {
     id: number;
     userId: number;
     userName: string;
-    warehouseId: number;
-    warehouseName: string;
+    email: string;
+    phoneNumber: string;
+    street: string;
+    city: string;
+    province: string;
     price: number;
     paymentProof: string | null;
     status: Status;

@@ -13,7 +13,7 @@ const getData = async (warehouseId: number, page: number): Promise<OrderResponse
                     'Content-Type': 'application/json',
                 },
                 params: {
-                    page
+                    page: page
                 }
             }
         )

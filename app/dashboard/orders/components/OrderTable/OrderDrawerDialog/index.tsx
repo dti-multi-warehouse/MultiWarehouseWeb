@@ -80,28 +80,22 @@ export default OrderDrawerDialog
 
 const OrderDrawerDialogContent: FC<Order> = (props) => {
     return (
-        <ScrollArea className={"h-[300px] w-full px-8 text-sm space-y-1"}>
+        <ScrollArea className={"h-[300px] w-full px-8 text-sm space-y-3"}>
             <div className={"mb-2"}>
                 <div className={"flex gap-2 font-semibold"}>
                     <p>{props.createdAt.toLocaleString().split('T')[0]}</p>
                     <p>{props.createdAt.toLocaleString().split('T')[1].split(".")[0]}</p>
                 </div>
-                <div className={"flex justify-between items-center"}>
-                    <p>Customer: </p>
-                    <p><span className={"text-[10px] text-gray-500"}>#{props.userId}</span> {props.userName}</p>
-                </div>
-                <div className={"flex justify-between items-center"}>
-                    <p>Payment Method: </p>
-                    <p>{props.paymentMethod} {props.bank}</p>
-                </div>
-                <div className={"flex justify-between items-center"}>
-                    <p>Account Number: </p>
-                    <p>{props.accountNumber}</p>
-                </div>
-                <div className={"flex justify-between items-center"}>
-                    <p>Total price: </p>
-                    <p>Rp.{props.price.toLocaleString()}</p>
-                </div>
+                <TwoContent left={"Customer Id:"} right={"#" + props.userId.toString()} />
+                <TwoContent left={"Customer"} right={props.userName} />
+                <TwoContent left={"Email"} right={props.email} />
+                <TwoContent left={"Phone"} right={props.phoneNumber} />
+                <TwoContent left={"Street"} right={props.street} />
+                <TwoContent left={"City"} right={props.city} />
+                <TwoContent left={"Province"} right={props.province} />
+                <TwoContent left={"Payment Method"} right={props.paymentMethod} />
+                <TwoContent left={"Account Number"} right={props.accountNumber} />
+                <TwoContent left={"Total Price"} right={props.price.toString()} />
             </div>
             <div className="h-0.5 w-full bg-gray-200 rounded-lg "></div>
             <div className={"space-y-0.5"}>
@@ -119,5 +113,14 @@ const OrderDrawerDialogContent: FC<Order> = (props) => {
                 <Image src={props.paymentProof} alt={"Payment Proof"} width={500} height={500} />
             )}
         </ScrollArea>
+    )
+}
+
+const TwoContent: FC<{left: string, right: string}> = ({left, right}) => {
+    return (
+        <div className={"flex justify-between"}>
+            <p>{left}:</p>
+            <p className={"max-w-48 text-right"}>{right}</p>
+        </div>
     )
 }
