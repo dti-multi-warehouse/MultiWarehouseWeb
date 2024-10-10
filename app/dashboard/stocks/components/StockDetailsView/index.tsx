@@ -2,13 +2,10 @@
 import {FC} from "react";
 import {
     Drawer,
-    DrawerClose,
     DrawerContent,
     DrawerDescription,
-    DrawerFooter,
     DrawerHeader,
     DrawerTitle,
-    DrawerTrigger,
 } from "@/components/ui/drawer"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import useStockDetails from "@/hooks/useStockDetails";
@@ -36,7 +33,7 @@ const StockDetailsView: FC = () => {
                     <DrawerHeader>
                         <DrawerTitle className={"hidden"}>{product.name} Stock Movements</DrawerTitle>
                         <DrawerDescription className={"hidden"}>The movements of {product.name} stock</DrawerDescription>
-                        <StockMovementsChart chartData={data?.stockMovementChartData} />
+                        <StockMovementsChart chartData={data?.stockMovementChartData} isLoading={isLoading}/>
                     </DrawerHeader>
                     <ScrollArea className="h-[40vh] px-4">
                         {data?.stockMovements && data.stockMovements.length > 0
@@ -49,13 +46,27 @@ const StockDetailsView: FC = () => {
         )
     }
 
+    if (!product.id) {
+        return (
+            <div className={"flex flex-col justify-center items-center"}>
+                <p>Select a product to see the detailed movements of the stock</p>
+            </div>
+        )
+    }
+
+    if (!data) {
+        return <></>
+    }
+
     return (
-        <section className={"col-span-1 space-y-2"}>
-            <StockMovementsChart chartData={data?.stockMovementChartData} />
-            <div className={"flex flex-col gap-2"}>
+        <section className={"col-span-1 space-y-2 flex flex-col"}>
+            <StockMovementsChart chartData={data?.stockMovementChartData} isLoading={isLoading} />
+            <div className={"flex flex-col flex-grow gap-2 items-center justify-center"}>
                 {data?.stockMovements && data.stockMovements.length > 0
                     ? data.stockMovements.map((details, index) => <StockDetailsCard key={index} {...details} />)
-                    : <h1>This is product has no movement during this time period!</h1>
+                    : (
+                        <h1>This stock has no movement during this time period!</h1>
+                    )
                 }
             </div>
         </section>
@@ -80,10 +91,10 @@ const StockDetailsCard: FC<StockDetails> = ({date, source, note , quantity}) => 
     }[source]
 
     const addendum = {
-        order: 'Order Id',
+        order: `Order Id: ${note}`,
         restock: '',
-        mutation_in: 'From warehouse',
-        mutation_out: 'To warehouse'
+        mutation_in: `From: ${note}`,
+        mutation_out: `To: ${note}`
     }[source]
 
     return (
@@ -108,7 +119,7 @@ const StockDetailsCard: FC<StockDetails> = ({date, source, note , quantity}) => 
                         <p className={"text-lg font-semibold"}>
                             Quantity: {quantity}
                         </p>
-                        <p className={"text-sm text-muted-foreground"}>{addendum}: {note}</p>
+                        <p className={"text-sm text-muted-foreground"}>{addendum}</p>
                     </div>
                 </div>
             </CardContent>

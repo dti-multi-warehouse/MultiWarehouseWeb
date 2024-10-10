@@ -6,7 +6,7 @@ import {sidebarLinks, superAdminLinks} from "@/constants/sidebarLinks";
 const DashboardSidebar: FC = () => {
     const isSuper = true
     return (
-        <section className={"sticky top-0 left-0 h-screen w-[240px] flex flex-col border-r max-md:hidden"}>
+        <section className={"sticky top-0 left-0 h-screen w-[240px] flex flex-col max-md:hidden"}>
             <Link href={"/"} className={"text-red-500 font-semibold text-center pt-6 pb-8"}>
                 AlphaMarch
             </Link>

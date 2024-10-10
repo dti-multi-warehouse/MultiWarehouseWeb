@@ -1,17 +1,20 @@
-import {StockMutation} from "@/types/datatypes";
+import {OrderResponseDto} from "@/types/order";
 import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
 
 
-const getData = async (warehouseId: number): Promise<StockMutation[]> => {
+const getData = async (userId: number, page: number): Promise<OrderResponseDto> => {
     try {
         const res: AxiosResponse = await axios.get(
-            config.BASE_URL + config.API_VER + config.endpoints.stockMutation + `/${warehouseId}`,
+            config.BASE_URL + config.API_VER + config.endpoints.order + `/user/${userId}`,
             {
                 headers: {
                     accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
+                params: {
+                    page
+                }
             }
         )
         return res.data.data;
@@ -20,6 +23,6 @@ const getData = async (warehouseId: number): Promise<StockMutation[]> => {
     }
 }
 
-export const getActiveStockMutationRequest = async (warehouseId: number): Promise<StockMutation[]> => {
-    return await getData(warehouseId);
+export const getUserOrder = async (userId: number, productId: number) => {
+    return await getData(userId, productId);
 }

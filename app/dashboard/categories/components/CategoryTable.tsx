@@ -2,7 +2,7 @@
 import {FC} from "react";
 import {
     Table,
-    TableBody,
+    TableBody, TableCaption,
     TableCell,
     TableHead,
     TableHeader,
@@ -19,11 +19,11 @@ const CategoryTable: FC = () => {
 
     return (
         <Table>
+            <TableCaption>Click on the category row to edit a category</TableCaption>
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">#</TableHead>
                     <TableHead>Name</TableHead>
-                    <TableHead className="text-right w-60">Actions</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
@@ -46,20 +46,13 @@ interface CategoryRowProps {
 }
 
 const CategoryRow: FC<CategoryRowProps> = ({ id, name }) => {
-    const handleDelete = () => {
-        axios.delete(config.BASE_URL + config.API_VER + config.endpoints.category + `/${id}`)
-    }
     return (
-        <TableRow>
-            <TableCell className="font-medium">{id}</TableCell>
-            <TableCell>{name}</TableCell>
-            <TableCell className="flex gap-4 justify-end">
-                <CategoryDrawerDialog mode={'update'} id={id}>
-                    <Pencil className={"cursor-pointer"} />
-                </CategoryDrawerDialog>
-                <Trash2 onClick={handleDelete}/>
-            </TableCell>
-        </TableRow>
+        <CategoryDrawerDialog mode={'update'} id={id}>
+            <TableRow className={"hover:cursor-pointer"}>
+                <TableCell className="font-medium">{id}</TableCell>
+                <TableCell>{name}</TableCell>
+            </TableRow>
+        </CategoryDrawerDialog>
     )
 }
 

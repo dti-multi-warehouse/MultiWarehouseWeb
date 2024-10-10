@@ -19,6 +19,7 @@ import {
 } from "@/components/ui/chart"
 import useDashboardStore from "@/hooks/useDashboardStore";
 import {StockMovementChartData} from "@/types/datatypes";
+import {Skeleton} from "@/components/ui/skeleton";
 
 // const chartData = [
 //     { date: '2023-01', restock: 100, mutationIn: 20, mutationOut: 30, order: 50 },
@@ -48,11 +49,24 @@ const chartConfig = {
 } satisfies ChartConfig
 
 interface StockMovementsChartProps {
-    chartData: StockMovementChartData[] | undefined
+    chartData: StockMovementChartData[] | undefined;
+    isLoading: boolean
 }
 
-const StockMovementsChart:FC<StockMovementsChartProps> = ({chartData}) => {
+const StockMovementsChart:FC<StockMovementsChartProps> = ({chartData, isLoading}) => {
     const product = useDashboardStore(state => state.product)
+
+    if (isLoading) {
+        return (
+            <Card className={"shadow-none lg:border-none max-lg:max-h-80"}>
+                <CardHeader className={"max-lg:px-0"}>
+                    <Skeleton className={"w-48 lg:w-96 h-6"} />
+                    <Skeleton className={"w-24 lg:w-48 h-4"} />
+                </CardHeader>
+                <Skeleton className={"w-full h-96 max-lg:h-40"} />
+            </Card>
+        )
+    }
 
     if (!chartData) {
         return <></>
@@ -64,68 +78,70 @@ const StockMovementsChart:FC<StockMovementsChartProps> = ({chartData}) => {
                 <CardTitle>{product.name} Movements</CardTitle>
                 <p className={"text-gray-500"}>{product.stock} currently in stock</p>
             </CardHeader>
-            <CardContent className={"max-lg:p-0"}>
-                <ChartContainer config={chartConfig}>
-                    <AreaChart
-                        accessibilityLayer
-                        data={chartData}
-                        margin={{
-                            left: 12,
-                            right: 12,
-                        }}
-                    >
-                        <CartesianGrid vertical={false} />
-                        <XAxis
-                            dataKey="date"
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                            tickFormatter={(value) => value.slice(5)} // Show only month
-                        />
-                        <YAxis
-                            tickLine={false}
-                            axisLine={false}
-                            tickMargin={8}
-                        />
-                        <ChartTooltip
-                            cursor={false}
-                            content={<ChartTooltipContent indicator="dot" />}
-                        />
-                        <Area
-                            dataKey="restock"
-                            type="monotone"
-                            fill="var(--color-restock)"
-                            fillOpacity={0.4}
-                            stroke="var(--color-restock)"
-                            stackId="1"
-                        />
-                        <Area
-                            dataKey="mutationIn"
-                            type="monotone"
-                            fill="var(--color-mutationIn)"
-                            fillOpacity={0.4}
-                            stroke="var(--color-mutationIn)"
-                            stackId="1"
-                        />
-                        <Area
-                            dataKey="mutationOut"
-                            type="monotone"
-                            fill="var(--color-mutationOut)"
-                            fillOpacity={0.4}
-                            stroke="var(--color-mutationOut)"
-                            stackId="2"
-                        />
-                        <Area
-                            dataKey="order"
-                            type="monotone"
-                            fill="var(--color-order)"
-                            fillOpacity={0.4}
-                            stroke="var(--color-order)"
-                            stackId="2"
-                        />
-                    </AreaChart>
-                </ChartContainer>
-            </CardContent>
+            {chartData.length > 0 && (
+                <CardContent className={"max-lg:p-0"}>
+                    <ChartContainer config={chartConfig}>
+                        <AreaChart
+                            accessibilityLayer
+                            data={chartData}
+                            margin={{
+                                left: 12,
+                                right: 12,
+                            }}
+                        >
+                            <CartesianGrid vertical={false} />
+                            <XAxis
+                                dataKey="period"
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                                tickFormatter={value => `Week ${value}`} // Show only month
+                            />
+                            <YAxis
+                                tickLine={false}
+                                axisLine={false}
+                                tickMargin={8}
+                            />
+                            <ChartTooltip
+                                cursor={false}
+                                content={<ChartTooltipContent indicator="dot" />}
+                            />
+                            <Area
+                                dataKey="restock"
+                                type="monotone"
+                                fill="var(--color-restock)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-restock)"
+                                stackId="1"
+                            />
+                            <Area
+                                dataKey="mutationIn"
+                                type="monotone"
+                                fill="var(--color-mutationIn)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-mutationIn)"
+                                stackId="1"
+                            />
+                            <Area
+                                dataKey="mutationOut"
+                                type="monotone"
+                                fill="var(--color-mutationOut)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-mutationOut)"
+                                stackId="2"
+                            />
+                            <Area
+                                dataKey="order"
+                                type="monotone"
+                                fill="var(--color-order)"
+                                fillOpacity={0.4}
+                                stroke="var(--color-order)"
+                                stackId="2"
+                            />
+                        </AreaChart>
+                    </ChartContainer>
+                </CardContent>
+            )}
         </Card>
     )
 }

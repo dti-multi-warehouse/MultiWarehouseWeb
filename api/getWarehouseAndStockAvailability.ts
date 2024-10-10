@@ -1,9 +1,9 @@
-import {ProductAndStockAvailablity} from "@/types/datatypes";
 import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
+import {WarehouseAndStockAvailabilityDto} from "@/types/Stock";
 
 
-const getData = async (warehouseId: number, productId: number): Promise<ProductAndStockAvailablity[]> => {
+const getData = async (warehouseId: number, productId: number): Promise<WarehouseAndStockAvailabilityDto[]> => {
     console.log(warehouseId)
     try {
         const response: AxiosResponse = await axios.get(

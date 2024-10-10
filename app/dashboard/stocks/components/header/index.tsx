@@ -1,13 +1,18 @@
-import {FC} from "react";
+import {Dispatch, FC, SetStateAction} from "react";
 import {Button} from "@/components/ui/button";
 import RequestSheet from "./RequestSheet";
 import StockDrawerDialog from "./StockDrawerDialog";
 import MonthPicker from "@/app/dashboard/components/MonthPicker";
 import WarehousePicker from "@/app/dashboard/components/WarehousePicker";
 import * as React from "react";
+import {Input} from "@/components/ui/input";
 
+interface StockHeaderProps {
+    query: string
+    setQuery: (query: string) => void
+}
 
-const StockHeader: FC = () => {
+const StockHeader: FC<StockHeaderProps> = ({query, setQuery}) => {
     const isSuper= true
 
     return (
@@ -27,6 +32,12 @@ const StockHeader: FC = () => {
                     </StockDrawerDialog>
                 </div>
                 <MonthPicker />
+                <Input
+                    value={query}
+                    onChange={(e) => setQuery(e.target.value)}
+                    placeholder={"Search for products..."}
+                    className={"focus-visible:border-white"}
+                />
             </div>
         </div>
     )

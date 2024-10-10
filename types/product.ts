@@ -6,6 +6,11 @@ export interface DashboardProducts {
     thumbnail: string;
 }
 
+export interface DashboardProductDto {
+    totalPage: number;
+    products: DashboardProducts[];
+}
+
 export interface Product {
     id?: number;
     name?: string;

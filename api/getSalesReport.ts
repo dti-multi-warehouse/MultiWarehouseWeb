@@ -1,9 +1,9 @@
-import {TotalSalesResponse} from "@/types/dashboard";
+import {SalesReport} from "@/types/dashboard";
 import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
 
 
-const getData = async (warehouseId: number, date: Date): Promise<TotalSalesResponse> => {
+const getData = async (warehouseId: number, date: Date): Promise<SalesReport> => {
     try {
         const response: AxiosResponse = await axios.get(
             config.BASE_URL + config.API_VER + config.endpoints.dashboard,
@@ -24,6 +24,6 @@ const getData = async (warehouseId: number, date: Date): Promise<TotalSalesRespo
     }
 }
 
-export const getTotalSales = async (warehouseId: number, date: Date): Promise<TotalSalesResponse> => {
+export const getSalesReport = async (warehouseId: number, date: Date): Promise<SalesReport> => {
     return await getData(warehouseId, date);
 }
