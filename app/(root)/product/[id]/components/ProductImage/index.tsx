@@ -13,9 +13,8 @@ interface ProductImageProps {
 }
 
 const ProductImage: FC<ProductImageProps> = ({imageUrls}) => {
-
     return (
-        <Carousel className={"col-span-1 w-48 h-48 sm:w-80 sm:h-80 md:w-[400px] md:h-[400px]"}>
+        <Carousel>
             <CarouselContent>
                 {
                     imageUrls.map( (image, index) => (
@@ -25,8 +24,8 @@ const ProductImage: FC<ProductImageProps> = ({imageUrls}) => {
                             <Image
                                 src={image}
                                 alt={"Product image"}
-                                width={400}
-                                height={400}
+                                width={300}
+                                height={300}
                                 className={"rounded-md"}
                                 priority={true}
                             />
