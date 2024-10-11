@@ -1,9 +1,9 @@
-import {DashboardProducts} from "@/types/product";
+import {DashboardProductDto} from "@/types/product";
 import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
 
 
-const getData = async (): Promise<DashboardProducts[]> => {
+const getData = async (query: String, page: number): Promise<DashboardProductDto> => {
     try {
         const response: AxiosResponse = await axios.get(
             config.BASE_URL + config.API_VER + config.endpoints.product + `/dashboard`,
@@ -12,6 +12,10 @@ const getData = async (): Promise<DashboardProducts[]> => {
                     accept: 'application/json',
                     'Content-Type': 'application/json',
                 },
+                params: {
+                    query,
+                    page
+                }
             }
         )
         return response.data.data;
@@ -21,6 +25,6 @@ const getData = async (): Promise<DashboardProducts[]> => {
     }
 }
 
-export const getDashboardProducts = async (): Promise<DashboardProducts[]> => {
-    return await getData();
+export const getDashboardProducts = async (query: String, page: number): Promise<DashboardProductDto> => {
+    return await getData(query, page);
 }

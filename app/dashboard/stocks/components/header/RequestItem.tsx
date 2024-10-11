@@ -4,34 +4,24 @@ import {Button} from "@/components/ui/button";
 import {config} from "@/constants/url";
 import axios from "axios";
 
-
-interface RequestItemProps extends StockMutation {
-    refetch: () => void;
-}
-
-const RequestItem: FC<RequestItemProps> = ({
+const RequestItem: FC<StockMutation> = ({
     id,
-    warehouseToId,
-    warehouseFromId,
+    warehouseToName,
     name,
     quantity,
-    created_at,
-    refetch
-                                        }) => {
+    created_at
+}) => {
     const url = config.BASE_URL + config.API_VER + config.endpoints.stockMutation + `/${id}`
     const handleAccept = () => {
         axios.put(url + "/accept")
-        refetch()
     }
 
     const handleReject = () => {
         axios.put(url + "/reject")
-        refetch()
     }
     return (
         <div className="mb-4 p-4 border rounded-lg">
-            <p><strong>From:</strong> {warehouseFromId}</p>
-            <p><strong>To:</strong> {warehouseToId}</p>
+            <p><strong>Requester:</strong> {warehouseToName}</p>
             <p><strong>Item:</strong> {name}</p>
             <p><strong>Quantity:</strong> {quantity}</p>
             <div className="mt-2">

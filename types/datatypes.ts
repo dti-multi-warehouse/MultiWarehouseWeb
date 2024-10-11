@@ -81,11 +81,13 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse {
-  accessToken: string;
-  userId: string;
-  email: string;
-  role: string;
+export interface LoginResponse 
+   accessToken: string;
+   userId: string;
+   email: string;
+   role: string;
+   warehouseId?: number;
+   warehouseName?: string;
 }
 
 export interface LogoutRequest {
@@ -156,12 +158,11 @@ export interface StockMovementChartData {
 }
 
 export interface StockMutation {
-  id: number;
-  warehouseToId: number;
-  warehouseFromId: number;
-  name: string;
-  quantity: number;
-  created_at: Date;
+    id: number;
+    warehouseToName: string
+    name: string;
+    quantity: number;
+    created_at: Date;
 }
 
 export interface ProductAndStockAvailablity {

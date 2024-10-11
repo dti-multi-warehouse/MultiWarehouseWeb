@@ -36,7 +36,8 @@ interface CategoryDrawerDialogProps {
 interface CategoryFormProps {
     className?: string,
     mode: "create" | "update",
-    id?: number,
+    id?: number,setOpen: (open: boolean) => void
+
 }
 
 interface FormValue {
@@ -59,7 +60,7 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                     </DialogHeader>
-                    <CategoryForm mode={mode} id={id} />
+                    <CategoryForm mode={mode} id={id} setOpen={setOpen} />
                 </DialogContent>
             </Dialog>
         )
@@ -74,7 +75,7 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id
                 <DrawerHeader className="text-left">
                     <DrawerTitle>{title}</DrawerTitle>
                 </DrawerHeader>
-                <CategoryForm className="px-4" mode={mode} id={id} />
+                <CategoryForm className="px-4" mode={mode} id={id} setOpen={setOpen} />
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
                         <Button variant="outline">Cancel</Button>
@@ -87,7 +88,12 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id
 
 export default CategoryDrawerDialog
 
-const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id }) => {
+const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id, setOpen }) => {
+    const handleDelete = () => {
+        if (!id) return
+        axios.delete(config.BASE_URL + config.API_VER + config.endpoints.category + `/${id}`)
+        setOpen(false)
+    }
 
     return (
         <Formik
@@ -117,6 +123,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id }) => {
                     )}
                 </Field>
                 <Button type="submit">Save changes</Button>
+                {mode !== "create" && <Button variant={"destructive"} onClick={handleDelete}>Delete product</Button>}
             </Form>
         </Formik>
     )

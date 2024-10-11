@@ -8,5 +8,6 @@ export const config = {
         stockMutation: 'stock/mutation',
         warehouse: 'warehouse',
         dashboard: 'dashboard',
+        order: 'order'
     },
 }
