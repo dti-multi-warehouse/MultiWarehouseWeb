@@ -67,7 +67,7 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) =>
         height={200}
         alt={name}
       />
-      <div className="flex flex-col gap-2 p-5 h-full justify-between">
+      <div className="flex flex-col gap-2.5 p-5 h-full justify-end">
         <h2 className="font-medium line-clamp-2">{name}</h2>
         <p className="font-semibold text-gray-500">Stok dari toko</p>
         <p className="font-bold text-red-600">Rp {price.toLocaleString()}</p>
