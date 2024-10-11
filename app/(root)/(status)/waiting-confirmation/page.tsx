@@ -4,9 +4,9 @@ import StatusCard from "../components/StatusCard";
 import { useOrdersByStatus } from "@/hooks/useOrder";
 import { Order } from "@/types/datatypes";
 
-const WaitingPayment: React.FC = () => {
+const WaitingConfirmation: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const { mutate: fetchOrdersByStatus } = useOrdersByStatus("AWAITING_PAYMENT");
+  const { mutate: fetchOrdersByStatus } = useOrdersByStatus("AWAITING_CONFIRMATION");
 
   useEffect(() => {
     console.log("Fetching orders...");
@@ -35,11 +35,11 @@ const WaitingPayment: React.FC = () => {
           <StatusCard key={order.id} order={order} />
         ))
       ) : (
-        <p>No orders found for waiting payment.</p>
+        <p>No orders found for waiting confirmation.</p>
       )}
     </div>
     </>
   );
 };
 
-export default WaitingPayment;
+export default WaitingConfirmation;

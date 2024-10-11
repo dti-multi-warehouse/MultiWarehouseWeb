@@ -56,7 +56,7 @@ const ProfileInformation: React.FC = () => {
 
   return (
     <>
-      <div className="flex gap-10 w-full">
+      <div className="flex flex-col md:flex-row gap-5 md:gap-10 w-full">
         <div className="flex flex-col items-center gap-5">
           <Image
             src={profile?.avatar || "/default-user.png"}
@@ -77,7 +77,7 @@ const ProfileInformation: React.FC = () => {
 
           <div>
             <p className="text-sm font-medium text-gray-600">Email</p>
-            <div className="flex items-center gap-10">
+            <div className="flex items-center gap-5 md:gap-10">
               <p className="font-semibold">{profile?.email}</p>
               {profile?.verified ? (
                 <span className="flex items-center text-xs text-green-800 gap-1 bg-green-200 py-1 px-3 rounded-xl">

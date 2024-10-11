@@ -22,16 +22,16 @@ const MyProfile: React.FC = () => {
 
   return (
     <>
-      <div className="m-10 flex flex-col gap-10">
+      <div className="m-5 md:m-10 flex flex-col gap-5 md:gap-10">
         <h2 className="font-bold text-xl">Profile User</h2>
         <div className="border-2 border-gray-200 rounded-xl flex flex-col">
-          <div className="p-10 ">
+          <div className="p-5 md:p-10 ">
             <p className="border border-red-600 rounded-full py-1 px-5 w-fit text-red-600">
               Pengaturan akun
             </p>
           </div>
           <hr className="border-dashed border-gray-600" />
-          <div className="p-10">
+          <div className="p-5 md:p-10">
             <ProfileInformation />
           </div>
         </div>
