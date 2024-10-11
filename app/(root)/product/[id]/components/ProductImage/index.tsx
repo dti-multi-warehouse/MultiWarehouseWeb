@@ -14,7 +14,7 @@ interface ProductImageProps {
 
 const ProductImage: FC<ProductImageProps> = ({imageUrls}) => {
     return (
-        <Carousel>
+        <Carousel className={"col-span-1"}>
             <CarouselContent>
                 {
                     imageUrls.map( (image, index) => (
