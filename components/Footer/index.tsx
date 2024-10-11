@@ -32,7 +32,7 @@ const contacts = [
 const Footer: React.FC = () => {
   return (
     <>
-    <div className="flex flex-col px-10 pt-20 shadow-airbnbSoft shadow-gray-400">
+    <div className="flex flex-col px-10 pt-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 ">
         <div className="flex flex-col gap-5">
           <h1 className="font-bold text-red-600 text-2xl">AlphaMarch</h1>
