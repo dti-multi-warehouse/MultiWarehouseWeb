@@ -60,7 +60,9 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) =>
   }
 
   return (
-<div className="flex flex-col gap-2 min-w-[150px] h-full max-w-[200px] hover:bg-white shadow-antiMetal shadow-transparent hover:scale-105 hover:shadow-gray-200 rounded-xl transition-all duration-500">
+<div className="flex flex-col gap-2 min-w-[150px] h-full max-w-[200px] hover:bg-white shadow-antiMetal shadow-transparent hover:scale-105 hover:shadow-gray-200 rounded-xl transition-all duration-500 hover:cursor-pointer"
+     onClick={handleCardClick}
+>
       <Image
         src={thumbnail}
         width={200}
