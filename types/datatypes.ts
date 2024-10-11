@@ -1,280 +1,308 @@
-import {date} from "yup";
-import {WarehouseList} from "@/types/warehouse";
+import { date } from "yup";
+import { WarehouseList } from "@/types/warehouse";
 
 export interface userAddress {
-    data?: {
-        id: number;
-        name: string;
-        phoneNumber: string;
-        label: string;
-        address: {
-          street: string;
-          city: string;
-          province: string;
-          latitude: number;
-          longitude: number;
-        };
-        primary: boolean;
-    }
+  data?: {
+    id: number;
+    name: string;
+    phoneNumber: string;
+    label: string;
+    address: {
+      street: string;
+      city: string;
+      province: string;
+      latitude: number;
+      longitude: number;
+    };
+    primary: boolean;
+  };
 }
 
 export interface AddItemDto {
-    productId: number;
-    quantity: number;
+  productId: number;
+  quantity: number;
 }
 
 export interface cartItems {
-    productId: number;
-    name: string;
-    price: number;
-    quantity: number;
-    imageUrl: string;
-    stock: number;
+  productId: number;
+  name: string;
+  price: number;
+  quantity: number;
+  imageUrl: string;
+  stock: number;
 }
 
 export interface CartResponse {
-    data: {
-        cartItems: cartItems[];
-        totalPrice: number;
-    }
+  data: {
+    cartItems: cartItems[];
+    totalPrice: number;
+  };
 }
 
-export interface productCards{
-    id: number;
-    thumbnail: string;
-    name: string;
-    price: number;
-    stock: number;
+export interface productCards {
+  id: number;
+  thumbnail: string;
+  name: string;
+  price: number;
+  stock: number;
 }
 
-export interface productCategories{
-    name: string;
-    icon: string;
-    content: productCards[];
+export interface productCategories {
+  name: string;
+  icon: string;
+  content: productCards[];
 }
 
 export interface FeaturedProductsDTO {
-    featuredProducts: FeaturedProducts[];
+  featuredProducts: FeaturedProducts[];
 }
 
 interface FeaturedProducts {
-    group_key: string;
-    hits: Document[];
+  group_key: string;
+  hits: Document[];
 }
 
 interface Document {
-    document: productCards;
+  document: productCards;
 }
 
 export interface UserProfileDTO {
-    id: number;
-    username: string;
-    email: string;
-    social: boolean;
-    verified: boolean;
-    avatar: string;
-    role: string;
-  }
+  id: number;
+  username: string;
+  email: string;
+  social: boolean;
+  verified: boolean;
+  avatar: string;
+  role: string;
+}
 
 export interface LoginRequest {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
-  
+
 export interface LoginResponse {
-    accessToken: string;
-    userId: string;
-    email: string;
-    role: string;
+  accessToken: string;
+  userId: string;
+  email: string;
+  role: string;
 }
-  
+
 export interface LogoutRequest {
-    token: string;
+  token: string;
 }
 
 export interface RegisterUserRequest {
-    email: string;
+  email: string;
 }
-  
+
 export interface RegisterUserResponse {
-    success: boolean;
-    message: string;
+  success: boolean;
+  message: string;
 }
-  
+
 export interface ConfirmRegistrationRequest {
-    email: string;
-    password: string;
-    token: string;
+  email: string;
+  password: string;
+  token: string;
 }
-  
+
 export interface ConfirmRegistrationResponse {
-    success: boolean;
-    message: string;
+  success: boolean;
+  message: string;
 }
 
-export interface ResetPasswordRequest{
-    email: string;
+export interface ResetPasswordRequest {
+  email: string;
 }
 
-export interface ResetPasswordResponse{
-    message: string;
+export interface ResetPasswordResponse {
+  message: string;
 }
 
 export interface ConfirmResetPasswordRequest {
-    email: string;
-    token: string;
-    newPassword: string;
+  email: string;
+  token: string;
+  newPassword: string;
 }
 
 export interface Stock {
-    id: number;
-    name: string;
-    stock: number
-    thumbnail: string;
-    incoming: number;
-    outgoing: number;
+  id: number;
+  name: string;
+  stock: number;
+  thumbnail: string;
+  incoming: number;
+  outgoing: number;
 }
 
 export interface StockDetailsResponse {
-    stockMovements: StockDetails[];
-    stockMovementChartData: StockMovementChartData[]
+  stockMovements: StockDetails[];
+  stockMovementChartData: StockMovementChartData[];
 }
 
 export interface StockDetails {
-    date: Date;
-    quantity: number;
-    source: 'order' | 'restock' | 'mutation_in' | 'mutation_out';
-    note: number
+  date: Date;
+  quantity: number;
+  source: "order" | "restock" | "mutation_in" | "mutation_out";
+  note: number;
 }
 
 export interface StockMovementChartData {
-    period: number;
-    restock: number;
-    mutationIn: number;
-    mutationOut: number;
-    order: number;
+  period: number;
+  restock: number;
+  mutationIn: number;
+  mutationOut: number;
+  order: number;
 }
 
 export interface StockMutation {
-    id: number;
-    warehouseToId: number;
-    warehouseFromId: number;
-    name: string;
-    quantity: number;
-    created_at: Date;
+  id: number;
+  warehouseToId: number;
+  warehouseFromId: number;
+  name: string;
+  quantity: number;
+  created_at: Date;
 }
 
 export interface ProductAndStockAvailablity {
-    productId: number;
-    name: string;
-    stock: number;
-    thumbnail: string;
+  productId: number;
+  name: string;
+  stock: number;
+  thumbnail: string;
 }
 
 export enum PaymentMethod {
-    MIDTRANS = 'MIDTRANS',
-    BANK_TRANSFER = 'BANK_TRANSFER',
+  MIDTRANS = "MIDTRANS",
+  BANK_TRANSFER = "BANK_TRANSFER",
 }
 
 export enum BankTransfer {
-    BCA = 'BCA',
-    BRI = 'BRI',
-    BNI = 'BNI',
-    CIMB = 'CIMB',
+  BCA = "BCA",
+  BRI = "BRI",
+  BNI = "BNI",
+  CIMB = "CIMB",
 }
 
 export interface CreateOrderItemRequestDto {
     productId: number;
     quantity: number;
-}
-
-export interface CreateOrderRequestDto {
+  }
+  
+  export interface CreateOrderRequestDto {
+    items: CreateOrderItemRequestDto[]; 
     paymentMethod: PaymentMethod;
     bankTransfer?: BankTransfer;
     shippingMethod: string;
-}
+  }  
 
 export interface CreateOrderResponseDto {
-    transactionId: string;
-    currency: string;
-    price: string;
-    transactionTime: string;
-    transactionStatus: string;
-    paymentType: string;
-    bank: string;
-    vaNumber: string;
-    message: string;
+  transactionId: string;
+  currency: string;
+  price: string;
+  transactionTime: string;
+  transactionStatus: string;
+  paymentType: string;
+  bank: string;
+  vaNumber: string;
+  message: string;
 }
 
 export interface Order {
     id: number;
     userId: number;
+    userName: string;
     warehouseId: number;
+    warehouseName: string;
     price: number;
     paymentProof: string | null;
     status: string;
-    paymentMethod: PaymentMethod;
-    orderItems: OrderItem[];
+    paymentMethod: string;
+    shippingCost: number;
+    bank: string;
+    accountNumber: string;
     createdAt: string;
-    updatedAt: string;
-}
+    paymentExpiredAt: string;
+    invoiceNumber: number;
+    productImages: string[];
+    productName: string;
+    quantity: number;
+    totalAmount: number;
+    buyerName: string;
+    buyerPhoneNumber: string;
+    buyerAddress: {
+      id: number;
+      street: string;
+      city: string;
+      province: string;
+    };
+    warehouseAddress: {
+      id: number;
+      street: string;
+      city: string;
+      province: string;
+    };
+    statusLabel: string;
+    shippingDate: string;
+    virtualAccountNumber: string;
+  }
+  
 
 export interface OrderItem {
-    id: number;
-    productId: number;
-    quantity: number;
-    price: number;
+  id: number;
+  productId: number;
+  quantity: number;
+  price: number;
 }
 
 export interface CreateOrderResponseDto {
-    orderId: number;
-    totalAmount: number;
-    orderItems: OrderItem[];
-    paymentUrl: string;
+  orderId: number;
+  totalAmount: number;
+  orderItems: OrderItem[];
+  paymentUrl: string;
 }
 
 export interface MidtransError {
-    statusCode: number;
-    message: string;
-    error: string;
+  statusCode: number;
+  message: string;
+  error: string;
 }
 
 export interface WarehouseDTO {
-    id: number;
-    street: string;
-    city: string;
-    province: string;
-    latitude: number;
-    longitude: number;
-  }
+  id: number;
+  street: string;
+  city: string;
+  province: string;
+  latitude: number;
+  longitude: number;
+}
 
-  export interface CreateWarehouseDto {
-    name: string;
-    street: string;
-    city: string;
-    province: string;
-    latitude: number;
-    longitude: number;
-  }
+export interface CreateWarehouseDto {
+  name: string;
+  street: string;
+  city: string;
+  province: string;
+  latitude: number;
+  longitude: number;
+}
 
-  export interface AssignWarehouseAdminDTO {
-    warehouseId: number;
-    userId: number;
-  }
+export interface AssignWarehouseAdminDTO {
+  warehouseId: number;
+  userId: number;
+}
 
-  export interface DashboardStore {
-    product: ProductStockDetails;
-    warehouse: WarehouseList;
-    date: Date;
-    isStockDrawerOpen: boolean;
-    setProduct: (product: ProductStockDetails) => void;
-    setWarehouse: (warehouse: WarehouseList) => void;
-    setDate: (date: Date) => void;
-    setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => void;
-  }
+export interface DashboardStore {
+  product: ProductStockDetails;
+  warehouse: WarehouseList;
+  date: Date;
+  isStockDrawerOpen: boolean;
+  setProduct: (product: ProductStockDetails) => void;
+  setWarehouse: (warehouse: WarehouseList) => void;
+  setDate: (date: Date) => void;
+  setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => void;
+}
 
-  export interface ProductStockDetails {
-    id: number;
-    name: string;
-    stock: number;
-  }
+export interface ProductStockDetails {
+  id: number;
+  name: string;
+  stock: number;
+}

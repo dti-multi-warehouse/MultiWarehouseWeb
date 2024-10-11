@@ -6,6 +6,10 @@ html{
   overflow-x: hidden;
 }
 
+.status-trx{
+  scrollbar-width: thin;
+}
+
 .map-container {
   height: 200px; 
   width: 100%; 

@@ -42,10 +42,10 @@ const CartItems: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col gap-5">
+    <div className="flex flex-col gap-5 w-full">
       {cartItems.map((item) => (
-        <div key={item.productId} className="flex gap-10 w-full">
-          <Image src={item.imageUrl} alt={item.name} width={150} height={150} />
+        <div key={item.productId} className="flex flex-col md:flex-row gap-5 md:gap-10 w-full">
+          <Image src={item.imageUrl} alt={item.name} width={150} height={150} className="" />
           <div className="flex flex-col gap-3 w-full">
             <button
               className="bg-red-200 text-red-600 rounded-full p-2 w-fit self-end"
@@ -76,9 +76,9 @@ const CartItems: React.FC = () => {
                 </button>
               </div>
             </div>
-            <div className="flex justify-between items-center mt-5">
+            <div className="flex gap-10 justify-between items-center mt-5">
               <p className="font-semibold">Total {item.name}</p>
-              <p className="font-semibold text-lg text-red-600">
+              <p className="font-semibold text-lg text-red-600 whitespace-nowrap">
                 Rp {item.price * (localQuantities[item.productId] || item.quantity)}
               </p>
             </div>
