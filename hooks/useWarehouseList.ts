@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getWarehouseList} from "@/api/getWarehouseList";
+import {getWarehouseList} from "@/api/warehouse/getWarehouseList";
 
 const useWarehouseList = () => {
     const {

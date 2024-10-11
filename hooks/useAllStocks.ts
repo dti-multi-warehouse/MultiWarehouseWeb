@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getAllStocks} from "@/api/getAllStocks";
+import {getAllStocks} from "@/api/stock/getAllStocks";
 
 
 const useAllStocks = (warehouseId: number, date: Date, query: string, page: number, perPage: number) => {

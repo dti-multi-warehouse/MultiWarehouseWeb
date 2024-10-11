@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getDashboardProducts} from "@/api/getDashboardProducts";
+import {getDashboardProducts} from "@/api/product/getDashboardProducts";
 
 
 const useDashboardProducts = (query: string, page: number) => {

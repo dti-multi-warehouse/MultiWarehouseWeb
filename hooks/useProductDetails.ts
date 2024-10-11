@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getProductDetails} from "@/api/getProductDetails";
+import {getProductDetails} from "@/api/product/getProductDetails";
 
 
 const useProductDetails = (id: number) => {

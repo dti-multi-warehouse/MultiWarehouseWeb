@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getFeaturedProducts} from "@/api/getFeaturedProducts";
+import {getFeaturedProducts} from "@/api/product/getFeaturedProducts";
 
 
 const useFeaturedProducts = () => {

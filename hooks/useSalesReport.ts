@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getSalesReport} from "@/api/getSalesReport";
+import {getSalesReport} from "@/api/dashboard/getSalesReport";
 
 
 const useSalesReport = (warehouseId: number, date: Date) => {

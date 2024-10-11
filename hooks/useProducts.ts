@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getProducts} from "@/api/getProducts";
+import {getProducts} from "@/api/product/getProducts";
 import {ReadonlyURLSearchParams} from "next/navigation";
 
 

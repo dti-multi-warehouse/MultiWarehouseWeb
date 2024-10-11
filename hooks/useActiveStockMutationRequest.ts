@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getActiveStockMutationRequest} from "@/api/getActiveStockMutationRequest";
+import {getActiveStockMutationRequest} from "@/api/stock/getActiveStockMutationRequest";
 
 
 const useActiveStockMutationRequest = (warehouseId: number) => {

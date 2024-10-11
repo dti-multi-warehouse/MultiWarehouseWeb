@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getProductAndStockAvailability} from "@/api/getProductAndStockAvailability";
+import {getProductAndStockAvailability} from "@/api/stock/getProductAndStockAvailability";
 
 
 const useProductAndStockAvailability = (warehouseId: number) => {

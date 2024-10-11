@@ -1,7 +1,7 @@
 import {config} from "@/constants/url";
-import {ProductSearchQueryParams, ProductSearchResult} from "@/types/product";
-import axios, {AxiosResponse} from "axios";
+import {ProductSearchResult} from "@/types/product";
 import {ReadonlyURLSearchParams} from "next/navigation";
+import apiClient from "@/lib/apiClient";
 
 const getData = async (params: ReadonlyURLSearchParams) : Promise<ProductSearchResult> => {
     const url = new URL(config.endpoints.product, config.BASE_URL + config.API_VER)
@@ -12,15 +12,7 @@ const getData = async (params: ReadonlyURLSearchParams) : Promise<ProductSearchR
         params.getAll("category").forEach( cat => url.searchParams.append("category", cat));
     }
     try {
-        const response: AxiosResponse = await axios.get(
-            url.toString(),
-            {
-                headers: {
-                    accept: 'application/json',
-                    'Content-Type': 'applcation/json',
-                },
-            }
-        );
+        const response = await apiClient.get(url.toString())
         return response.data.data;
     } catch (error) {
         console.error('Error fetching data:', error);

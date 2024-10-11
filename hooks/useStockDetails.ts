@@ -1,5 +1,5 @@
 import {useQuery} from "react-query";
-import {getStockDetails} from "@/api/getStockDetails";
+import {getStockDetails} from "@/api/stock/getStockDetails";
 
 
 const useStockDetails = (warehouseId: number, productId: number, date: Date) => {
