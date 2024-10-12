@@ -22,9 +22,15 @@ import useDashboardStore from "@/hooks/useDashboardStore";
 
 const WarehousePicker = () => {
     const selectedWarehouse = useDashboardStore((state) => state.warehouse)
+    const isAdmin = useDashboardStore((state) => state.isAdmin)
+    const warehouse = useDashboardStore(state => state.warehouse)
     const setWarehouse = useDashboardStore((state) => state.setWarehouse)
     const [open, setOpen] = React.useState(false)
     const {data, isLoading, error} = useWarehouseList()
+
+    if (!isAdmin) {
+        return <p className={"font-semibold text-gray-500"}>{warehouse.name}</p>
+    }
 
     return (
         <Popover open={open} onOpenChange={setOpen}>

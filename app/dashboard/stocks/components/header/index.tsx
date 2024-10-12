@@ -13,15 +13,13 @@ interface StockHeaderProps {
 }
 
 const StockHeader: FC<StockHeaderProps> = ({query, setQuery}) => {
-    const isSuper= true
 
     return (
         <div className={"flex flex-col lg:flex-row justify-between gap-4 px-8 pt-4 pb-2 border-b"}>
             <div>
                 <h1 className={"text-3xl font-semibold"}>Stocks</h1>
                 <div className={"flex gap-1"}>
-                    <p className={"font-semibold"}>Warehouse:</p>
-                    {isSuper ? <WarehousePicker/> : <p>Warehouse Name</p>}
+                    <WarehousePicker/>
                 </div>
             </div>
             <div className={"space-y-4"}>

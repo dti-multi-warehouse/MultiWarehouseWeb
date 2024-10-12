@@ -13,10 +13,12 @@ const useDashboardStore = create<DashboardStore>((set) => ({
         name: 'Gudang'
     },
     date: new Date(),
+    isAdmin: false,
     isStockDrawerOpen: false,
     setProduct: (product: ProductStockDetails) => set((state) => ({ product })),
     setWarehouse: (warehouse: WarehouseList) => set((state) => ({ warehouse: warehouse })),
     setDate: (date: Date) => set((state) => ({ date })),
+    setIsAdmin: (isAdmin: boolean) => set((state) => ({ isAdmin })),
     setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => {
         set((state) => ({isStockDrawerOpen}))
     }

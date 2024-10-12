@@ -267,10 +267,12 @@ export interface WarehouseDTO {
     product: ProductStockDetails;
     warehouse: WarehouseList;
     date: Date;
+    isAdmin: boolean;
     isStockDrawerOpen: boolean;
     setProduct: (product: ProductStockDetails) => void;
     setWarehouse: (warehouse: WarehouseList) => void;
     setDate: (date: Date) => void;
+    setIsAdmin: (isAdmin: boolean) => void;
     setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => void;
   }
 

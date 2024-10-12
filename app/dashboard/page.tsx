@@ -12,6 +12,7 @@ const Dashboard: FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
   const setWarehouse = useDashboardStore(state => state.setWarehouse)
+  const setIsAdmin = useDashboardStore(state => state.setIsAdmin)
 
   useEffect(() => {
     if (status === "authenticated") {
@@ -20,12 +21,13 @@ const Dashboard: FC = () => {
                 id: session.user.warehouseId,
                 name: session.user.warehouseName
             })
+            setIsAdmin(session.user.role === "ADMIN")
         }
-        if (session.user?.role !== "ADMIN" && session.user?.role !== "warehouse_admin") {
+        if (session.user?.role !== "ADMIN" && session.user?.role !== "WAREHOUSE_ADMIN") {
         router.push("/"); // Redirect non-admins to the homepage
       }
     } else if (status === "unauthenticated") {
-      // router.push("/"); // Redirect unauthenticated users
+      router.push("/"); // Redirect unauthenticated users
     }
   }, [status, session, router, setWarehouse]);
 
