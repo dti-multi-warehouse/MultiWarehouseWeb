@@ -1,3 +1,4 @@
+'use client'
 import {FC} from "react";
 import TotalSalesChart from "@/app/dashboard/components/DashboardCharts/TotalSalesChart";
 import CategorySalesChart from "@/app/dashboard/components/DashboardCharts/CategorySalesChart";
