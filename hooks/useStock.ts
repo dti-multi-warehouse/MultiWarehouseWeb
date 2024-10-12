@@ -1,10 +1,24 @@
-import {useQuery} from "react-query";
+import {useMutation, useQuery, useQueryClient} from "react-query";
 import {getAllStocks} from "@/api/stock/getAllStocks";
 import {getStockDetails} from "@/api/stock/getStockDetails";
 import {getWarehouseAndStockAvailability} from "@/api/stock/getWarehouseAndStockAvailability";
 import {getProductAndStockAvailability} from "@/api/stock/getProductAndStockAvailability";
 import {getActiveStockMutationRequest} from "@/api/stock/getActiveStockMutationRequest";
+import {getSession} from "next-auth/react";
+import apiClient from "@/lib/apiClient";
+import {AxiosError} from "axios";
+import {config} from "@/constants/url";
 
+const attachToken = async (configs: any) => {
+    const session = await getSession();
+    if (session?.accessToken) {
+        configs.headers = {
+            ...configs.headers,
+            Authorization: `Bearer ${session.accessToken}`,
+        };
+    }
+    return configs;
+};
 
 export const useAllStocks = (warehouseId: number, date: Date, query: string, page: number, perPage: number) => {
     const {
@@ -69,4 +83,48 @@ export const useActiveStockMutationRequest = (warehouseId: number) => {
     })
 
     return { data, isLoading, error }
+}
+
+export const useAcceptMutationRequest = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation(
+        async (id: number) => {
+            const configs = await attachToken({})
+            await apiClient.put(
+                config.BASE_URL + config.API_VER + config.endpoints.stockMutation + `/${id}` + '/accept',
+                {},
+                configs)
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['stock', 'mutation'])
+            },
+            onError: (error: AxiosError) => {
+                throw error;
+            }
+        }
+    );
+}
+
+export const useRejectMutationRequest = () => {
+    const queryClient = useQueryClient()
+
+    return useMutation(
+        async (id: number) => {
+            const configs = await attachToken({})
+            await apiClient.put(
+                config.BASE_URL + config.API_VER + config.endpoints.stockMutation + `/${id}` + '/reject',
+                {},
+                configs)
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['stock', 'mutation'])
+            },
+            onError: (error: AxiosError) => {
+                throw error;
+            }
+        }
+    );
 }

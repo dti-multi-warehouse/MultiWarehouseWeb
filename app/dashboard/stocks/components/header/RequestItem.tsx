@@ -1,8 +1,7 @@
 import {FC} from "react";
 import {StockMutation} from "@/types/datatypes";
 import {Button} from "@/components/ui/button";
-import {config} from "@/constants/url";
-import axios from "axios";
+import {useAcceptMutationRequest, useRejectMutationRequest} from "@/hooks/useStock";
 
 const RequestItem: FC<StockMutation> = ({
     id,
@@ -11,13 +10,14 @@ const RequestItem: FC<StockMutation> = ({
     quantity,
     created_at
 }) => {
-    const url = config.BASE_URL + config.API_VER + config.endpoints.stockMutation + `/${id}`
+    const useAccept = useAcceptMutationRequest()
+    const useReject = useRejectMutationRequest()
     const handleAccept = () => {
-        axios.put(url + "/accept")
+        useAccept.mutate(id)
     }
 
     const handleReject = () => {
-        axios.put(url + "/reject")
+        useReject.mutate(id)
     }
     return (
         <div className="mb-4 p-4 border rounded-lg">
