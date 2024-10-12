@@ -3,7 +3,6 @@
 import {FC, useCallback, useEffect, useState} from "react";
 import {FileWithPreview, ProductData} from "@/app/dashboard/products/types";
 import axios from "axios";
-import useProductDetails from "@/hooks/useProductDetails";
 import * as Yup from "yup";
 import {useDropzone} from "react-dropzone";
 import {Form, Formik} from "formik";
@@ -16,6 +15,7 @@ import {BadgeX, ImageUp} from "lucide-react";
 import {Button} from "@/components/ui/button";
 import {config} from "@/constants/url";
 import {useRouter} from "next/navigation";
+import {useProductDetails} from "@/hooks/useProducts";
 
 interface Props {
     params: {

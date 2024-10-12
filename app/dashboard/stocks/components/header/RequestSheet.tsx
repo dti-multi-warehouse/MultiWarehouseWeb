@@ -9,9 +9,9 @@ import {
     SheetTrigger,
 } from "@/components/ui/sheet"
 import {Button} from "@/components/ui/button";
-import useActiveStockMutationRequest from "@/hooks/useActiveStockMutationRequest";
 import RequestItem from "@/app/dashboard/stocks/components/header/RequestItem";
 import useDashboardStore from "@/stores/useDashboardStore";
+import {useActiveStockMutationRequest} from "@/hooks/useStock";
 
 
 const RequestSheet: FC = () => {

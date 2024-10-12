@@ -15,8 +15,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import useWarehouseAndStockAvailability from "@/hooks/useWarehouseAndStockAvailability";
 import {useFormikContext} from "formik";
+import {useWarehouseAndStockAvailability} from "@/hooks/useStock";
 
 interface WarehouseFormValue {
     productId: number

@@ -9,7 +9,6 @@ import {
 } from "@/components/ui/table"
 import React, {FC, useState} from "react";
 import {Stock} from "@/types/datatypes";
-import useAllStocks from "@/hooks/useAllStocks";
 import Image from "next/image";
 import useDashboardStore from "@/stores/useDashboardStore";
 import {
@@ -19,6 +18,7 @@ import {
     PaginationLink, PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination";
+import {useAllStocks} from "@/hooks/useStock";
 
 const StockTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0);

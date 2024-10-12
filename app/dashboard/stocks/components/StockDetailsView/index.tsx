@@ -8,13 +8,13 @@ import {
     DrawerTitle,
 } from "@/components/ui/drawer"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import useStockDetails from "@/hooks/useStockDetails";
 import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon} from "lucide-react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {StockDetails} from "@/types/datatypes";
 import useDashboardStore from "@/stores/useDashboardStore";
 import StockMovementsChart from "@/app/dashboard/stocks/components/StockDetailsView/StockChart";
 import useMediaQuery from "@/hooks/useMediaQuery";
+import {useStockDetails} from "@/hooks/useStock";
 
 
 const StockDetailsView: FC = () => {

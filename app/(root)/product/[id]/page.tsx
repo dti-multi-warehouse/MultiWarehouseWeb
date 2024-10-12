@@ -3,9 +3,9 @@ import {FC} from "react";
 import CTA from "@/app/(root)/product/[id]/components/CTA";
 import ProductImage from "@/app/(root)/product/[id]/components/ProductImage";
 import ProductDetails from "@/app/(root)/product/[id]/components/ProductDetails";
-import useProductDetails from "@/hooks/useProductDetails";
 import {AlertCircle, Loader} from "lucide-react";
 import {Skeleton} from "@/components/ui/skeleton";
+import {useProductDetails} from "@/hooks/useProducts";
 
 interface Props {
     params: {
