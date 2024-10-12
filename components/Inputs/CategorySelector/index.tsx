@@ -21,7 +21,7 @@ import {
 import {FC, useEffect} from "react";
 import { Field, FieldProps, FormikValues} from "formik";
 import {Label} from "@/components/ui/label";
-import useCategories from "@/hooks/useCategories";
+import {useCategories} from "@/hooks/useCategories";
 
 interface CategorySelectorProps {
     initialValue?: string

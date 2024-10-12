@@ -24,8 +24,7 @@ import { Label } from "@/components/ui/label"
 import useMediaQuery from "@/hooks/useMediaQuery";
 import {Field, FieldProps, Form, Formik, FormikValues} from "formik";
 import {FC} from "react";
-import axios from "axios";
-import {config} from "@/constants/url";
+import {useAddCategory, useDeleteCategory, useUpdateCategory} from "@/hooks/useCategories";
 
 interface CategoryDrawerDialogProps {
     children: React.ReactNode,
@@ -89,9 +88,12 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id
 export default CategoryDrawerDialog
 
 const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id, setOpen }) => {
+    const addCategory = useAddCategory()
+    const updateCategory = useUpdateCategory()
+    const deleteCategory = useDeleteCategory()
     const handleDelete = () => {
         if (!id) return
-        axios.delete(config.BASE_URL + config.API_VER + config.endpoints.category + `/${id}`)
+        deleteCategory.mutate(id)
         setOpen(false)
     }
 
@@ -99,14 +101,13 @@ const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id, setOpen }) =
         <Formik
             initialValues={{ name: '' }}
             onSubmit={ (values) => {
-                const url = config.BASE_URL + config.API_VER + config.endpoints.category
-                const request = mode === "create"
-                    ? axios.post(url, values)
-                    : axios.put(url + `/${id}`, values)
-                request.then(response => {
-                //     Handle success, close the drawer
-                }).catch(error => {
-                })
+                if (mode === "create") {
+                    addCategory.mutate(values)
+                } else {
+                    if (!id) return
+                    updateCategory.mutate({id, values})
+                }
+                setOpen(false)
             }}
         >
 

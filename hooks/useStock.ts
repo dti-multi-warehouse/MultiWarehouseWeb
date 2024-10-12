@@ -77,12 +77,56 @@ export const useActiveStockMutationRequest = (warehouseId: number) => {
         isLoading,
         error,
     } = useQuery( {
-        queryKey: ['stock', 'mutation'],
+        queryKey: ['stock', 'mutation', warehouseId],
         queryFn: async () => getActiveStockMutationRequest(warehouseId),
         staleTime: 60 * 1000
     })
 
     return { data, isLoading, error }
+}
+
+export const useRestock = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation(
+        async (values: { productId: number; warehouseToId: number; warehouseFromId: number; quantity: number; maxQuantity: number; }) => {
+            const configs = await attachToken({})
+            await apiClient.post(
+                config.BASE_URL + config.API_VER + config.endpoints.stock + '/restock',
+                values,
+                configs)
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['stock', 'mutation'])
+            },
+            onError: (error: AxiosError) => {
+                throw error;
+            }
+        }
+    );
+}
+
+export const useRequestMutation = () => {
+    const queryClient = useQueryClient();
+
+    return useMutation(
+        async (values: { productId: number; warehouseToId: number; warehouseFromId: number; quantity: number; maxQuantity: number; }) => {
+            const configs = await attachToken({})
+            await apiClient.post(
+                config.BASE_URL + config.API_VER + config.endpoints.stock + '/mutation',
+                values,
+                configs)
+        },
+        {
+            onSuccess: () => {
+                queryClient.invalidateQueries(['stock', 'mutation'])
+            },
+            onError: (error: AxiosError) => {
+                throw error;
+            }
+        }
+    );
 }
 
 export const useAcceptMutationRequest = () => {
