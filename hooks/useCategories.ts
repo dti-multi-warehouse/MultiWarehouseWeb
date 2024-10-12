@@ -33,11 +33,16 @@ export const useAddCategory = () => {
     const queryClient = useQueryClient();
 
     return useMutation(
-        async (values: {name: string}) => {
-            const configs = await attachToken({})
+        async (formData: FormData) => {
+            const contentTypeConfig = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            const configs = await attachToken(contentTypeConfig)
             await apiClient.post(
                 config.BASE_URL + config.API_VER + config.endpoints.category,
-                values,
+                formData,
                 configs)
         },
         {

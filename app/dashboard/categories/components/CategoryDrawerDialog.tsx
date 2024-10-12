@@ -23,8 +23,11 @@ import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import useMediaQuery from "@/hooks/useMediaQuery";
 import {Field, FieldProps, Form, Formik, FormikValues} from "formik";
-import {FC} from "react";
+import {FC, useCallback, useEffect, useState} from "react";
 import {useAddCategory, useDeleteCategory, useUpdateCategory} from "@/hooks/useCategories";
+import {FileWithPreview} from "@/app/dashboard/products/types";
+import {useDropzone} from "react-dropzone";
+import {ImageUp} from "lucide-react";
 
 interface CategoryDrawerDialogProps {
     children: React.ReactNode,
@@ -88,9 +91,51 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id
 export default CategoryDrawerDialog
 
 const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id, setOpen }) => {
+    const [logo, setLogo] = useState<FileWithPreview | undefined>(undefined);
     const addCategory = useAddCategory()
     const updateCategory = useUpdateCategory()
     const deleteCategory = useDeleteCategory()
+
+    const onDrop = useCallback((file: File[]) => {
+        const image = file[0]
+        const fileWithPreview = Object.assign(image, {
+            preview: URL.createObjectURL(image)
+        })
+
+        setLogo(fileWithPreview);
+    }, []);
+
+    const { getRootProps, getInputProps } = useDropzone({
+        accept: {
+            'image/png': ['.png'],
+            'image/jpg': ['.jpg'],
+            'image/jpeg': ['.jpeg'],
+            'image/gif': ['.gif']
+        },
+        onDrop,
+        maxSize: 1000000
+    });
+
+    useEffect(() => {
+        return () => {
+            if (logo) {
+                URL.revokeObjectURL(logo.preview);
+            }
+        };
+    }, [logo]);
+
+    const handleAdd = (values: {name: string}) => {
+        const formData = new FormData()
+        formData.append("requestDto", new Blob([JSON.stringify(values)], { type: "application/json" }), "")
+        if (!logo) return
+        formData.append("logo", logo)
+        addCategory.mutate(formData)
+    }
+
+    const handleUpdate = (values: {name: string}) => {
+
+    }
+
     const handleDelete = () => {
         if (!id) return
         deleteCategory.mutate(id)
@@ -102,7 +147,7 @@ const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id, setOpen }) =
             initialValues={{ name: '' }}
             onSubmit={ (values) => {
                 if (mode === "create") {
-                    addCategory.mutate(values)
+                    handleAdd(values)
                 } else {
                     if (!id) return
                     updateCategory.mutate({id, values})
@@ -120,6 +165,14 @@ const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id, setOpen }) =
                             {form.touched["name"] && form.errors["name"] && (
                                 <div className="text-red-500 text-sm mt-1">{form.errors["name"]?.toString()}</div>
                             )}
+                            <div className={"flex flex-col gap-2"}>
+                                <Label htmlFor={"logo"} className={"lg:col-span-1"}>Logo</Label>
+                                <div
+                                    className={"w-24 h-24 border border-dotted flex items-center justify-center cursor-pointer"} {...getRootProps()}>
+                                    <input {...getInputProps()} name={"logo"} />
+                                    <ImageUp className={"text-gray-500"}/>
+                                </div>
+                            </div>
                         </>
                     )}
                 </Field>
