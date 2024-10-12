@@ -6,6 +6,9 @@ steps:
       - 'DOCKER_BUILDKIT=1'
     id: 'build-image'
 
+  - name: 'gcr.io/cloud-builders/compose'
+    args: ['build']
+
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/sanguine-willow-436015-k8/alphamarch']
