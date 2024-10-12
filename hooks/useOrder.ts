@@ -1,8 +1,10 @@
-import { useMutation, useQueryClient } from 'react-query';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
 import apiClient from '@/lib/apiClient';
 import { CreateOrderRequestDto, CreateOrderResponseDto } from '@/types/datatypes';
 import { AxiosError } from 'axios';
 import { getSession } from 'next-auth/react';
+import {getAdminOrder} from "@/api/order/getAdminOrder";
+import {getUserOrder} from "@/api/order/getUserOrder";
 
 const attachToken = async (config: any) => {
   const session = await getSession();
@@ -14,6 +16,34 @@ const attachToken = async (config: any) => {
   }
   return config;
 };
+
+export const useAdminOrder = (warehouseId: number, page: number) => {
+  const {
+    data,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['order', 'admin' , warehouseId, page],
+    queryFn: async () => getAdminOrder(warehouseId, page),
+    staleTime: 5 * 60 * 1000
+  })
+
+  return { data, isLoading, error }
+}
+
+const useUserOrder = (userId: number, page: number) => {
+  const {
+    data,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['order', 'user', userId, page],
+    queryFn: async () => getUserOrder(userId, page),
+    staleTime: 5 * 60 * 1000
+  })
+
+  return { data, isLoading, error }
+}
 
 export const useCreateOrder = () => {
   const queryClient = useQueryClient();
@@ -64,7 +94,7 @@ export const useCancelOrder = () => {
 
   return useMutation(
     async (orderId: number) => {
-      const response = await apiClient.put(`/api/v1/order/cancel/${orderId}`);
+      const response = await apiClient.put(`/api/v1/order/${orderId}/cancel`);
       return response.data;
     },
     {
@@ -83,7 +113,7 @@ export const useConfirmPayment = () => {
 
   return useMutation(
     async (orderId: number) => {
-      const response = await apiClient.put(`/api/v1/order/confirm/${orderId}`);
+      const response = await apiClient.put(`/api/v1/order/${orderId}/confirm`);
       return response.data;
     },
     {
@@ -102,7 +132,7 @@ export const useSendOrder = () => {
 
   return useMutation(
     async (orderId: number) => {
-      const response = await apiClient.put(`/api/v1/order/send/${orderId}`);
+      const response = await apiClient.put(`/api/v1/order/${orderId}/send`);
       return response.data;
     },
     {
@@ -121,7 +151,7 @@ export const useFinalizeOrder = () => {
 
   return useMutation(
     async (orderId: number) => {
-      const response = await apiClient.put(`/api/v1/order/finalize/${orderId}`);
+      const response = await apiClient.put(`/api/v1/order/${orderId}/finalize`);
       return response.data;
     },
     {

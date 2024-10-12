@@ -18,7 +18,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import useWarehouseList from "@/hooks/useWarehouseList";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 const WarehousePicker = () => {
     const selectedWarehouse = useDashboardStore((state) => state.warehouse)

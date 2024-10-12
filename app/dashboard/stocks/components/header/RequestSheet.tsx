@@ -11,7 +11,7 @@ import {
 import {Button} from "@/components/ui/button";
 import useActiveStockMutationRequest from "@/hooks/useActiveStockMutationRequest";
 import RequestItem from "@/app/dashboard/stocks/components/header/RequestItem";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 
 const RequestSheet: FC = () => {

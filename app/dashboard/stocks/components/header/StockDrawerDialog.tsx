@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/drawer";
 import {Button} from "@/components/ui/button";
 import StockMutationForm from "./StockMutationForm";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 interface StockDrawerDialogProps {
     children: ReactNode

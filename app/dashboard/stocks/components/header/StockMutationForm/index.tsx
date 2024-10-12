@@ -7,7 +7,7 @@ import WarehouseInput from "@/app/dashboard/stocks/components/header/StockMutati
 import QuantityInput from "@/app/dashboard/stocks/components/header/StockMutationForm/QuantityInput";
 import axios from "axios";
 import {config} from "@/constants/url";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 
 const StockMutationSchema = Yup.object().shape({

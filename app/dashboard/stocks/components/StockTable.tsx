@@ -11,7 +11,7 @@ import React, {FC, useState} from "react";
 import {Stock} from "@/types/datatypes";
 import useAllStocks from "@/hooks/useAllStocks";
 import Image from "next/image";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 import {
     Pagination,
     PaginationContent,

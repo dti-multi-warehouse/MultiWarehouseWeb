@@ -5,7 +5,7 @@ import DashboardHeader from "@/components/DashboardHeader";
 import DashboardMobileHeader from "@/components/DashboardMobileHeader";
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/navigation";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 const DashboardLayout = ({
         children

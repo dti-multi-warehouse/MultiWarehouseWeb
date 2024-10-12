@@ -12,7 +12,7 @@ import useStockDetails from "@/hooks/useStockDetails";
 import {ArrowDownIcon, ArrowLeftIcon, ArrowRightIcon, ArrowUpIcon} from "lucide-react";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {StockDetails} from "@/types/datatypes";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 import StockMovementsChart from "@/app/dashboard/stocks/components/StockDetailsView/StockChart";
 import useMediaQuery from "@/hooks/useMediaQuery";
 

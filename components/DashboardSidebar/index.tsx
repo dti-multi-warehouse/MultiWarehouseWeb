@@ -3,7 +3,7 @@ import {FC} from "react";
 import Link from "next/link";
 import SidebarLink from "@/components/DashboardSidebar/SidebarLink";
 import {sidebarLinks, superAdminLinks} from "@/constants/sidebarLinks";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 const DashboardSidebar: FC = () => {
     const isAdmin = useDashboardStore(state => state.isAdmin)
