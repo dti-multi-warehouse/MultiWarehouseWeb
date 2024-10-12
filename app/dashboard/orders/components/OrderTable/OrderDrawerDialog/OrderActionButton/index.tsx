@@ -3,6 +3,7 @@ import {Status} from "@/types/order";
 import {Button} from "@/components/ui/button";
 import axios from "axios";
 import {config} from "@/constants/url";
+import {useCancelOrder, useConfirmPayment, useSendOrder} from "@/hooks/useOrder";
 
 interface OrderActionButtonProps {
     status: Status,
@@ -11,18 +12,21 @@ interface OrderActionButtonProps {
 }
 
 const OrderActionButton: FC<OrderActionButtonProps> = ({status, id, setOpen}) => {
+    const cancel = useCancelOrder()
+    const confirm = useConfirmPayment()
+    const deliver = useSendOrder()
     const handleCancel = () => {
-        axios.put(config.BASE_URL + config.API_VER + config.endpoints.order + `/${id}/cancel`)
+        cancel.mutate(id)
         setOpen(false)
     }
 
     const handleConfirm = () => {
-        axios.put(config.BASE_URL + config.API_VER + config.endpoints.order + `/${id}/confirm`)
+        confirm.mutate(id)
         setOpen(false)
     }
 
     const handleDeliver = () => {
-        axios.put(config.BASE_URL + config.API_VER + config.endpoints.order + `/${id}/send`)
+        deliver.mutate(id)
         setOpen(false)
     }
 

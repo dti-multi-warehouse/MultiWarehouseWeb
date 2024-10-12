@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient, UseMutationResult } from 'react-query';
 import apiClient from '@/lib/apiClient';
+import {getWarehouseList} from "@/api/warehouse/getWarehouseList";
 
 export const useGetWarehouseById = (id: number) => {
   return useQuery(
@@ -112,3 +113,17 @@ export const useAssignWarehouseAdmin = (): UseMutationResult<void, unknown, { wa
     }
   );
 };
+
+export const useWarehouseList = () => {
+  const {
+    data,
+    isLoading,
+    error
+  } = useQuery({
+    queryKey: ['warehouses'],
+    queryFn: async () => getWarehouseList(),
+    staleTime: 60 * 60 * 1000
+  })
+
+  return { data, isLoading, error }
+}

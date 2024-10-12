@@ -81,7 +81,7 @@ export interface LoginRequest {
   password: string;
 }
 
-export interface LoginResponse 
+export interface LoginResponse {
    accessToken: string;
    userId: string;
    email: string;
@@ -89,7 +89,7 @@ export interface LoginResponse
    warehouseId?: number;
    warehouseName?: string;
 }
-
+  
 export interface LogoutRequest {
   token: string;
 }
@@ -188,13 +188,13 @@ export interface CreateOrderItemRequestDto {
     productId: number;
     quantity: number;
   }
-  
+
   export interface CreateOrderRequestDto {
-    items: CreateOrderItemRequestDto[]; 
+    items: CreateOrderItemRequestDto[];
     paymentMethod: PaymentMethod;
     bankTransfer?: BankTransfer;
     shippingMethod: string;
-  }  
+  }
 
 export interface CreateOrderResponseDto {
   transactionId: string;
@@ -246,7 +246,7 @@ export interface Order {
     shippingDate: string;
     virtualAccountNumber: string;
   }
-  
+
 
 export interface OrderItem {
   id: number;
@@ -291,16 +291,18 @@ export interface AssignWarehouseAdminDTO {
   userId: number;
 }
 
-export interface DashboardStore {
-  product: ProductStockDetails;
-  warehouse: WarehouseList;
-  date: Date;
-  isStockDrawerOpen: boolean;
-  setProduct: (product: ProductStockDetails) => void;
-  setWarehouse: (warehouse: WarehouseList) => void;
-  setDate: (date: Date) => void;
-  setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => void;
-}
+  export interface DashboardStore {
+    product: ProductStockDetails;
+    warehouse: WarehouseList;
+    date: Date;
+    isAdmin: boolean;
+    isStockDrawerOpen: boolean;
+    setProduct: (product: ProductStockDetails) => void;
+    setWarehouse: (warehouse: WarehouseList) => void;
+    setDate: (date: Date) => void;
+    setIsAdmin: (isAdmin: boolean) => void;
+    setIsStockDrawerOpen: (isStockDrawerOpen: boolean) => void;
+  }
 
 export interface ProductStockDetails {
   id: number;

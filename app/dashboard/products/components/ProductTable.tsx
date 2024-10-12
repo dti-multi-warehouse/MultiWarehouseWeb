@@ -8,8 +8,6 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {Pencil, Trash2} from "lucide-react";
-import useDashboardProducts from "@/hooks/useDashboardProducts";
 import {DashboardProducts} from "@/types/product";
 import Image from "next/image";
 import {useRouter} from "next/navigation";
@@ -20,6 +18,7 @@ import {
     PaginationLink, PaginationNext,
     PaginationPrevious
 } from "@/components/ui/pagination";
+import {useDashboardProducts} from "@/hooks/useProducts";
 
 const ProductTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0)

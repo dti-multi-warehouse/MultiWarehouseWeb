@@ -10,9 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { orderlist } from "@/data/data";
-import useDashboardStore from "@/hooks/useDashboardStore";
-import useAdminOrder from "@/hooks/order/useAdminOrder";
+import useDashboardStore from "@/stores/useDashboardStore";
 import OrderTableRow from "@/app/dashboard/orders/components/OrderTable/OrderTableRow";
 import {
   Pagination,
@@ -21,6 +19,7 @@ import {
   PaginationLink, PaginationNext,
   PaginationPrevious
 } from "@/components/ui/pagination";
+import {useAdminOrder} from "@/hooks/useOrder";
 
 const OrderTable: React.FC = () => {
   const warehouse = useDashboardStore(state => state.warehouse)

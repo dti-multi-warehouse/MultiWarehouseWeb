@@ -17,7 +17,7 @@ import {
     ChartTooltip,
     ChartTooltipContent,
 } from "@/components/ui/chart"
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 import {StockMovementChartData} from "@/types/datatypes";
 import {Skeleton} from "@/components/ui/skeleton";
 

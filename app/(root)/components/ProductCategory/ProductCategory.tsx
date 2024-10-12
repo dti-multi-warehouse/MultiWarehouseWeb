@@ -3,12 +3,12 @@
 import React from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "../../../../components/ProductCard";
-import useFeaturedProducts from "@/hooks/useFeaturedProducts";
 import { BiDrink } from "react-icons/bi";
 import { IoFastFood } from "react-icons/io5";
 import { FaKitchenSet } from "react-icons/fa6";
 import { MdOutlinePets } from "react-icons/md";
 import { GiShop, GiInnerSelf, GiMeat } from "react-icons/gi";
+import {useFeaturedProducts} from "@/hooks/useProducts";
 
 const iconMap: { [key: string]: JSX.Element } = {
   BiDrink: <BiDrink />,

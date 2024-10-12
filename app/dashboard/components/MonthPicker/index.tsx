@@ -5,7 +5,7 @@ import { ChevronLeft, ChevronRight, CalendarIcon } from "lucide-react"
 import { format, addYears, subYears } from "date-fns"
 import { Button } from "@/components/ui/button"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 const MonthPicker = () => {
     const date = useDashboardStore((state) => state.date)

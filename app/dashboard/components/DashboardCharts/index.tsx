@@ -1,8 +1,9 @@
+'use client'
 import {FC} from "react";
 import TotalSalesChart from "@/app/dashboard/components/DashboardCharts/TotalSalesChart";
 import CategorySalesChart from "@/app/dashboard/components/DashboardCharts/CategorySalesChart";
 import ProductSalesChart from "@/app/dashboard/components/DashboardCharts/ProductSalesChart";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
 import useSalesReport from "@/hooks/useSalesReport";
 import ChartSkeleton from "@/app/dashboard/components/DashboardCharts/ChartSkeleton";
 import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";

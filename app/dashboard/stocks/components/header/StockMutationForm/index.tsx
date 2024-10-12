@@ -5,9 +5,7 @@ import {Form, Formik} from "formik";
 import ProductInput from "@/app/dashboard/stocks/components/header/StockMutationForm/ProductInput";
 import WarehouseInput from "@/app/dashboard/stocks/components/header/StockMutationForm/WarehouseInput";
 import QuantityInput from "@/app/dashboard/stocks/components/header/StockMutationForm/QuantityInput";
-import axios from "axios";
-import {config} from "@/constants/url";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import {useRequestMutation, useRestock} from "@/hooks/useStock";
 
 
 const StockMutationSchema = Yup.object().shape({
@@ -25,13 +23,16 @@ interface StockMutationFormProps {
 
 const StockMutationForm: FC<StockMutationFormProps> = ({setOpen, warehouseId}) => {
     const [type, setType] = useState<'restock' | 'mutation'>('restock')
+    const restock = useRestock()
+    const mutation = useRequestMutation()
 
     const handleSubmit = (values: { productId: number; warehouseToId: number; warehouseFromId: number; quantity: number; maxQuantity: number; }) => {
-        const url = config.BASE_URL + config.API_VER + config.endpoints.stock + `/${type}`
-        axios.post(url, values)
-            .then(() => {
-                setOpen(false)
-            })
+        if (type === 'mutation') {
+            mutation.mutate(values)
+        } else {
+            restock.mutate(values)
+        }
+        setOpen(false)
     }
 
     return (

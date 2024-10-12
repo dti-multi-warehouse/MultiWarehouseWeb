@@ -17,8 +17,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import Image from "next/image";
-import useProductAndStockAvailability from "@/hooks/useProductAndStockAvailability";
 import {useFormikContext} from "formik";
+import {useProductAndStockAvailability} from "@/hooks/useStock";
 
 
 interface ProductInputValue {

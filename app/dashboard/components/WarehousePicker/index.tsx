@@ -17,14 +17,20 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import useWarehouseList from "@/hooks/useWarehouseList";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
+import {useWarehouseList} from "@/hooks/useWarehouse";
 
 const WarehousePicker = () => {
     const selectedWarehouse = useDashboardStore((state) => state.warehouse)
+    const isAdmin = useDashboardStore((state) => state.isAdmin)
+    const warehouse = useDashboardStore(state => state.warehouse)
     const setWarehouse = useDashboardStore((state) => state.setWarehouse)
     const [open, setOpen] = React.useState(false)
     const {data, isLoading, error} = useWarehouseList()
+
+    if (!isAdmin) {
+        return <p className={"font-semibold text-gray-500"}>{warehouse.name}</p>
+    }
 
     return (
         <Popover open={open} onOpenChange={setOpen}>

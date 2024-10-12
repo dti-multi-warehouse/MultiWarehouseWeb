@@ -2,7 +2,6 @@
 
 import {FC, useCallback, useEffect, useState} from "react";
 import {FileWithPreview, ProductData} from "@/app/dashboard/products/types";
-import axios from "axios";
 import {useDropzone} from "react-dropzone";
 import * as Yup from "yup";
 import {Form, Formik} from "formik";
@@ -13,8 +12,8 @@ import {Label} from "@/components/ui/label";
 import Image from "next/image";
 import {BadgeX, ImageUp} from "lucide-react";
 import {Button} from "@/components/ui/button";
-import {config} from "@/constants/url";
 import {useRouter} from "next/navigation";
+import {useAddProduct} from "@/hooks/useProducts";
 
 const productSchema = Yup.object().shape({
     name: Yup.string().required("Product name is required"),
@@ -26,6 +25,7 @@ const productSchema = Yup.object().shape({
 const AddProductPage: FC = () => {
     const router = useRouter()
     const [images, setImages] = useState<FileWithPreview[]>([]);
+    const addProduct = useAddProduct()
 
     const onDrop = useCallback((acceptedImages: File[]) => {
         setImages(prevImages => [
@@ -63,7 +63,7 @@ const AddProductPage: FC = () => {
         const formData = new FormData()
         formData.append("product", new Blob([JSON.stringify(values)], {type: 'application/json'}))
         images.forEach(image => formData.append("images", image))
-        axios.post(config.BASE_URL + config.API_VER + config.endpoints.product, formData)
+        addProduct.mutate(formData)
         router.back()
     }
 

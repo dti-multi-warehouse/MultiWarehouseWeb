@@ -13,7 +13,7 @@ const ProductRow: FC<ProductRowProps> = ({isRow, hits}) => {
 
     return (
         <div className={'col-span-4 overflow-visible'}>
-            <div className={clsx('grid', isRow ? 'grid-flow-col' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5', 'overflow-visible', 'no-scrollbar')}>
+            <div className={clsx('grid gap-4', isRow ? 'grid-flow-col' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5', 'overflow-visible', 'no-scrollbar')}>
                 {hits?.map((hit, index) => <ProductCard key={index} {...hit.document} />)}
             </div>
         </div>

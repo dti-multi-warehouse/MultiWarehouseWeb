@@ -1,23 +1,17 @@
 import {OrderResponseDto} from "@/types/order";
-import axios, {AxiosResponse} from "axios";
 import {config} from "@/constants/url";
+import apiClient from "@/lib/apiClient";
 
 
 const getData = async (warehouseId: number, page: number): Promise<OrderResponseDto> => {
     try {
-        const res: AxiosResponse = await axios.get(
-            config.BASE_URL + config.API_VER + config.endpoints.order + `/admin/${warehouseId}`,
-            {
-                headers: {
-                    accept: 'application/json',
-                    'Content-Type': 'application/json',
-                },
-                params: {
-                    page: page
-                }
+        const url = config.BASE_URL + config.API_VER + config.endpoints.order + `/admin/${warehouseId}`
+        const response = await apiClient.get(url, {
+            params: {
+                page: page
             }
-        )
-        return res.data.data;
+        });
+        return response.data.data;
     } catch (error) {
         throw error;
     }

@@ -8,11 +8,8 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {Pencil, Trash2} from "lucide-react";
 import CategoryDrawerDialog from "@/app/dashboard/categories/components/CategoryDrawerDialog";
-import useCategories from "@/hooks/useCategories";
-import axios from "axios";
-import {config} from "@/constants/url";
+import {useCategories} from "@/hooks/useCategories";
 
 const CategoryTable: FC = () => {
     const { data, isLoading, error } = useCategories()

@@ -1,7 +1,7 @@
 import {FC} from "react";
-import useCategories from "@/hooks/useCategories";
 import CategoryCheckbox from "@/app/(root)/product/components/ProductFilter/CategoryFilter/CategoryCheckbox";
 import {Skeleton} from "@/components/ui/skeleton";
+import {useCategories} from "@/hooks/useCategories";
 
 interface ProductFilterInputProps {
     onChange: (value: any[]) => void;

@@ -2,8 +2,6 @@
 
 import {FC, useCallback, useEffect, useState} from "react";
 import {FileWithPreview, ProductData} from "@/app/dashboard/products/types";
-import axios from "axios";
-import useProductDetails from "@/hooks/useProductDetails";
 import * as Yup from "yup";
 import {useDropzone} from "react-dropzone";
 import {Form, Formik} from "formik";
@@ -14,8 +12,8 @@ import {Label} from "@/components/ui/label";
 import Image from "next/image";
 import {BadgeX, ImageUp} from "lucide-react";
 import {Button} from "@/components/ui/button";
-import {config} from "@/constants/url";
 import {useRouter} from "next/navigation";
+import {useDeleteProduct, useProductDetails, useUpdateProduct} from "@/hooks/useProducts";
 
 interface Props {
     params: {
@@ -35,6 +33,8 @@ const EditProductPage: FC<Props> = ({params}) => {
     const [ prevImages, setPrevImages] = useState<string[]>([])
     const [images, setImages] = useState<FileWithPreview[]>([])
     const router = useRouter()
+    const updateProduct = useUpdateProduct()
+    const deleteProduct = useDeleteProduct()
 
     const onDrop = useCallback((acceptedImages: File[]) => {
         setImages(prevImages => [
@@ -81,7 +81,7 @@ const EditProductPage: FC<Props> = ({params}) => {
     }
 
     const handleDelete = () => {
-        axios.delete(config.BASE_URL + config.API_VER + config.endpoints.category + `/${params.id}`)
+        deleteProduct.mutate(params.id)
         router.back()
     }
 
@@ -93,20 +93,16 @@ const EditProductPage: FC<Props> = ({params}) => {
         if (images.length > 0) {
             images.forEach(image => formData.append("images", image))
         }
-        axios
-            .put(config.BASE_URL + config.API_VER + config.endpoints.product + `/${params.id}`, formData)
-            .then(r => {
-                if (r.status == 200) {
-                    router.back()
-                }
-            })
+        const id = params.id
+        updateProduct.mutate({formData, id})
+        router.back()
     }
 
     if (!data || !data.name || !data.description) {
         return null
     }
 
-    return <main className={"p-8"}>
+    return <main className={"p-8 flex flex-col"}>
         <h1 className={"text-3xl font-semibold"}>Edit product</h1>
         <Formik
             initialValues={{
@@ -117,7 +113,7 @@ const EditProductPage: FC<Props> = ({params}) => {
             }}
             validationSchema={productSchema}
             onSubmit={(values) => handleSubmit(values, images)}>
-            <Form className={"flex flex-col gap-4 p-4 lg:px-64 lg:py-16"}>
+            <Form className={"flex flex-col gap-4 p-4 lg:px-64 lg:pt-16"}>
                 <CustomInput name={"name"} label={"Product Name"} placeholder={data.name || "What's the name of the product?"}/>
                 <CustomInput name={"price"} label={"Price"} type={"number"} placeholder={data.price?.toString() || "How much is it going to be?"}/>
                 <CategorySelector initialValue={data.category}/>
@@ -175,12 +171,10 @@ const EditProductPage: FC<Props> = ({params}) => {
                         </div>
                     </div>
                 </div>
-                <div className={"flex justify-center mt-20 gap-8"}>
-                    <Button variant={"destructive"} className={"w-48"}>Delete product</Button>
-                    <Button type={"submit"} className={"w-48"} onClick={handleDelete}>Edit product</Button>
-                </div>
+                <Button type={"submit"} className={"w-48 lg:w-96 mt-8 self-center"}>Edit product</Button>
             </Form>
         </Formik>
+        <Button variant={"destructive"} className={"w-48 lg:w-96 self-center"} onClick={handleDelete}>Delete product</Button>
     </main>
 }
 

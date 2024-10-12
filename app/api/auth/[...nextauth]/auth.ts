@@ -56,6 +56,17 @@ export const authOptions: NextAuthOptions = {
               password: credentials.password,
             });
             if (response.data && response.data.accessToken) {
+              if (response.data.role) {
+                return {
+                  id: response.data.userId,
+                  token: response.data.accessToken,
+                  email: response.data.email,
+                  role: response.data.role || "user",
+                  social: false,
+                  warehouseId: response.data.warehouseId,
+                  warehouseName: response.data.warehouseName
+                }
+              }
               return {
                 id: response.data.userId,
                 token: response.data.accessToken,

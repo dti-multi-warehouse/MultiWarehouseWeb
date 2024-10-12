@@ -10,8 +10,8 @@ import { IoFastFood } from "react-icons/io5";
 import { FaKitchenSet } from "react-icons/fa6";
 import { MdOutlinePets } from "react-icons/md";
 import { GiShop, GiInnerSelf, GiMeat } from "react-icons/gi";
-import useCategories from "@/hooks/useCategories";
 import Image from "next/image";
+import {useCategories} from "@/hooks/useCategories";
 
 const category = [
   { name: "Minuman", icon: <BiDrink /> },
