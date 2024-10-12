@@ -1,7 +1,6 @@
 'use client'
 import * as React from "react"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 import {
     Dialog,
@@ -19,31 +18,15 @@ import {
     DrawerTitle,
     DrawerTrigger,
 } from "@/components/ui/drawer"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import useMediaQuery from "@/hooks/useMediaQuery";
-import {Field, FieldProps, Form, Formik, FormikValues} from "formik";
-import {FC, useCallback, useEffect, useState} from "react";
-import {useAddCategory, useDeleteCategory, useUpdateCategory} from "@/hooks/useCategories";
-import {FileWithPreview} from "@/app/dashboard/products/types";
-import {useDropzone} from "react-dropzone";
-import {ImageUp} from "lucide-react";
+import {FC} from "react";
+import AddCategoryForm from "@/app/dashboard/categories/components/AddCategoryForm";
+import EditCategoryForm from "@/app/dashboard/categories/components/EditCategoryForm";
 
 interface CategoryDrawerDialogProps {
     children: React.ReactNode,
     mode: 'create' | 'update',
     id?: number
-}
-
-interface CategoryFormProps {
-    className?: string,
-    mode: "create" | "update",
-    id?: number,setOpen: (open: boolean) => void
-
-}
-
-interface FormValue {
-    category: string
 }
 
 const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id}) => {
@@ -62,7 +45,8 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id
                     <DialogHeader>
                         <DialogTitle>{title}</DialogTitle>
                     </DialogHeader>
-                    <CategoryForm mode={mode} id={id} setOpen={setOpen} />
+                    {mode === "create" && <AddCategoryForm setOpen={setOpen} className={"flex flex-col gap-2"} />}
+                    {mode === "update" && id && <EditCategoryForm id={id} setOpen={setOpen} className={"flex flex-col gap-2"} />}
                 </DialogContent>
             </Dialog>
         )
@@ -77,7 +61,8 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id
                 <DrawerHeader className="text-left">
                     <DrawerTitle>{title}</DrawerTitle>
                 </DrawerHeader>
-                <CategoryForm className="px-4" mode={mode} id={id} setOpen={setOpen} />
+                {mode === "create" && <AddCategoryForm setOpen={setOpen} className={"flex flex-col px-4 gap-2"} />}
+                {mode === "update" && id && <EditCategoryForm id={id} setOpen={setOpen} className={"flex flex-col px-4 gap-2"} />}
                 <DrawerFooter className="pt-2">
                     <DrawerClose asChild>
                         <Button variant="outline">Cancel</Button>
@@ -89,96 +74,3 @@ const CategoryDrawerDialog: FC<CategoryDrawerDialogProps> = ({children, mode, id
 }
 
 export default CategoryDrawerDialog
-
-const CategoryForm: FC<CategoryFormProps> = ({ className, mode, id, setOpen }) => {
-    const [logo, setLogo] = useState<FileWithPreview | undefined>(undefined);
-    const addCategory = useAddCategory()
-    const updateCategory = useUpdateCategory()
-    const deleteCategory = useDeleteCategory()
-
-    const onDrop = useCallback((file: File[]) => {
-        const image = file[0]
-        const fileWithPreview = Object.assign(image, {
-            preview: URL.createObjectURL(image)
-        })
-
-        setLogo(fileWithPreview);
-    }, []);
-
-    const { getRootProps, getInputProps } = useDropzone({
-        accept: {
-            'image/png': ['.png'],
-            'image/jpg': ['.jpg'],
-            'image/jpeg': ['.jpeg'],
-            'image/gif': ['.gif']
-        },
-        onDrop,
-        maxSize: 1000000
-    });
-
-    useEffect(() => {
-        return () => {
-            if (logo) {
-                URL.revokeObjectURL(logo.preview);
-            }
-        };
-    }, [logo]);
-
-    const handleAdd = (values: {name: string}) => {
-        const formData = new FormData()
-        formData.append("requestDto", new Blob([JSON.stringify(values)], { type: "application/json" }), "")
-        if (!logo) return
-        formData.append("logo", logo)
-        addCategory.mutate(formData)
-    }
-
-    const handleUpdate = (values: {name: string}) => {
-
-    }
-
-    const handleDelete = () => {
-        if (!id) return
-        deleteCategory.mutate(id)
-        setOpen(false)
-    }
-
-    return (
-        <Formik
-            initialValues={{ name: '' }}
-            onSubmit={ (values) => {
-                if (mode === "create") {
-                    handleAdd(values)
-                } else {
-                    if (!id) return
-                    updateCategory.mutate({id, values})
-                }
-                setOpen(false)
-            }}
-        >
-
-            <Form className={cn("grid items-start gap-4", className)}>
-                <Field name={"name"} className="grid gap-2">
-                    {({ field, form}: FieldProps<any, FormikValues>) => (
-                        <>
-                            <Label htmlFor={"name"} className={"lg:col-span-1"}>Category Name</Label>
-                            <Input {...field} />
-                            {form.touched["name"] && form.errors["name"] && (
-                                <div className="text-red-500 text-sm mt-1">{form.errors["name"]?.toString()}</div>
-                            )}
-                            <div className={"flex flex-col gap-2"}>
-                                <Label htmlFor={"logo"} className={"lg:col-span-1"}>Logo</Label>
-                                <div
-                                    className={"w-24 h-24 border border-dotted flex items-center justify-center cursor-pointer"} {...getRootProps()}>
-                                    <input {...getInputProps()} name={"logo"} />
-                                    <ImageUp className={"text-gray-500"}/>
-                                </div>
-                            </div>
-                        </>
-                    )}
-                </Field>
-                <Button type="submit">Save changes</Button>
-                {mode !== "create" && <Button variant={"destructive"} onClick={handleDelete}>Delete product</Button>}
-            </Form>
-        </Formik>
-    )
-}

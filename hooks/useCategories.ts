@@ -4,6 +4,7 @@ import {getSession} from "next-auth/react";
 import apiClient from "@/lib/apiClient";
 import {config} from "@/constants/url";
 import {AxiosError} from "axios";
+import {getCategory} from "@/api/category/getCategory";
 
 const attachToken = async (configs: any) => {
     const session = await getSession();
@@ -24,6 +25,19 @@ export const useCategories = () => {
     } = useQuery({
         queryKey: ['categories'],
         queryFn: async () => getCategories(),
+    })
+
+    return { data, isLoading, error }
+}
+
+export const useCategory = (id: number) => {
+    const {
+        data,
+        isLoading,
+        error
+    } = useQuery({
+        queryKey: ['categories', id],
+        queryFn: async () => getCategory(id),
     })
 
     return { data, isLoading, error }
@@ -60,11 +74,16 @@ export const useUpdateCategory = () => {
     const queryClient = useQueryClient();
 
     return useMutation(
-        async (params: {id: number, values: {name: string}}) => {
-            const configs = await attachToken({})
+        async (values: {formData: FormData, id: number}) => {
+            const contentTypeConfig = {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
+            };
+            const configs = await attachToken(contentTypeConfig)
             await apiClient.put(
-                config.BASE_URL + config.API_VER + config.endpoints.category + `/${params.id}`,
-                params.values,
+                config.BASE_URL + config.API_VER + config.endpoints.category + `/${values.id}`,
+                values.formData,
                 configs)
         },
         {
