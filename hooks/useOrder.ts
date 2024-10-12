@@ -1,6 +1,6 @@
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import apiClient from '@/lib/apiClient';
-import { CreateOrderRequestDto, CreateOrderResponseDto } from '@/types/datatypes';
+import { CreateOrderRequestDto, CreateOrderResponseDto, Order } from '@/types/datatypes';
 import { AxiosError } from 'axios';
 import { getSession } from 'next-auth/react';
 import {getAdminOrder} from "@/api/order/getAdminOrder";
@@ -44,6 +44,71 @@ const useUserOrder = (userId: number, page: number) => {
 
   return { data, isLoading, error }
 }
+
+export const useOrdersByStatus = (status: string) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async () => {
+      const config = await attachToken({});
+      const session = await getSession();
+      if (!session || !session.user?.id) throw new Error('User session not found');
+      const response = await apiClient.get<Order[]>(`/api/v1/order/user/${session.user.id}/status/${status}`, config);
+      return response.data;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('ordersByStatus');
+      },
+      onError: (error: AxiosError) => {
+        console.error('Error fetching orders by status:', error.response?.data);
+      },
+    }
+  );
+};
+
+export const useOrderDetails = (orderId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async () => {
+      const config = await attachToken({});
+      const response = await apiClient.get<Order>(`/api/v1/order/${orderId}`, config);
+      return response.data;
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('orderDetails');
+      },
+      onError: (error: AxiosError) => {
+        console.error('Error fetching order details:', error.response?.data);
+      },
+    }
+  );
+};
+
+export const useOrderDetailByUser = (orderId: number) => {
+  const queryClient = useQueryClient();
+
+  return useMutation(
+    async () => {
+      const config = await attachToken({});
+      const session = await getSession();
+      if (!session || !session.user?.id) throw new Error('User session not found');
+      const response = await apiClient.get<Order[]>(`/api/v1/order/user/${session.user.id}`, config);
+      const orders = response.data;
+      return orders.find((order) => order.id === orderId);
+    },
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('orderDetails');
+      },
+      onError: (error: AxiosError) => {
+        console.error('Error fetching order details:', error.response?.data);
+      },
+    }
+  );
+};
 
 export const useCreateOrder = () => {
   const queryClient = useQueryClient();
