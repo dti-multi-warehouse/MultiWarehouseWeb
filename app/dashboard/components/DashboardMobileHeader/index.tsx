@@ -1,6 +1,6 @@
 import {FC} from "react";
 import Link from "next/link";
-import MobileNav from "@/components/DashboardMobileHeader/MobileNav";
+import MobileNav from "@/app/dashboard/components/DashboardMobileHeader/MobileNav";
 
 const DashboardMobileHeader: FC = () => {
     return (

@@ -1,8 +1,8 @@
 'use client'
 import {ReactNode, useEffect} from "react";
-import DashboardSidebar from "@/components/DashboardSidebar";
-import DashboardHeader from "@/components/DashboardHeader";
-import DashboardMobileHeader from "@/components/DashboardMobileHeader";
+import DashboardSidebar from "app/dashboard/components/DashboardSidebar";
+import DashboardHeader from "app/dashboard/components/DashboardHeader";
+import DashboardMobileHeader from "app/dashboard/components/DashboardMobileHeader";
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/navigation";
 import useDashboardStore from "@/stores/useDashboardStore";
@@ -27,16 +27,21 @@ const DashboardLayout = ({
                 setIsAdmin(session.user.role === "ADMIN")
             }
             if (session.user?.role !== "ADMIN" && session.user?.role !== "WAREHOUSE_ADMIN") {
-                router.push("/"); // Redirect non-admins to the homepage
+                router.push("/");
             }
         } else if (status === "unauthenticated") {
-            router.push("/dashboard/sign-in"); // Redirect unauthenticated users
-        } 
-    }, [status, session, router, setWarehouse]);
+            router.push("/dashboard/sign-in");
+        }
+    }, [status, session, router, setWarehouse, setIsAdmin]);
 
     if (status === "loading") {
-        return <div>Loading...</div>;
+        return (
+            <div className={"flex h-screen justify-center items-center"}>
+                <div className={"loader"}></div>
+            </div>
+        )
     }
+
     return <main className={"flex"}>
         <DashboardSidebar />
         <div className={"h-full w-full border-l"}>

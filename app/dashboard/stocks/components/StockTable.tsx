@@ -11,14 +11,10 @@ import React, {FC, useState} from "react";
 import {Stock} from "@/types/datatypes";
 import Image from "next/image";
 import useDashboardStore from "@/stores/useDashboardStore";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink, PaginationNext,
-    PaginationPrevious
-} from "@/components/ui/pagination";
 import {useAllStocks} from "@/hooks/useStock";
+import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
+import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
+import TablePagination from "@/app/dashboard/components/TablePagination";
 
 const StockTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0);
@@ -26,9 +22,6 @@ const StockTable: FC<{query: string}> = ({query}) => {
     const date = useDashboardStore(state => state.date)
     const {data, isLoading, error} = useAllStocks(warehouse.id, date, query, page, 10)
 
-    if (!data) {
-        return <></>
-    }
     return (
         <Table className={"overflow-hidden"}>
             <TableHeader>
@@ -42,39 +35,14 @@ const StockTable: FC<{query: string}> = ({query}) => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data.stocks.map((stock, index) => <StockRow key={index} {...stock}/>)}
+                {isLoading && <SkeletonTableRow col={6} />}
+                {!data && !isLoading && <EmptyTableRow col={6} />}
+                {data && data.stocks.map((stock, index) => <StockRow key={index} {...stock}/>)}
             </TableBody>
             <TableFooter>
                 <TableRow>
-                    <TableCell colSpan={7}>
-                        <Pagination>
-                            <PaginationContent>
-                                <PaginationItem>
-                                    <PaginationPrevious
-                                        href="#"
-                                        onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-                                    />
-                                </PaginationItem>
-                                {Array.from({ length: data.totalPage }).map((_, index) => (
-                                    <PaginationItem key={index}>
-                                        <PaginationLink
-                                            href="#"
-                                            onClick={() => setPage(index)}
-                                        >
-                                            {index + 1}
-                                        </PaginationLink>
-                                    </PaginationItem>
-                                ))}
-                                <PaginationItem>
-                                    <PaginationNext
-                                        href="#"
-                                        onClick={() =>
-                                            setPage((prev) => Math.min(prev + 1, data?.totalPage - 1))
-                                        }
-                                    />
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
+                    <TableCell colSpan={6}>
+                        {data && <TablePagination totalPage={data.totalPage} page={page} setPage={setPage} />}
                     </TableCell>
                 </TableRow>
             </TableFooter>
