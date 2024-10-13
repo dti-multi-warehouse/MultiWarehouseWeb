@@ -33,4 +33,4 @@ steps:
     id: 'deploy-to-cloud-run'
 
 images:
-  - 'gcr.io/sanguine-willow-436015-k8/alphamarch'
+  - 'gcr.io/sanguine-willow-436015-k8/prod-alphamarch'
