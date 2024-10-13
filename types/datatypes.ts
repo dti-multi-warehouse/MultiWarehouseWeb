@@ -185,16 +185,17 @@ export enum BankTransfer {
 }
 
 export interface CreateOrderItemRequestDto {
-    productId: number;
-    quantity: number;
-  }
+  productIds: number; // Ensure this is correctly populated for each product
+  quantity: number;  // Ensure quantity is positive
+}
 
-  export interface CreateOrderRequestDto {
-    items: CreateOrderItemRequestDto[];
-    paymentMethod: PaymentMethod;
-    bankTransfer?: BankTransfer;
-    shippingMethod: string;
-  }
+export interface CreateOrderRequestDto {
+  items: CreateOrderItemRequestDto[];
+  paymentMethod: PaymentMethod;
+  bankTransfer?: BankTransfer;
+  shippingMethod: string; // Ensure this is a valid shipping method
+  shippingAddressId: number; // Ensure a valid shipping address ID is passed
+}
 
 export interface CreateOrderResponseDto {
   transactionId: string;

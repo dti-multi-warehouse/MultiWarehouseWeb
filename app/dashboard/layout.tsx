@@ -27,10 +27,10 @@ const DashboardLayout = ({
                 setIsAdmin(session.user.role === "ADMIN")
             }
             if (session.user?.role !== "ADMIN" && session.user?.role !== "WAREHOUSE_ADMIN") {
-                router.push("/dashboard/sign-in"); // Redirect non-admins to the homepage
+                router.push("/");
             }
         } else if (status === "unauthenticated") {
-            router.push("/dashboard/sign-in"); // Redirect unauthenticated users
+            router.push("/dashboard/sign-in");
         }
     }, [status, session, router, setWarehouse, setIsAdmin]);
 
