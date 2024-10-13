@@ -19,14 +19,12 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination";
 import {useDashboardProducts} from "@/hooks/useProducts";
+import SkeletonTableRow from "@/components/SkeletonTableRow";
+import EmptyTableRow from "@/components/EmptyTableRow";
 
 const ProductTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0)
     const { data, isLoading, error } = useDashboardProducts(query, page)
-
-    if (!data) {
-        return <></>
-    }
 
     return (
         <Table>
@@ -41,41 +39,45 @@ const ProductTable: FC<{query: string}> = ({query}) => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data.products.map( (product, index) => (
+                {isLoading && <SkeletonTableRow col={5} />}
+                {!data && !isLoading && <EmptyTableRow col={5} />}
+                {data && data.products.map( (product, index) => (
                     <ProductRow key={index} {...product} />
                 ))}
             </TableBody>
             <TableFooter>
                 <TableRow>
                     <TableCell colSpan={5}>
-                        <Pagination>
-                            <PaginationContent>
-                                <PaginationItem>
-                                    <PaginationPrevious
-                                        href="#"
-                                        onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-                                    />
-                                </PaginationItem>
-                                {Array.from({ length: data.totalPage }).map((_, index) => (
-                                    <PaginationItem key={index}>
-                                        <PaginationLink
+                        {data && (
+                            <Pagination>
+                                <PaginationContent>
+                                    <PaginationItem>
+                                        <PaginationPrevious
                                             href="#"
-                                            onClick={() => setPage(index)}
-                                        >
-                                            {index + 1}
-                                        </PaginationLink>
+                                            onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+                                        />
                                     </PaginationItem>
-                                ))}
-                                <PaginationItem>
-                                    <PaginationNext
-                                        href="#"
-                                        onClick={() =>
-                                            setPage((prev) => Math.min(prev + 1, data.totalPage - 1))
-                                        }
-                                    />
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
+                                    {Array.from({ length: data.totalPage }).map((_, index) => (
+                                        <PaginationItem key={index}>
+                                            <PaginationLink
+                                                href="#"
+                                                onClick={() => setPage(index)}
+                                            >
+                                                {index + 1}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    ))}
+                                    <PaginationItem>
+                                        <PaginationNext
+                                            href="#"
+                                            onClick={() =>
+                                                setPage((prev) => Math.min(prev + 1, data.totalPage - 1))
+                                            }
+                                        />
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
+                        )}
                     </TableCell>
                 </TableRow>
             </TableFooter>

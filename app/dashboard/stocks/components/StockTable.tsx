@@ -19,6 +19,8 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination";
 import {useAllStocks} from "@/hooks/useStock";
+import SkeletonTableRow from "@/components/SkeletonTableRow";
+import EmptyTableRow from "@/components/EmptyTableRow";
 
 const StockTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0);
@@ -26,9 +28,6 @@ const StockTable: FC<{query: string}> = ({query}) => {
     const date = useDashboardStore(state => state.date)
     const {data, isLoading, error} = useAllStocks(warehouse.id, date, query, page, 10)
 
-    if (!data) {
-        return <></>
-    }
     return (
         <Table className={"overflow-hidden"}>
             <TableHeader>
@@ -42,39 +41,43 @@ const StockTable: FC<{query: string}> = ({query}) => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data.stocks.map((stock, index) => <StockRow key={index} {...stock}/>)}
+                {isLoading && <SkeletonTableRow col={6} />}
+                {!data && !isLoading && <EmptyTableRow col={6} />}
+                {data && data.stocks.map((stock, index) => <StockRow key={index} {...stock}/>)}
             </TableBody>
             <TableFooter>
                 <TableRow>
-                    <TableCell colSpan={7}>
-                        <Pagination>
-                            <PaginationContent>
-                                <PaginationItem>
-                                    <PaginationPrevious
-                                        href="#"
-                                        onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-                                    />
-                                </PaginationItem>
-                                {Array.from({ length: data.totalPage }).map((_, index) => (
-                                    <PaginationItem key={index}>
-                                        <PaginationLink
+                    <TableCell colSpan={6}>
+                        {data && (
+                            <Pagination>
+                                <PaginationContent>
+                                    <PaginationItem>
+                                        <PaginationPrevious
                                             href="#"
-                                            onClick={() => setPage(index)}
-                                        >
-                                            {index + 1}
-                                        </PaginationLink>
+                                            onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
+                                        />
                                     </PaginationItem>
-                                ))}
-                                <PaginationItem>
-                                    <PaginationNext
-                                        href="#"
-                                        onClick={() =>
-                                            setPage((prev) => Math.min(prev + 1, data?.totalPage - 1))
-                                        }
-                                    />
-                                </PaginationItem>
-                            </PaginationContent>
-                        </Pagination>
+                                    {Array.from({ length: data.totalPage }).map((_, index) => (
+                                        <PaginationItem key={index}>
+                                            <PaginationLink
+                                                href="#"
+                                                onClick={() => setPage(index)}
+                                            >
+                                                {index + 1}
+                                            </PaginationLink>
+                                        </PaginationItem>
+                                    ))}
+                                    <PaginationItem>
+                                        <PaginationNext
+                                            href="#"
+                                            onClick={() =>
+                                                setPage((prev) => Math.min(prev + 1, data?.totalPage - 1))
+                                            }
+                                        />
+                                    </PaginationItem>
+                                </PaginationContent>
+                            </Pagination>
+                        )}
                     </TableCell>
                 </TableRow>
             </TableFooter>

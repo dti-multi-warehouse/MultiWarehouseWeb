@@ -1,5 +1,5 @@
 'use client'
-import {FC} from "react";
+import React, {FC} from "react";
 import {
     Table,
     TableBody, TableCaption,
@@ -10,6 +10,8 @@ import {
 } from "@/components/ui/table"
 import CategoryDrawerDialog from "@/app/dashboard/categories/components/CategoryDrawerDialog";
 import {useCategories} from "@/hooks/useCategories";
+import SkeletonTableRow from "@/components/SkeletonTableRow";
+import EmptyTableRow from "@/components/EmptyTableRow";
 
 const CategoryTable: FC = () => {
     const { data, isLoading, error } = useCategories()
@@ -24,7 +26,9 @@ const CategoryTable: FC = () => {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data?.map( category => (
+                {isLoading && <SkeletonTableRow col={2} />}
+                {!data && !isLoading && <EmptyTableRow col={2} />}
+                {data && data.map( category => (
                     <CategoryRow
                         key={category.id}
                         id={category.id}
