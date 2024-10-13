@@ -1,8 +1,8 @@
 'use client'
 import {ReactNode, useEffect} from "react";
-import DashboardSidebar from "@/components/DashboardSidebar";
-import DashboardHeader from "@/components/DashboardHeader";
-import DashboardMobileHeader from "@/components/DashboardMobileHeader";
+import DashboardSidebar from "app/dashboard/components/DashboardSidebar";
+import DashboardHeader from "app/dashboard/components/DashboardHeader";
+import DashboardMobileHeader from "app/dashboard/components/DashboardMobileHeader";
 import {useSession} from "next-auth/react";
 import {useRouter} from "next/navigation";
 import useDashboardStore from "@/stores/useDashboardStore";

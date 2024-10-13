@@ -1,5 +1,5 @@
 import {FC} from "react";
-import UserInfo from "@/components/DashboardHeader/UserInfo";
+import UserInfo from "@/app/dashboard/components/DashboardHeader/UserInfo";
 
 const DashboardHeader: FC = () => {
     return (

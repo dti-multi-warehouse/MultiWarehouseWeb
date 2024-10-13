@@ -1,4 +1,4 @@
-import {SidebarLinkProps} from "@/components/DashboardSidebar/types";
+import {SidebarLinkProps} from "@/app/dashboard/components/DashboardSidebar/types";
 import {Building, ChartNoAxesCombined, Library, Package2, Tag, Truck, UsersRound, Warehouse} from "lucide-react";
 
 export const sidebarLinks: SidebarLinkProps[] = [

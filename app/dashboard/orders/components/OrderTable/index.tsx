@@ -20,8 +20,8 @@ import {
   PaginationPrevious
 } from "@/components/ui/pagination";
 import {useAdminOrder} from "@/hooks/useOrder";
-import EmptyTableRow from "@/components/EmptyTableRow";
-import SkeletonTableRow from "@/components/SkeletonTableRow";
+import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
+import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
 
 const OrderTable: React.FC = () => {
   const warehouse = useDashboardStore(state => state.warehouse)

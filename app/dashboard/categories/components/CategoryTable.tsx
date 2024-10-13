@@ -10,8 +10,8 @@ import {
 } from "@/components/ui/table"
 import CategoryDrawerDialog from "@/app/dashboard/categories/components/CategoryDrawerDialog";
 import {useCategories} from "@/hooks/useCategories";
-import SkeletonTableRow from "@/components/SkeletonTableRow";
-import EmptyTableRow from "@/components/EmptyTableRow";
+import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
+import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
 
 const CategoryTable: FC = () => {
     const { data, isLoading, error } = useCategories()

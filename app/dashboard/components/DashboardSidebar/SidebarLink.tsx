@@ -2,7 +2,7 @@
 
 import {FC} from "react";
 import Link from "next/link";
-import {SidebarLinkProps} from "@/components/DashboardSidebar/types";
+import {SidebarLinkProps} from "@/app/dashboard/components/DashboardSidebar/types";
 import {usePathname} from "next/navigation";
 import {clsx} from "clsx";
 

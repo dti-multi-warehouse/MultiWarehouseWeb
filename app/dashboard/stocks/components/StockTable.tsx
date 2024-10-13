@@ -19,8 +19,8 @@ import {
     PaginationPrevious
 } from "@/components/ui/pagination";
 import {useAllStocks} from "@/hooks/useStock";
-import SkeletonTableRow from "@/components/SkeletonTableRow";
-import EmptyTableRow from "@/components/EmptyTableRow";
+import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
+import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
 
 const StockTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0);
