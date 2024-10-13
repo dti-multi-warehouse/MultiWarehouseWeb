@@ -32,11 +32,16 @@ const DashboardLayout = ({
         } else if (status === "unauthenticated") {
             router.push("/dashboard/sign-in"); // Redirect unauthenticated users
         }
-    }, [status, session, router, setWarehouse]);
+    }, [status, session, router, setWarehouse, setIsAdmin]);
 
     if (status === "loading") {
-        return <div>Loading...</div>;
+        return (
+            <div className={"flex h-screen justify-center items-center"}>
+                <div className={"loader"}></div>
+            </div>
+        )
     }
+
     return <main className={"flex"}>
         <DashboardSidebar />
         <div className={"h-full w-full border-l"}>
