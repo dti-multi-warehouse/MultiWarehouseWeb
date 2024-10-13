@@ -7,7 +7,6 @@ FROM base AS builder
 COPY package.json package-lock.json ./
 RUN npm ci
 COPY . .
-
 # Build the Next.js application
 RUN npm run build
 
@@ -19,7 +18,11 @@ COPY --from=builder /app/package-lock.json ./package-lock.json
 COPY --from=builder /app/.next/standalone ./
 COPY --from=builder /app/.next/static ./.next/static
 COPY --from=builder /app/public ./public
+COPY --from=builder /app/rename-env-vars.ts ./rename-env-vars.ts
+
+# Install ts-node for running TypeScript files
+RUN npm install -g ts-node
 
 # Run the app
 EXPOSE 3000
-CMD ["node", "server.js"]
+CMD ["sh", "-c", "ts-node --transpile-only rename-env-vars.ts && node server.js"]
