@@ -7,7 +7,7 @@ import {
 } from "@/components/ui/sheet"
 import {Menu} from "lucide-react";
 import Link from "next/link";
-import SidebarLink from "@/components/DashboardSidebar/SidebarLink";
+import SidebarLink from "@/app/dashboard/components/DashboardSidebar/SidebarLink";
 import {sidebarLinks, superAdminLinks} from "@/constants/sidebarLinks";
 
 const MobileNav: FC = () => {
