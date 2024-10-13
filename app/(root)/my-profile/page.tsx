@@ -1,22 +1,22 @@
 "use client";
 
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import ProfileInformation from "./components/ProfileInformation";
-import { useEffect } from "react";
-import React from "react";
+import React, { useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import ProfileInformation from './components/ProfileInformation';
+import dynamic from 'next/dynamic';
 
 const MyProfile: React.FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
 
   useEffect(() => {
-    if (status === "unauthenticated") {
-      router.push("/");
+    if (typeof window !== 'undefined' && status === 'unauthenticated') {
+      router.push('/');
     }
   }, [status, router]);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return <div>Loading...</div>;
   }
 
@@ -40,4 +40,4 @@ const MyProfile: React.FC = () => {
   );
 };
 
-export default MyProfile;
+export default dynamic(() => Promise.resolve(MyProfile), { ssr: false });

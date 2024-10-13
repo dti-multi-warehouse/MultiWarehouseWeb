@@ -1,17 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import { Label } from "@/components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import Buttons from "@/components/Buttons";
-import Image from "next/image";
-import { useCart } from "@/hooks/useCart";
-import { useGetUserAddresses } from "@/hooks/useAddress";
-import { useCreateOrder } from "@/hooks/useOrder";
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { Label } from '@/components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import Buttons from '@/components/Buttons';
+import Image from 'next/image';
+import { useCart } from '@/hooks/useCart';
+import { useGetUserAddresses } from '@/hooks/useAddress';
+import { useCreateOrder } from '@/hooks/useOrder';
 import { PaymentMethod, BankTransfer, CreateOrderRequestDto } from '@/types/datatypes';
-import apiClient from "@/lib/apiClient";
-import React from "react";
+import apiClient from '@/lib/apiClient';
+import dynamic from 'next/dynamic';
 
 const Checkout: React.FC = () => {
   const { cart, isLoading: isCartLoading } = useCart();
@@ -26,9 +26,7 @@ const Checkout: React.FC = () => {
 
   useEffect(() => {
     if (cart) {
-      const calculatedSubtotal = cart.data.cartItems.reduce((total, item) => {
-        return total + item.price * item.quantity;
-      }, 0);
+      const calculatedSubtotal = cart.data.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
       setSubtotal(calculatedSubtotal);
     }
   }, [cart]);
@@ -43,92 +41,67 @@ const Checkout: React.FC = () => {
 
     try {
       const response = await apiClient.post("/api/v1/order/shipping-cost", {
-        destinationCityId: primaryAddress.id, 
+        destinationCityId: primaryAddress.id,
         weight: 10,
         courier: shippingMethod
       });
 
       const costData = response.data?.data?.rajaongkir?.results?.[0]?.costs?.[0]?.cost?.[0]?.value;
-      if (costData) {
-        setShippingCost(costData);
-      } else {
-        setShippingCost(0);
-      }
+      setShippingCost(costData || 0);
     } catch (error) {
       console.error("Error fetching shipping cost:", error);
     }
   };
 
   useEffect(() => {
-    if (selectedShippingMethod) {
+    if (typeof window !== 'undefined' && selectedShippingMethod) {
       fetchShippingCost(selectedShippingMethod);
     }
-  }, [fetchShippingCost, selectedShippingMethod]);
+  }, [selectedShippingMethod]);
 
   const handleCheckout = () => {
     const primaryAddress = addresses?.data.find((address) => address.primary === true);
-  
+
     if (!primaryAddress || !primaryAddress.id) {
       alert("No primary address found.");
       return;
     }
-  
-    // Extract productIds and items with quantities
-    const productIds = cart?.data.cartItems.map((item) => item.productId) || [];
+
     const items = cart?.data.cartItems.map((item) => ({
       productId: item.productId,
       quantity: item.quantity,
     })) || [];
-  
-    // Check if any productId is missing or if the items array is empty
-    if (items.some(item => item.productId === null || item.productId === undefined)) {
-      alert("Some product IDs are missing.");
+
+    if (items.some(item => item.productId === null || item.productId === undefined) || items.length === 0) {
+      alert("Some product IDs are missing or cart is empty.");
       return;
     }
-  
-    if (items.length === 0) {
-      alert("No products found in the cart.");
-      return;
-    }
-  
-    // Ensure shipping method is correctly selected
+
     if (!selectedShippingMethod) {
       alert("Please select a shipping method.");
       return;
     }
-  
-    const [courier] = selectedShippingMethod.split('-');  // Extract courier method
-  
-    // Construct the order payload
+
+    const [courier] = selectedShippingMethod.split('-');
+
     const orderPayload: CreateOrderRequestDto = {
-      productIds, // Array of product IDs (required by backend)
-      items,      // Array of productId and quantity objects
+      productIds: items.map((item) => item.productId),
+      items,
       paymentMethod: PaymentMethod[selectedPaymentMethod as keyof typeof PaymentMethod],
-      bankTransfer: selectedPaymentMethod === 'MIDTRANS' ? BankTransfer[selectedBank as keyof typeof BankTransfer] : undefined, // Only send bankTransfer if payment method is MIDTRANS
+      bankTransfer: selectedPaymentMethod === 'MIDTRANS' ? BankTransfer[selectedBank as keyof typeof BankTransfer] : undefined,
       shippingMethod: courier,
-      shippingAddressId: primaryAddress.id,  // Ensure shipping address ID is valid
+      shippingAddressId: primaryAddress.id,
     };
-  
-    console.log("Order Payload: ", orderPayload);  // Log the payload for debugging
-  
-    // Submit the order using the mutation
+
     createOrder.mutate(orderPayload, {
-      onSuccess: () => {
-        router.push("/in-process");  // Redirect to success page
-      },
-      onError: (error) => {
-        console.error("Order creation failed:", error);  // Log any error that occurs
-      },
+      onSuccess: () => router.push("/in-process"),
+      onError: (error) => console.error("Order creation failed:", error),
     });
   };
-  
-  
 
   if (isCartLoading || isAddressLoading) return <div>Loading...</div>;
 
-  const primaryAddress = Array.isArray(addresses?.data)
-    ? addresses.data.find((address) => address.primary === true)
-    : null;
+  const primaryAddress = addresses?.data.find((address) => address.primary);
 
   return (
     <>
@@ -137,7 +110,7 @@ const Checkout: React.FC = () => {
 
         <div className="flex flex-col lg:flex-row gap-10">
           <div className=" w-full lg:w-[60%] flex flex-col gap-5">
-          <div className="h-2 w-full bg-gray-200 rounded-lg "></div>
+            <div className="h-2 w-full bg-gray-200 rounded-lg"></div>
             <div className="flex flex-col gap-5 py-3">
               <h3 className="font-semibold">Detail Pembeli</h3>
               {primaryAddress ? (
@@ -164,9 +137,7 @@ const Checkout: React.FC = () => {
                   />
                   <div className="flex flex-col gap-3 w-full">
                     <h2 className="font-semibold text-gray-600">{item.name}</h2>
-                    <p className="font-semibold text-lg">
-                      Rp {item.price.toLocaleString()}
-                    </p>
+                    <p className="font-semibold text-lg">Rp {item.price.toLocaleString()}</p>
                     <p className="font-semibold">Jumlah beli {item.quantity}</p>
                   </div>
                 </div>
@@ -186,7 +157,7 @@ const Checkout: React.FC = () => {
               <div className="flex items-center justify-between">
                 <p>Ongkos Kirim</p>
                 <p className="font-semibold text-lg">
-                  Rp {shippingCost.toLocaleString()} {/* Display dynamic shipping cost */}
+                  Rp {shippingCost.toLocaleString()}
                 </p>
               </div>
               <div className="flex items-center justify-between">
@@ -197,7 +168,6 @@ const Checkout: React.FC = () => {
               </div>
             </div>
 
-            {/* Payment Method */}
             <div className="flex flex-col gap-5">
               <h3 className="font-semibold">Metode Pembayaran</h3>
               <RadioGroup
@@ -215,7 +185,6 @@ const Checkout: React.FC = () => {
                 </div>
               </RadioGroup>
 
-              {/* Bank Transfer Options */}
               {selectedPaymentMethod === "MIDTRANS" && (
                 <div className="flex flex-col gap-5">
                   <h3 className="font-semibold">Pilih Bank Transfer</h3>
@@ -266,10 +235,7 @@ const Checkout: React.FC = () => {
                 </RadioGroup>
               </div>
 
-              <Buttons
-                className="w-fit self-center font-semibold !px-10 !py-2"
-                onClick={handleCheckout}
-              >
+              <Buttons className="w-fit self-center font-semibold !px-10 !py-2" onClick={handleCheckout}>
                 Checkout Now
               </Buttons>
             </div>
@@ -280,4 +246,4 @@ const Checkout: React.FC = () => {
   );
 };
 
-export default Checkout;
+export default dynamic(() => Promise.resolve(Checkout), { ssr: false });

@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useCart } from '@/hooks/useCart';
 import CartItems from './components/CartItems';
@@ -7,14 +8,12 @@ import Buttons from '@/components/Buttons';
 import { useSession } from 'next-auth/react';
 import { useGetProfile } from '@/hooks/useUser';
 import AlertDialog from '@/components/AlertDialog';
-import { useEffect, useState } from 'react';
-import React from 'react';
+import dynamic from 'next/dynamic';
 
 const Cart: React.FC = () => {
   const { data: session, status } = useSession();
   const router = useRouter();
-  const { profile, isLoading: isProfileLoading, error } = useGetProfile();
-  
+  const { profile, isLoading: isProfileLoading } = useGetProfile();
   const { cart, isLoading: isCartLoading, error: cartError } = useCart();
 
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -24,24 +23,24 @@ const Cart: React.FC = () => {
   const isVerified = profile?.verified;
 
   useEffect(() => {
-    if (status === "unauthenticated") {
+    if (typeof window !== 'undefined' && status === "unauthenticated") {
       router.push("/");
     }
   }, [status, router]);
 
   useEffect(() => {
-    if (isAuthenticated && !isProfileLoading && !isVerified) {
+    if (typeof window !== 'undefined' && isAuthenticated && !isProfileLoading && !isVerified) {
       setDialogMessage("Please verify your email to access the cart.");
       setDialogOpen(true);
     }
   }, [isAuthenticated, isProfileLoading, isVerified]);
 
   if (status === "loading" || isProfileLoading || isCartLoading) {
-    return <div>Loading...</div>; 
+    return <div>Loading...</div>;
   }
 
   if (cartError) {
-    return <div>Error loading cart data</div>; 
+    return <div>Error loading cart data</div>;
   }
 
   const handleCheckout = () => {
@@ -62,11 +61,11 @@ const Cart: React.FC = () => {
     <>
       <div className="p-5 md:p-10 w-full flex flex-col gap-5">
         <h1 className="font-bold text-xl">Keranjang</h1>
-        <div className="flex flex-col lg:flex-row gap-5 items-start ">
+        <div className="flex flex-col lg:flex-row gap-5 items-start">
           <div className="flex w-full lg:w-[60%] flex-col gap-5">
-            <div className="h-2 w-full bg-gray-200 rounded-lg "></div>
+            <div className="h-2 w-full bg-gray-200 rounded-lg"></div>
             <h2 className="font-semibold">Daftar Stok dari Gudang</h2>
-            <CartItems /> 
+            <CartItems />
           </div>
           <div className="flex w-full lg:w-[40%] lg:px-20">
             <div className="p-5 w-full rounded-xl shadow-boxedSoft shadow-gray-400 bg-gray-200 h-fit flex flex-col gap-5">
@@ -99,4 +98,4 @@ const Cart: React.FC = () => {
   );
 };
 
-export default Cart;
+export default dynamic(() => Promise.resolve(Cart), { ssr: false });
