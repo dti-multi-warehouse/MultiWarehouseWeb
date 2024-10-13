@@ -1,6 +1,7 @@
+'use client'
 import StatusTransactionNav from "@/components/StatusTransactionNav";
 
-export default function RootLayout({
+export default function StatusLayout({
     children,
 }: Readonly<{
     children: React.ReactNode;

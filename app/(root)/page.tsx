@@ -1,5 +1,3 @@
-"use client"
-
 import React from "react";
 import CategoryComponent from "./components/Category";
 import Hero from "./components/Hero";
