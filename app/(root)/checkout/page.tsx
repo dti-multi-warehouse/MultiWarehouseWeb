@@ -44,7 +44,7 @@ const Checkout: React.FC = () => {
     try {
       const response = await apiClient.post("/api/v1/order/shipping-cost", {
         destinationCityId: primaryAddress.id, 
-        weight: 100,
+        weight: 10,
         courier: shippingMethod
       });
 
@@ -67,39 +67,62 @@ const Checkout: React.FC = () => {
 
   const handleCheckout = () => {
     const primaryAddress = addresses?.data.find((address) => address.primary === true);
-
-    if (!primaryAddress) {
+  
+    if (!primaryAddress || !primaryAddress.id) {
       alert("No primary address found.");
       return;
     }
-
-    const [courier, service] = selectedShippingMethod.split('-');
-
-    const productIds = cart?.data.cartItems.map(item => item.productId) || [];
-
-    if (productIds.length === 0) {
+  
+    // Extract productIds and items with quantities
+    const productIds = cart?.data.cartItems.map((item) => item.productId) || [];
+    const items = cart?.data.cartItems.map((item) => ({
+      productId: item.productId,
+      quantity: item.quantity,
+    })) || [];
+  
+    // Check if any productId is missing or if the items array is empty
+    if (items.some(item => item.productId === null || item.productId === undefined)) {
+      alert("Some product IDs are missing.");
+      return;
+    }
+  
+    if (items.length === 0) {
       alert("No products found in the cart.");
       return;
     }
-
+  
+    // Ensure shipping method is correctly selected
+    if (!selectedShippingMethod) {
+      alert("Please select a shipping method.");
+      return;
+    }
+  
+    const [courier] = selectedShippingMethod.split('-');  // Extract courier method
+  
+    // Construct the order payload
     const orderPayload: CreateOrderRequestDto = {
+      productIds, // Array of product IDs (required by backend)
+      items,      // Array of productId and quantity objects
       paymentMethod: PaymentMethod[selectedPaymentMethod as keyof typeof PaymentMethod],
-      bankTransfer: BankTransfer[selectedBank as keyof typeof BankTransfer],
+      bankTransfer: selectedPaymentMethod === 'MIDTRANS' ? BankTransfer[selectedBank as keyof typeof BankTransfer] : undefined, // Only send bankTransfer if payment method is MIDTRANS
       shippingMethod: courier,
-      shippingService: service,
-      shippingAddressId: primaryAddress.id,
-      productIds: productIds,
+      shippingAddressId: primaryAddress.id,  // Ensure shipping address ID is valid
     };
-
+  
+    console.log("Order Payload: ", orderPayload);  // Log the payload for debugging
+  
+    // Submit the order using the mutation
     createOrder.mutate(orderPayload, {
       onSuccess: () => {
-        router.push("/in-process");
+        router.push("/in-process");  // Redirect to success page
       },
       onError: (error) => {
-        console.error("Order creation failed:", error);
+        console.error("Order creation failed:", error);  // Log any error that occurs
       },
     });
   };
+  
+  
 
   if (isCartLoading || isAddressLoading) return <div>Loading...</div>;
 
@@ -109,11 +132,11 @@ const Checkout: React.FC = () => {
 
   return (
     <>
-      <div className="w-full p-10 flex flex-col gap-5">
+      <div className="w-full p-5 md:p-10 flex flex-col gap-5">
         <h1 className="font-bold text-xl">Checkout Pesanan</h1>
 
-        <div className="flex gap-10">
-          <div className="w-[60%] flex flex-col gap-5">
+        <div className="flex flex-col lg:flex-row gap-10">
+          <div className=" w-full lg:w-[60%] flex flex-col gap-5">
           <div className="h-2 w-full bg-gray-200 rounded-lg "></div>
             <div className="flex flex-col gap-5 py-3">
               <h3 className="font-semibold">Detail Pembeli</h3>
@@ -151,7 +174,7 @@ const Checkout: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-[40%] flex flex-col gap-10 mx-10 p-10 bg-gray-100 h-fit rounded-xl shadow-boxedSoft">
+          <div className="w-full lg:w-[40%] flex flex-col gap-10 lg:mx-10 p-10 bg-gray-100 h-fit rounded-xl shadow-boxedSoft">
             <div className="flex flex-col gap-3">
               <h2 className="font-semibold text-lg">Pesanan</h2>
               <div className="flex items-center justify-between">

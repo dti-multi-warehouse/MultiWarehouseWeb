@@ -22,7 +22,6 @@ const ResponsiveHeader: React.FC = () => {
   const { data: session } = useSession();
   const { isSignedIn: isClerkSignedIn } = useClerkUser();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const { profile, isLoading: isProfileLoading } = useGetProfile();
 
   const handleLogout = () => {
@@ -38,10 +37,6 @@ const ResponsiveHeader: React.FC = () => {
 
   const handleCloseDialog = () => {
     setDialogOpen(false);
-  };
-
-  const toggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
   };
 
   const isLoggedIn = session || isClerkSignedIn;
@@ -74,40 +69,20 @@ const ResponsiveHeader: React.FC = () => {
               <div className="mt-4">
                 {isLoggedIn && !isProfileLoading ? (
                   <div className="">
-                    <button
-                      className="flex items-center gap-2"
-                      onClick={toggleDropdown}
-                    >
-                      <Image
-                        src={profile?.avatar || "/default-user.png"}
-                        alt="user"
-                        width={30}
-                        height={30}
-                        className="rounded-full bg-gray-300"
-                      />
-                      <span>
-                        <TiArrowSortedDown />
-                      </span>
-                    </button>
-
-                    {isDropdownOpen && (
-                      <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
-                        <Link href="/my-profile">
-                          <div className="block px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">
-                            Profile
-                          </div>
-                        </Link>
-                        <button
-                          className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-200"
-                          onClick={handleLogout}
-                        >
-                          Logout
-                        </button>
+                    <Link href="/my-profile">
+                      <div className="block  py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">
+                        Profile
                       </div>
-                    )}
+                    </Link>
+                    <button
+                      className="block w-full text-left py-2 text-gray-700 hover:bg-gray-200"
+                      onClick={handleLogout}
+                    >
+                      Logout
+                    </button>
                   </div>
                 ) : (
-                  <div className="md:flex items-center gap-2 hidden">
+                  <div className="text-gray-700">
                     <Link href="/sign-in" className="hover:text-red-500">
                       Login
                     </Link>{" "}

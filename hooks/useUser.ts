@@ -85,6 +85,17 @@ export const useLoginUser = (): UseMutationResult<LoginResponse, unknown, LoginR
         throw new Error('Failed to get user session');
       }
 
+      if (session.user.role === 'ADMIN' || session.user.role === 'WAREHOUSE_ADMIN') {
+          return {
+              accessToken: session.accessToken!,
+              userId: session.user.id!,
+              email: session.user.email!,
+              role: session.user.role!,
+              warehouseName: session.user.warehouseName!,
+              warehouseId: session.user.warehouseId!,
+          }
+      }
+
       return {
         accessToken: session.accessToken!,
         userId: session.user.id!,

@@ -66,17 +66,24 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) =>
         width={200}
         height={200}
         alt={name}
+        onClick={handleCardClick}
+        className={"hover: cursor-pointer"}
       />
-      <div className="flex flex-col gap-2 p-5 h-full justify-between">
+      <div
+          className="flex flex-col gap-2.5 p-5 h-full justify-end hover:cursor-pointer"
+          onClick={handleCardClick}
+      >
         <h2 className="font-medium line-clamp-2">{name}</h2>
         <p className="font-semibold text-gray-500">Stok dari toko</p>
         <p className="font-bold text-red-600">Rp {price.toLocaleString()}</p>
+      </div>
+      <div className={"p-5"}>
         <Buttons
-          className={`w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
-            stock < 1 || !isAuthenticated || !isVerified ? "!bg-gray-300 !text-gray-800" : "!bg-red-600"
-          }`}
-          onClick={handleButtonClick}
-          disabled={stock < 1 }
+            className={`w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
+                stock < 1 || !isAuthenticated || !isVerified ? "!bg-gray-300 !text-gray-800" : "!bg-red-600"
+            }`}
+            onClick={handleButtonClick}
+            disabled={stock < 1 }
         >
           {stock < 1 ? "Stock Kosong" : "Beli"}
         </Buttons>

@@ -8,6 +8,8 @@ declare module "next-auth" {
       id?: string;
       role?: string;
       social?: boolean;
+      warehouseId?: number;
+      warehouseName?: string;
     } & DefaultSession["user"];
   }
 
@@ -16,6 +18,8 @@ declare module "next-auth" {
     id?: string;
     role?: string;
     social?: boolean;
+    warehouseId?: number;
+    warehouseName?: string;
   }
 }
 
@@ -25,5 +29,7 @@ declare module "next-auth/jwt" {
     id?: string;
     role?: string;
     social?: boolean;
+    warehouseId?: number;
+    warehouseName?: string;
   }
 }

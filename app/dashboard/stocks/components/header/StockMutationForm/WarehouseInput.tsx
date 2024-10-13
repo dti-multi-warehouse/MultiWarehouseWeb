@@ -15,32 +15,8 @@ import {
     PopoverContent,
     PopoverTrigger,
 } from "@/components/ui/popover"
-import Image from "next/image";
-import useWarehouseAndStockAvailability from "@/hooks/useWarehouseAndStockAvailability";
 import {useFormikContext} from "formik";
-
-const frameworks = [
-    {
-        value: "next.js",
-        label: "Next.js",
-    },
-    {
-        value: "sveltekit",
-        label: "SvelteKit",
-    },
-    {
-        value: "nuxt.js",
-        label: "Nuxt.js",
-    },
-    {
-        value: "remix",
-        label: "Remix",
-    },
-    {
-        value: "astro",
-        label: "Astro",
-    },
-]
+import {useWarehouseAndStockAvailability} from "@/hooks/useStock";
 
 interface WarehouseFormValue {
     productId: number
@@ -56,6 +32,8 @@ const WarehouseInput: FC = () => {
     const { values, setFieldValue } = useFormikContext<WarehouseFormValue>()
     const { data, isLoading, error } = useWarehouseAndStockAvailability(values.warehouseToId, values.productId)
 
+
+    console.log(data)
     return (
         <Popover open={open} onOpenChange={setOpen} modal={true}>
             <PopoverTrigger asChild>
@@ -67,7 +45,7 @@ const WarehouseInput: FC = () => {
                     disabled={values.productId === 0}
                 >
                     {value
-                        ? data.find((warehouse) => String(warehouse.warehouseId) === value)?.warehouseId
+                        ? data?.find((warehouse) => warehouse.warehouseName === value)?.warehouseName
                         : "Select warehouse..."}
                     <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                 </Button>
@@ -81,7 +59,7 @@ const WarehouseInput: FC = () => {
                             {data?.map((warehouse) => (
                                 <CommandItem
                                     key={warehouse.warehouseId}
-                                    value={String(warehouse.warehouseId)}
+                                    value={warehouse.warehouseName}
                                     onSelect={(currentValue) => {
                                         setFieldValue("warehouseFromId", warehouse.warehouseId)
                                         setFieldValue("maxQuantity", warehouse.stock)
@@ -91,13 +69,18 @@ const WarehouseInput: FC = () => {
                                     className={"flex justify-between h-16"}
                                 >
                                     <div className={"flex flex-col gap-1"}>
-                                        <p>{warehouse.warehouseId}</p>
-                                        <p className={"text-gray-500"}>In stock: {warehouse.stock}</p>
+                                        <p>{warehouse.warehouseName}</p>
+                                        <p className={cn(
+                                            "text-gray-500 text-xs",
+                                            warehouse.stock < 50 && "text-red-600",
+                                            warehouse.stock >= 50 && "text-yellow-600",
+                                            warehouse.stock >= 100 && "text-green-600",
+                                        )}>In stock: {warehouse.stock}</p>
                                     </div>
                                     <Check
                                         className={cn(
                                             "mr-2 h-4 w-4",
-                                            value === String(warehouse.warehouseId) ? "opacity-100" : "opacity-0"
+                                            value === warehouse.warehouseName ? "opacity-100" : "opacity-0"
                                         )}
                                     />
                                 </CommandItem>

@@ -5,8 +5,7 @@ import {Form, Formik} from "formik";
 import ProductInput from "@/app/dashboard/stocks/components/header/StockMutationForm/ProductInput";
 import WarehouseInput from "@/app/dashboard/stocks/components/header/StockMutationForm/WarehouseInput";
 import QuantityInput from "@/app/dashboard/stocks/components/header/StockMutationForm/QuantityInput";
-import axios from "axios";
-import {config} from "@/constants/url";
+import {useRequestMutation, useRestock} from "@/hooks/useStock";
 
 
 const StockMutationSchema = Yup.object().shape({
@@ -19,31 +18,37 @@ const StockMutationSchema = Yup.object().shape({
 
 interface StockMutationFormProps {
     setOpen: Dispatch<SetStateAction<boolean>>;
+    warehouseId: number;
 }
 
-const StockMutationForm: FC<StockMutationFormProps> = ({setOpen}) => {
+const StockMutationForm: FC<StockMutationFormProps> = ({setOpen, warehouseId}) => {
     const [type, setType] = useState<'restock' | 'mutation'>('restock')
+    const restock = useRestock()
+    const mutation = useRequestMutation()
 
     const handleSubmit = (values: { productId: number; warehouseToId: number; warehouseFromId: number; quantity: number; maxQuantity: number; }) => {
-        const url = config.BASE_URL + config.API_VER + config.endpoints.stock + `/${type}`
-        axios.post(url, values)
-            .then(() => {
-                setOpen(false)
-            })
+        if (type === 'mutation') {
+            mutation.mutate(values)
+        } else {
+            restock.mutate(values)
+        }
+        setOpen(false)
     }
 
     return (
-        <div>
-            <div className={"flex justify-center gap-2"}>
+        <>
+            <div className={"flex justify-center gap-8 mb-4"}>
                 <Button
                     className={"w-24"}
                     onClick={() => setType("restock")}
+                    variant={type === 'restock' ? "default" : "outline"}
                 >
                     Restock
                 </Button>
                 <Button
                     className={"w-24"}
                     onClick={() => setType("mutation")}
+                    variant={type === 'mutation' ? "default" : "outline"}
                 >
                     Mutate
                 </Button>
@@ -51,7 +56,7 @@ const StockMutationForm: FC<StockMutationFormProps> = ({setOpen}) => {
             <Formik
                 initialValues={{
                     productId: 0,
-                    warehouseToId: 2,
+                    warehouseToId: warehouseId,
                     warehouseFromId: 0,
                     quantity: 1,
                     maxQuantity: 999
@@ -66,7 +71,7 @@ const StockMutationForm: FC<StockMutationFormProps> = ({setOpen}) => {
                     <Button type={"submit"}>Submit</Button>
                 </Form>
             </Formik>
-        </div>
+        </>
     )
 }
 

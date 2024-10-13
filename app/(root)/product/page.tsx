@@ -1,10 +1,10 @@
 'use client'
 import {useSearchParams} from "next/navigation";
-import useProducts from "@/hooks/useProducts";
 import ProductPagination from "@/app/(root)/product/components/ProductPagination";
 import ProductFilter from "@/app/(root)/product/components/ProductFilter";
 import ProductRowSkeleton from "@/app/(root)/product/components/ProductRow/ProductRowSkeleton";
 import ProductRow from "@/app/(root)/product/components/ProductRow";
+import {useProducts} from "@/hooks/useProducts";
 
 
 const ProductPage = () => {

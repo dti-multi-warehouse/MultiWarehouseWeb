@@ -1,6 +1,7 @@
 import Link from "next/link";
 import SignInForm from "./components/SignInForm";
 import ReactQueryProvider from "@/lib/ReactQueryProvider";
+import React from "react";
 
 const SignIn: React.FC = () => {
   return (

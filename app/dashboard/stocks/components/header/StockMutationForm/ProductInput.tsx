@@ -17,8 +17,8 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover"
 import Image from "next/image";
-import useProductAndStockAvailability from "@/hooks/useProductAndStockAvailability";
 import {useFormikContext} from "formik";
+import {useProductAndStockAvailability} from "@/hooks/useStock";
 
 
 interface ProductInputValue {
@@ -70,7 +70,12 @@ const ProductInput: FC = () => {
                                             <div>
                                                 <p className={"text-xs font-light"}>ID: {product.productId}</p>
                                                 <p className={"font-semibold"}>{product.name}</p>
-                                                <p className={"text-gray-500 text-xs"}>In stock: {product.stock}</p>
+                                                <p className={cn(
+                                                    "text-gray-500 text-xs",
+                                                    product.stock < 50 && "text-red-600",
+                                                    product.stock >= 50 && "text-yellow-600",
+                                                    product.stock >= 100 && "text-green-600",
+                                                )}>In stock: {product.stock}</p>
                                             </div>
                                         </div>
                                         <Check

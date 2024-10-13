@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import { useSignUp, useUser, useClerk } from "@clerk/nextjs";
+import React from "react";
+import { useSignUp } from "@clerk/nextjs";
 import { FaGoogle } from "react-icons/fa";
 
 const SocialButtonRegister: React.FC = () => {

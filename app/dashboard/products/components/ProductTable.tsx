@@ -1,40 +1,51 @@
 'use client'
-import {FC} from "react";
+import React, {FC, useState} from "react";
 import {
     Table,
-    TableBody,
-    TableCell,
+    TableBody, TableCaption,
+    TableCell, TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {Pencil, Trash2} from "lucide-react";
-import useDashboardProducts from "@/hooks/useDashboardProducts";
 import {DashboardProducts} from "@/types/product";
 import Image from "next/image";
 import {useRouter} from "next/navigation";
+import {useDashboardProducts} from "@/hooks/useProducts";
+import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
+import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
+import TablePagination from "@/app/dashboard/components/TablePagination";
 
-const ProductTable: FC = () => {
-    const { data, isLoading, error } = useDashboardProducts()
+const ProductTable: FC<{query: string}> = ({query}) => {
+    const [page, setPage] = useState(0)
+    const { data, isLoading, error } = useDashboardProducts(query, page)
 
-    console.log(data)
     return (
         <Table>
+            <TableCaption>Click on the product row to edit a product</TableCaption>
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">#</TableHead>
-                    <TableHead>Image</TableHead>
+                    <TableHead className={"max-md:hidden"}>Image</TableHead>
                     <TableHead>Name</TableHead>
                     <TableHead>Category</TableHead>
                     <TableHead>Price</TableHead>
-                    <TableHead className="text-right w-60">Actions</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data?.map( (product, index) => (
+                {isLoading && <SkeletonTableRow col={5} />}
+                {!data && !isLoading && <EmptyTableRow col={5} />}
+                {data && data.products.map( (product, index) => (
                     <ProductRow key={index} {...product} />
                 ))}
             </TableBody>
+            <TableFooter>
+                <TableRow>
+                    <TableCell colSpan={5}>
+                        {data && <TablePagination totalPage={data.totalPage} page={page} setPage={setPage} />}
+                    </TableCell>
+                </TableRow>
+            </TableFooter>
         </Table>
 
     )
@@ -43,26 +54,18 @@ const ProductTable: FC = () => {
 const ProductRow: FC<DashboardProducts> = ({id, name, price, thumbnail, category}) => {
     const router = useRouter()
 
-    const handleDelete = () => {
-        // axios.delete(config.BASE_URL + config.API_VER + config.endpoints.category + `/${id}`)
-    }
-
     const handleEdit = () => {
         router.push("/dashboard/products/edit/" + id)
     }
     return (
-        <TableRow>
+        <TableRow onClick={handleEdit} className={"hover:cursor-pointer"}>
             <TableCell className="font-medium">{id}</TableCell>
-            <TableCell>
+            <TableCell className={"max-md:hidden"}>
                 <Image src={thumbnail} alt={`image of ${name}`} width={60} height={60} />
             </TableCell>
             <TableCell>{name}</TableCell>
             <TableCell>{category}</TableCell>
             <TableCell>{price}</TableCell>
-            <TableCell className="flex gap-4 justify-end">
-                <Pencil onClick={handleEdit}/>
-                <Trash2 onClick={handleDelete}/>
-            </TableCell>
         </TableRow>
     )
 }

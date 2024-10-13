@@ -89,11 +89,14 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
     }
   };
 
+  const opencageapi = process.env.NEXT_PUBLIC_OPENCAGE_API_KEY;
+  console.log(opencageapi);
+
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${process.env.NEXT_PUBLIC_OPENCAGE_API_KEY}&language=id`
+        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${opencageapi}&language=id`
       );
       const data = response.data;
       if (data.results && data.results.length > 0) {

@@ -1,3 +1,9 @@
+export const links = [
+    { label: 'Home', url: '/' },
+    { label: 'Shop', url: '/product' },
+    { label: 'Contact', url: '/contact' },
+]
+
 export const orderlist = [
     {
         id: 1,

@@ -38,11 +38,8 @@ const AdminSignInForm: React.FC = () => {
             { email: values.email, password: values.password },
             {
               onSuccess: (data) => {
-                console.log('Login success data:', data);
-                if (data.role === "ADMIN") {
+                if (data.role === "ADMIN" || data.role === 'WAREHOUSE_ADMIN') {
                   router.push("/dashboard");
-                } else if (data.role === "WAREHOUSE_ADMIN") {
-                  router.push("/dashboard/stocks");
                 } else {
                   setDialogMessage("This login is restricted to admins.");
                   setDialogOpen(true);

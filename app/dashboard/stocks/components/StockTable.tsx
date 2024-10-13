@@ -2,48 +2,57 @@
 import {
     Table,
     TableBody,
-    TableCell,
+    TableCell, TableFooter,
     TableHead,
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
-import {FC} from "react";
+import React, {FC, useState} from "react";
 import {Stock} from "@/types/datatypes";
-import useAllStocks from "@/hooks/useAllStocks";
 import Image from "next/image";
-import useDashboardStore from "@/hooks/useDashboardStore";
+import useDashboardStore from "@/stores/useDashboardStore";
+import {useAllStocks} from "@/hooks/useStock";
+import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
+import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
+import TablePagination from "@/app/dashboard/components/TablePagination";
 
-const StockTable: FC = () => {
+const StockTable: FC<{query: string}> = ({query}) => {
+    const [page, setPage] = useState(0);
     const warehouse = useDashboardStore(state => state.warehouse)
     const date = useDashboardStore(state => state.date)
-    const {data, isLoading, error} = useAllStocks(warehouse.id, date)
+    const {data, isLoading, error} = useAllStocks(warehouse.id, date, query, page, 10)
 
     return (
         <Table className={"overflow-hidden"}>
             <TableHeader>
                 <TableRow>
-                    <TableHead className={"w-12 max-md:hidden"}>#</TableHead>
+                    <TableHead className={"w-12 max-md:hidden"}>Id</TableHead>
                     <TableHead className={"w-20 max-md:hidden"}>Image</TableHead>
                     <TableHead className={"max-w-24"}>Name</TableHead>
                     <TableHead className={"text-green-600"}>In</TableHead>
                     <TableHead className={"text-red-600"}>Out</TableHead>
-                    <TableHead>Stock</TableHead>
+                    <TableHead>In Stock</TableHead>
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {data?.map((stock, index) => <StockRow key={index} {...stock} index={index + 1} />)}
+                {isLoading && <SkeletonTableRow col={6} />}
+                {!data && !isLoading && <EmptyTableRow col={6} />}
+                {data && data.stocks.map((stock, index) => <StockRow key={index} {...stock}/>)}
             </TableBody>
+            <TableFooter>
+                <TableRow>
+                    <TableCell colSpan={6}>
+                        {data && <TablePagination totalPage={data.totalPage} page={page} setPage={setPage} />}
+                    </TableCell>
+                </TableRow>
+            </TableFooter>
         </Table>
     )
 }
 
 export default StockTable;
 
-interface StockRowProps extends Stock {
-    index: number;
-}
-
-const StockRow: FC<StockRowProps> = ({id, thumbnail, name, incoming, outgoing, stock, index}) => {
+const StockRow: FC<Stock> = ({id, thumbnail, name, incoming, outgoing, stock}) => {
     const setProductId = useDashboardStore(state => state.setProduct)
     const  setIsStockDrawerOpen = useDashboardStore(state => state.setIsStockDrawerOpen)
 
@@ -52,8 +61,8 @@ const StockRow: FC<StockRowProps> = ({id, thumbnail, name, incoming, outgoing, s
         setIsStockDrawerOpen(true)
     }
     return (
-        <TableRow onClick={handleClick}>
-            <TableCell className={"max-md:hidden w-12 font-medium"}>{index}</TableCell>
+        <TableRow onClick={handleClick} className={"hover:cursor-pointer"}>
+            <TableCell className={"max-md:hidden w-12 font-medium"}>{id}</TableCell>
             <TableCell className={"max-md:hidden w-20"}>
                 <Image src={thumbnail} alt={`thumbnail of ${name}`} width={60} height={60} />
             </TableCell>

@@ -60,15 +60,15 @@ const Cart: React.FC = () => {
 
   return (
     <>
-      <div className="m-10 w-full flex flex-col gap-5">
+      <div className="p-5 md:p-10 w-full flex flex-col gap-5">
         <h1 className="font-bold text-xl">Keranjang</h1>
-        <div className="flex gap-5 items-start">
-          <div className="flex w-[60%] flex-col gap-5">
+        <div className="flex flex-col lg:flex-row gap-5 items-start ">
+          <div className="flex w-full lg:w-[60%] flex-col gap-5">
             <div className="h-2 w-full bg-gray-200 rounded-lg "></div>
             <h2 className="font-semibold">Daftar Stok dari Gudang</h2>
             <CartItems /> 
           </div>
-          <div className="flex w-[40%] px-20">
+          <div className="flex w-full lg:w-[40%] lg:px-20">
             <div className="p-5 w-full rounded-xl shadow-boxedSoft shadow-gray-400 bg-gray-200 h-fit flex flex-col gap-5">
               <h2 className="text-lg font-semibold">Pesanan</h2>
               <hr className="border-gray-900 border-dashed" />

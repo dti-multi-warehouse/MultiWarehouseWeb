@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/drawer";
 import {Button} from "@/components/ui/button";
 import StockMutationForm from "./StockMutationForm";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 interface StockDrawerDialogProps {
     children: ReactNode
@@ -20,6 +21,7 @@ interface StockDrawerDialogProps {
 
 const StockDrawerDialog: FC<StockDrawerDialogProps> = ({children}) => {
     const [open, setOpen] = useState(false)
+    const warehouse = useDashboardStore(state => state.warehouse)
     const isDesktop = useMediaQuery("(min-width: 768px)")
 
     if (isDesktop) {
@@ -31,9 +33,9 @@ const StockDrawerDialog: FC<StockDrawerDialogProps> = ({children}) => {
                 <DialogContent className={"sm:max-w-[425px]"}>
                     <DialogHeader>
                         <DialogTitle>Manage Stock</DialogTitle>
-                        <p className={"text-gray-500 text-sm"}>Warehouse Name</p>
+                        <p className={"text-gray-500 text-sm"}>{warehouse.name}</p>
                     </DialogHeader>
-                    <StockMutationForm setOpen={setOpen} />
+                    <StockMutationForm setOpen={setOpen} warehouseId={warehouse.id} />
                 </DialogContent>
             </Dialog>
         )
@@ -48,7 +50,7 @@ const StockDrawerDialog: FC<StockDrawerDialogProps> = ({children}) => {
                 <DrawerHeader className={"text-left"}>
                     <DrawerTitle>Manage Stock</DrawerTitle>
                 </DrawerHeader>
-                <StockMutationForm setOpen={setOpen}/>
+                <StockMutationForm setOpen={setOpen} warehouseId={warehouse.id}/>
                     <DrawerFooter className={"pt-2"}>
                         <DrawerClose asChild>
                             <Button variant={"outline"}>Cancel</Button>
