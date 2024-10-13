@@ -11,16 +11,10 @@ import React, {FC, useState} from "react";
 import {Stock} from "@/types/datatypes";
 import Image from "next/image";
 import useDashboardStore from "@/stores/useDashboardStore";
-import {
-    Pagination,
-    PaginationContent,
-    PaginationItem,
-    PaginationLink, PaginationNext,
-    PaginationPrevious
-} from "@/components/ui/pagination";
 import {useAllStocks} from "@/hooks/useStock";
 import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
 import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
+import TablePagination from "@/app/dashboard/components/TablePagination";
 
 const StockTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0);
@@ -48,36 +42,7 @@ const StockTable: FC<{query: string}> = ({query}) => {
             <TableFooter>
                 <TableRow>
                     <TableCell colSpan={6}>
-                        {data && (
-                            <Pagination>
-                                <PaginationContent>
-                                    <PaginationItem>
-                                        <PaginationPrevious
-                                            href="#"
-                                            onClick={() => setPage((prev) => Math.max(prev - 1, 0))}
-                                        />
-                                    </PaginationItem>
-                                    {Array.from({ length: data.totalPage }).map((_, index) => (
-                                        <PaginationItem key={index}>
-                                            <PaginationLink
-                                                href="#"
-                                                onClick={() => setPage(index)}
-                                            >
-                                                {index + 1}
-                                            </PaginationLink>
-                                        </PaginationItem>
-                                    ))}
-                                    <PaginationItem>
-                                        <PaginationNext
-                                            href="#"
-                                            onClick={() =>
-                                                setPage((prev) => Math.min(prev + 1, data?.totalPage - 1))
-                                            }
-                                        />
-                                    </PaginationItem>
-                                </PaginationContent>
-                            </Pagination>
-                        )}
+                        {data && <TablePagination totalPage={data.totalPage} page={page} setPage={setPage} />}
                     </TableCell>
                 </TableRow>
             </TableFooter>
