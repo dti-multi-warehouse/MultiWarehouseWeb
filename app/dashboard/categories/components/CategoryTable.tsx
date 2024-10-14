@@ -12,6 +12,7 @@ import CategoryDrawerDialog from "@/app/dashboard/categories/components/Category
 import {useCategories} from "@/hooks/useCategories";
 import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
 import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 const CategoryTable: FC = () => {
     const { data, isLoading, error } = useCategories()
@@ -47,13 +48,24 @@ interface CategoryRowProps {
 }
 
 const CategoryRow: FC<CategoryRowProps> = ({ id, name }) => {
+    const isAdmin = useDashboardStore(state => state.isAdmin)
+
+    if (isAdmin) {
+        return (
+            <CategoryDrawerDialog mode={'update'} id={id}>
+                <TableRow className={"hover:cursor-pointer"}>
+                    <TableCell className="font-medium">{id}</TableCell>
+                    <TableCell>{name}</TableCell>
+                </TableRow>
+            </CategoryDrawerDialog>
+        )
+    }
+
     return (
-        <CategoryDrawerDialog mode={'update'} id={id}>
-            <TableRow className={"hover:cursor-pointer"}>
-                <TableCell className="font-medium">{id}</TableCell>
-                <TableCell>{name}</TableCell>
-            </TableRow>
-        </CategoryDrawerDialog>
+        <TableRow>
+            <TableCell className="font-medium">{id}</TableCell>
+            <TableCell>{name}</TableCell>
+        </TableRow>
     )
 }
 
