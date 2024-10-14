@@ -27,6 +27,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
           </DialogTitle>
           <hr className="border-dashed border-gray-800" />
           <div className="w-full flex flex-col gap-5 p-5">
+            {/* Display buyer and warehouse details */}
             <div className="flex w-full justify-between md:items-center">
               <h2 className="font-semibold">Kirim ke</h2>
               <p className="text-red-600 py-1 px-3 border border-red-600 rounded-full w-fit text-xs">
@@ -43,7 +44,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
                 <p>{order.buyerName || 'N/A'}</p>
                 <p>{order.buyerPhoneNumber || 'N/A'}</p>
                 <p className="text-gray-600 self-start text-left">
-                  {order.buyerAddress.street + order.buyerAddress.city + order.buyerAddress.province || 'Address not available'}
+                  {order.buyerAddress.street + ", " + order.buyerAddress.city + ", " + order.buyerAddress.province || 'Address not available'}
                 </p>
               </div>
             </div>
@@ -54,8 +55,10 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
             <p>No Invoice: {order.invoiceNumber || 'N/A'}</p>
             <p>Dikirim pada {order.shippingDate ? new Date(order.shippingDate).toLocaleDateString() : 'N/A'}</p>
             <div className="flex flex-col md:flex-row gap-5 md:items-end w-full">
+              {/* Check for product image and display it */}
               <Image alt="product" src={order.productImages?.[0] || "/default-product.png"} width={150} height={150} />
               <div className="flex flex-col gap-5 font-semibold items-start w-full">
+                {/* Display product details */}
                 <p className="text-gray-500">{order.productName || 'N/A'}</p>
                 <p className="text-lg">Rp {order.price || 0}</p>
                 <div className="flex items-center justify-between w-full">
