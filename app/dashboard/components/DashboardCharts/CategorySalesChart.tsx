@@ -16,10 +16,27 @@ import {
 import {CategorySales} from "@/types/dashboard";
 
 const chartConfig = {
-    Beverages: {
-        label: "Beverages",
+    Drinks: {
+        label: "Drinks",
         color: "hsl(var(--chart-1))",
     },
+    Food: {
+        label: "Food",
+        color: "hsl(var(--chart-2))",
+    },
+    Spices: {
+        label: "Spices",
+        color: "hsl(var(--chart-3))",
+    },
+    Seasonings: {
+        label: "Seasonings",
+        color: "hsl(var(--chart-3))",
+    },
+    Organics: {
+        label: "Organics",
+        color: "hsl(var(--chart-4))",
+    },
+
 } satisfies ChartConfig
 
 interface CategorySalesChartProps {
