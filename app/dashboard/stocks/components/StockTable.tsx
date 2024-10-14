@@ -8,13 +8,14 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import React, {FC, useState} from "react";
-import {Stock} from "@/types/datatypes";
 import Image from "next/image";
 import useDashboardStore from "@/stores/useDashboardStore";
 import {useAllStocks} from "@/hooks/useStock";
 import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
 import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
 import TablePagination from "@/app/dashboard/components/TablePagination";
+import {Stock} from "@/types/Stock";
+import {clsx} from "clsx";
 
 const StockTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0);
@@ -52,7 +53,7 @@ const StockTable: FC<{query: string}> = ({query}) => {
 
 export default StockTable;
 
-const StockRow: FC<Stock> = ({id, thumbnail, name, incoming, outgoing, stock}) => {
+const StockRow: FC<Stock> = ({id, thumbnail, name, incoming, outgoing, stock, deletedAt}) => {
     const setProductId = useDashboardStore(state => state.setProduct)
     const  setIsStockDrawerOpen = useDashboardStore(state => state.setIsStockDrawerOpen)
 
@@ -61,7 +62,7 @@ const StockRow: FC<Stock> = ({id, thumbnail, name, incoming, outgoing, stock}) =
         setIsStockDrawerOpen(true)
     }
     return (
-        <TableRow onClick={handleClick} className={"hover:cursor-pointer"}>
+        <TableRow onClick={handleClick} className={clsx("hover:cursor-pointer", deletedAt && "bg-gray-600/50")}>
             <TableCell className={"max-md:hidden w-12 font-medium"}>{id}</TableCell>
             <TableCell className={"max-md:hidden w-20"}>
                 <Image src={thumbnail} alt={`thumbnail of ${name}`} width={60} height={60} />

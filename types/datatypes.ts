@@ -128,15 +128,6 @@ export interface ConfirmResetPasswordRequest {
   newPassword: string;
 }
 
-export interface Stock {
-  id: number;
-  name: string;
-  stock: number;
-  thumbnail: string;
-  incoming: number;
-  outgoing: number;
-}
-
 export interface StockDetailsResponse {
   stockMovements: StockDetails[];
   stockMovementChartData: StockMovementChartData[];
