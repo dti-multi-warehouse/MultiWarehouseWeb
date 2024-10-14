@@ -18,7 +18,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
   return (
     <Dialog>
       <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex md:justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500 w-fit self-center md:self-end">
-        Bayar Sekarang
+      {order.status === "AWAITING_PAYMENT" ? "Bayar Sekarang" : "Lihat Detail"}
       </DialogTrigger>
       <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
         <DialogHeader>
@@ -79,7 +79,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
               <div className="flex flex-col items-center md:items-end text-gray-500 w-full ">
                 <p>Total Pembayaran</p>
                 <p className="font-bold text-lg text-gray-700">Rp {order.totalAmount || 0}</p>
-                <Buttons>Bayar Sekarang</Buttons>
+                <Buttons>{order.status === "AWAITING_PAYMENT" ? "Bayar Sekarang" : "Lihat Detail"}</Buttons>
               </div>
             </div>
           </div>
