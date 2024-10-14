@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import apiClient from "@/lib/apiClient";
 import { LoginResponse } from "@/types/datatypes";
+import jwt from 'jsonwebtoken';
 
 export const authOptions: NextAuthOptions = {
   providers: [
@@ -138,9 +139,24 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.social = user.social;
         token.role = user.role;
-        token.warehouseId = user.warehouseId
-        token.warehouseName = user.warehouseName
+        token.warehouseId = user.warehouseId;
+        token.warehouseName = user.warehouseName;
       }
+
+      // Decode the JWT header to get the `kid`
+      if (token.accessToken) {
+        try {
+          const decodedHeader = jwt.decode(token.accessToken, { complete: true });
+          console.log("Decoded JWT Header:", decodedHeader?.header);
+
+          // Access `kid`
+          const kid = decodedHeader?.header?.kid;
+          console.log("JWT `kid`:", kid);
+        } catch (err) {
+          console.error("Error decoding JWT:", err);
+        }
+      }
+
       return token;
     },
     async session({ session, token }) {
