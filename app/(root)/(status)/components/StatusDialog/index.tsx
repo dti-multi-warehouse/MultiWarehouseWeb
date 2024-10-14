@@ -8,7 +8,14 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import Buttons from "@/components/Buttons";
-import { Order } from "@/types/datatypes";
+import { Order, OrderItem } from "@/types/datatypes";
+
+const getProductDetailsById = (productId: number): { name: string; thumbnail: string } => {
+  return {
+    name: "Sample Product", 
+    thumbnail: "/sample-thumbnail.png",
+  };
+};
 
 interface StatusDialogProps {
   order: Order;
@@ -43,7 +50,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
                 <p>{order.buyerName || 'N/A'}</p>
                 <p>{order.buyerPhoneNumber || 'N/A'}</p>
                 <p className="text-gray-600 self-start text-left">
-                  {order.buyerAddress.street + order.buyerAddress.city + order.buyerAddress.province || 'Address not available'}
+                  {order.buyerAddress.street + ', ' + order.buyerAddress.city + ', ' + order.buyerAddress.province || 'Address not available'}
                 </p>
               </div>
             </div>
@@ -53,17 +60,22 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
             <p className="text-black font-semibold mb-3">Detail Pesanan</p>
             <p>No Invoice: {order.invoiceNumber || 'N/A'}</p>
             <p>Dikirim pada {order.shippingDate ? new Date(order.shippingDate).toLocaleDateString() : 'N/A'}</p>
-            <div className="flex flex-col md:flex-row gap-5 md:items-end w-full">
-              <Image alt="product" src={order.productImages?.[0] || "/default-product.png"} width={150} height={150} />
-              <div className="flex flex-col gap-5 font-semibold items-start w-full">
-                <p className="text-gray-500">{order.productName || 'N/A'}</p>
-                <p className="text-lg">Rp {order.price || 0}</p>
-                <div className="flex items-center justify-between w-full">
-                  <p className="text-gray-500">Jumlah beli {order.quantity || 0}</p>
-                  <p className="text-red-600">Rp {order.totalAmount || 0}</p>
+            {order.items.map((item: OrderItem, index: number) => {
+              const productDetails = getProductDetailsById(item.productId);
+              return (
+                <div key={index} className="flex flex-col md:flex-row gap-5 md:items-end w-full">
+                  <Image alt="product" src={productDetails.thumbnail || "/default-product.png"} width={100} height={100} />
+                  <div className="flex flex-col gap-5 font-semibold items-start w-full">
+                    <p className="text-gray-500">{productDetails.name || 'N/A'}</p>
+                    <p className="text-lg">Rp {item.price || 0}</p>
+                    <div className="flex items-center justify-between w-full">
+                      <p className="text-gray-500">Jumlah beli {item.quantity || 0}</p>
+                      <p className="text-red-600">Rp {item.quantity * item.price || 0}</p>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
+              );
+            })}
           </div>
           <hr className="border-dashed border-gray-800" />
           <div className="flex flex-col gap-5 p-5 font-medium text-sm w-full">

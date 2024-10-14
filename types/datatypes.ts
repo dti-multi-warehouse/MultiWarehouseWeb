@@ -185,8 +185,8 @@ export enum BankTransfer {
 }
 
 export interface CreateOrderItemRequestDto {
-  productIds: number; // Ensure this is correctly populated for each product
-  quantity: number;  // Ensure quantity is positive
+  productIds: number; 
+  quantity: number;  
 }
 
 export interface CreateOrderRequestDto {
@@ -210,43 +210,42 @@ export interface CreateOrderResponseDto {
 }
 
 export interface Order {
+  id: number;
+  userId: number;
+  userName: string;
+  warehouseId: number;
+  warehouseName: string;
+  price: number;
+  paymentProof: string | null;
+  status: string;
+  paymentMethod: string;
+  shippingCost: number;
+  bank: string;
+  accountNumber: string;
+  createdAt: string;
+  paymentExpiredAt: string;
+  invoiceNumber: number;
+  items: OrderItem[]; // Replace product-specific fields with a list of items
+  totalAmount: number;
+  buyerName: string;
+  buyerPhoneNumber: string;
+  buyerAddress: {
     id: number;
-    userId: number;
-    userName: string;
-    warehouseId: number;
-    warehouseName: string;
-    price: number;
-    paymentProof: string | null;
-    status: string;
-    paymentMethod: string;
-    shippingCost: number;
-    bank: string;
-    accountNumber: string;
-    createdAt: string;
-    paymentExpiredAt: string;
-    invoiceNumber: number;
-    productImages: string[];
-    productName: string;
-    quantity: number;
-    totalAmount: number;
-    buyerName: string;
-    buyerPhoneNumber: string;
-    buyerAddress: {
-      id: number;
-      street: string;
-      city: string;
-      province: string;
-    };
-    warehouseAddress: {
-      id: number;
-      street: string;
-      city: string;
-      province: string;
-    };
-    statusLabel: string;
-    shippingDate: string;
-    virtualAccountNumber: string;
-  }
+    street: string;
+    city: string;
+    province: string;
+  };
+  warehouseAddress: {
+    id: number;
+    street: string;
+    city: string;
+    province: string;
+  };
+  statusLabel: string;
+  shippingDate: string;
+  virtualAccountNumber: string;
+}
+
 
 
 export interface OrderItem {
