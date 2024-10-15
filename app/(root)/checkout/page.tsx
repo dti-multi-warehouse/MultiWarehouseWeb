@@ -21,8 +21,18 @@ const Checkout: React.FC = () => {
   const [selectedBank, setSelectedBank] = useState("BCA");
   const [selectedShippingMethod, setSelectedShippingMethod] = useState("");
   const [shippingCost, setShippingCost] = useState(0);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
   const router = useRouter();
   const createOrder = useCreateOrder();
+
+  useEffect(() => {
+    if (addresses && addresses.data.length > 0) {
+      const primaryAddress = addresses.data.find(address => address.primary);
+      if (primaryAddress) {
+        setSelectedAddressId(primaryAddress.id);
+      }
+    }
+  }, [addresses]);
 
   useEffect(() => {
     if (cart) {
@@ -31,19 +41,17 @@ const Checkout: React.FC = () => {
     }
   }, [cart]);
 
-  const fetchShippingCost = async (shippingMethod: string) => {
-    const primaryAddress = addresses?.data.find((address) => address.primary);
-
-    if (!primaryAddress) {
-      console.error("No primary address found.");
+  const fetchShippingCost = async () => {
+    if (!selectedAddressId || !selectedShippingMethod) {
+      console.error("No shipping address or method selected.");
       return;
     }
 
     try {
       const response = await apiClient.post("/api/v1/order/shipping-cost", {
-        destinationCityId: primaryAddress.id,
+        destinationCityId: selectedAddressId,
         weight: 10,
-        courier: shippingMethod
+        courier: selectedShippingMethod,
       });
 
       const costData = response.data?.data?.rajaongkir?.results?.[0]?.costs?.[0]?.cost?.[0]?.value;
@@ -54,16 +62,15 @@ const Checkout: React.FC = () => {
   };
 
   useEffect(() => {
-    if (typeof window !== 'undefined' && selectedShippingMethod) {
-      fetchShippingCost(selectedShippingMethod);
+    if (selectedAddressId && selectedShippingMethod) {
+      fetchShippingCost();
     }
-  }, [selectedShippingMethod]);
+  }, [selectedAddressId, selectedShippingMethod]);
 
   const handleCheckout = () => {
-    const primaryAddress = addresses?.data.find((address) => address.primary === true);
-
-    if (!primaryAddress || !primaryAddress.id) {
-      alert("No primary address found.");
+    const selectedAddress = addresses?.data.find((address) => address.id === selectedAddressId);
+    if (!selectedAddress) {
+      alert("No shipping address selected.");
       return;
     }
 
@@ -72,8 +79,8 @@ const Checkout: React.FC = () => {
       quantity: item.quantity,
     })) || [];
 
-    if (items.some(item => item.productId === null || item.productId === undefined) || items.length === 0) {
-      alert("Some product IDs are missing or cart is empty.");
+    if (items.length === 0) {
+      alert("Cart is empty.");
       return;
     }
 
@@ -90,41 +97,46 @@ const Checkout: React.FC = () => {
       paymentMethod: PaymentMethod[selectedPaymentMethod as keyof typeof PaymentMethod],
       bankTransfer: selectedPaymentMethod === 'MIDTRANS' ? BankTransfer[selectedBank as keyof typeof BankTransfer] : undefined,
       shippingMethod: courier,
-      shippingAddressId: primaryAddress.id,
+      shippingAddressId: selectedAddressId,
     };
 
     createOrder.mutate(orderPayload, {
-      onSuccess: () => router.push("/in-process"),
+      onSuccess: () => router.push("/waiting-payment"),
       onError: (error) => console.error("Order creation failed:", error),
     });
   };
 
   if (isCartLoading || isAddressLoading) return <div>Loading...</div>;
 
-  const primaryAddress = addresses?.data.find((address) => address.primary);
-
   return (
     <>
       <div className="w-full p-5 md:p-10 flex flex-col gap-5">
         <h1 className="font-bold text-xl">Checkout Pesanan</h1>
-
         <div className="flex flex-col lg:flex-row gap-10">
-          <div className=" w-full lg:w-[60%] flex flex-col gap-5">
+          <div className="w-full lg:w-[60%] flex flex-col gap-5">
             <div className="h-2 w-full bg-gray-200 rounded-lg"></div>
             <div className="flex flex-col gap-5 py-3">
               <h3 className="font-semibold">Detail Pembeli</h3>
-              {primaryAddress ? (
-                <div className="flex flex-col gap-2 font-medium">
-                  <p>{primaryAddress.name}</p>
-                  <p>{primaryAddress.phoneNumber}</p>
-                  <p>{primaryAddress.address.street}, {primaryAddress.address.city}</p>
-                  <p className="font-bold text-sm text-gray-600">Alamat Utama</p>
-                </div>
-              ) : (
-                <p>No primary address available.</p>
-              )}
+              <RadioGroup
+                value={selectedAddressId?.toString()}
+                onValueChange={(value) => setSelectedAddressId(parseInt(value))}
+                className="flex flex-col gap-5"
+              >
+                {addresses?.data.map((address) => (
+                  <div className="flex flex-col gap-3  w-full">
+                  <div key={address.id} className="flex gap-3 w-full">
+                    <RadioGroupItem value={address.id.toString()} id={`address-${address.id}`} />
+                    <Label htmlFor={`address-${address.id}`} className="leading-[1.6]">
+                      {address.name} - {address.phoneNumber} <br />{address.address.street}, <br /> {address.address.city}
+                    </Label>
+                  </div>
+                  <hr className="w-full border-dashed " />
+                  </div>
+                ))}
+              </RadioGroup>
+              {!addresses?.data.length && <p>No address available.</p>}
             </div>
-
+            <div className="h-2 w-full bg-gray-200 rounded-lg"></div>
             <div className="flex flex-col gap-5">
               <h3 className="font-semibold">Stok Barang</h3>
               {cart?.data?.cartItems.map((item, index) => (
