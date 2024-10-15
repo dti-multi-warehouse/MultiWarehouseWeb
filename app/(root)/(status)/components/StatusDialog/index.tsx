@@ -11,7 +11,7 @@ import {
 import Image from "next/image";
 import Buttons from "@/components/Buttons";
 import { Order } from "@/types/datatypes";
-import { useCancelOrder, useUploadPaymentProof, useConfirmPayment } from "@/hooks/useOrder";
+import { useCancelOrder, useUploadPaymentProof, useFinalizeOrder } from "@/hooks/useOrder";
 import AlertDialog from "@/components/AlertDialog";
 
 interface StatusDialogProps {
@@ -26,7 +26,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const uploadPaymentProof = useUploadPaymentProof();
   const cancelOrder = useCancelOrder();
-  const confirmPayment = useConfirmPayment();
+  const confirmPayment = useFinalizeOrder();
 
   useEffect(() => {
     if (order.status === "AWAITING_PAYMENT" && order.paymentExpiredAt) {
@@ -99,7 +99,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
           <div className="w-full flex flex-col gap-5 p-5">
             <div className="flex w-full justify-between md:items-center">
               <h2 className="font-semibold">Kirim ke</h2>
-              <p className="text-red-600 py-1 px-3 border border-red-600 rounded-full w-fit text-xs">
+              <p className="text-red-600 py-1 px-3 border border-red-600 font-bold rounded-full w-fit text-xs">
                 {order.status || "N/A"}
               </p>
             </div>
@@ -139,8 +139,10 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
                 : "N/A"}
             </p>
             {order.items.map((item, index) => (
-              <div key={index} className="flex flex-col md:flex-row gap-5 md:items-end w-full">
-                <Image alt="product" src={item.thumbnail || "/default-product.png"} width={150} height={150} />
+              <div key={index} className="flex flex-col md:flex-row gap-5 md:items-center w-full">
+                <div className=" w-[150px] h-[150px] rounded-xl border-2 overflow-hidden">
+                  <Image alt="product" src={item.thumbnail || "/default-product.png"} width={150} height={150} className="w-[150px] h-[150px] object-cover object-center rounded-xl" />
+                </div>
                 <div className="flex flex-col gap-2 font-semibold items-start w-full">
                   <p className="text-gray-500">{item.name || "N/A"}</p>
                   <p className="text-lg text-red-600">Rp {item.price || 0}</p>
@@ -160,7 +162,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
               <div className="flex flex-col w-full gap-2 text-gray-500">
                 <p>Metode Pembayaran: {order.paymentMethod + " " + order.bank || "N/A"}</p>
                 {order.paymentMethod === "MANUAL" ? (
-                  <div>
+                  <div className={`${order.status === "AWAITING_PAYMENT" ? "block" : "hidden"}`}>
                     <p>Upload Bukti Pembayaran:</p>
                     <input type="file" accept="image/*" onChange={handlePaymentProofUpload} />
                   </div>
@@ -168,7 +170,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
                   <div>
                     <p>Nomor VA:</p>
                     <h3 className="text-lg">{order.virtualAccountNumber || "N/A"}</h3>
-                    <Buttons onClick={handleCopyVirtualAccount} className="bg-green-500">
+                    <Buttons onClick={handleCopyVirtualAccount} className={`${order.status === "AWAITING_PAYMENT" ? "block" : "hidden"}`}>
                       {isCopied ? "Nomor VA Disalin!" : "Salin Nomor VA"}
                     </Buttons>
                   </div>
@@ -189,7 +191,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
 
                 {order.status === "DELIVERING" && (
                   <Buttons onClick={handleConfirmPayment} className="bg-blue-500">
-                    Konfirmasi Pesanan Diterima
+                    Pesanan Diterima
                   </Buttons>
                 )}
 

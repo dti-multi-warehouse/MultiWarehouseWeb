@@ -22,25 +22,25 @@ const StatusCard: React.FC<StatusCardProps> = ({ order }) => {
             width={150}
             height={150}
             alt="product"
-            className="min-w-[150px] min-h-[150px] max-w-[150px] max-h-[150px] object-cover object-center rounded-xl"
+            className="min-w-[150px] min-h-[150px] max-w-[150px] max-h-[150px] object-cover object-center rounded-xl border-2"
           />
         )}
-        <div className="flex flex-col gap-3">
+        <div className="flex flex-col gap-1">
           <div className="flex gap-3 items-center text-lg mb-3 w-full">
             <TbCalendarTime />
-            <p className="text-sm">{new Date(order.shippingDate).toLocaleDateString()}</p>
+            <p className="text-sm text-black">{new Date(order.shippingDate).toLocaleDateString()}</p>
           </div>
-          <h4 className="text-gray-600 flex items-center gap-3  whitespace-nowrap">
+          <h4 className="text-gray-600 flex items-center gap-3 font-semibold text-lg  whitespace-nowrap">
             {order.buyerName} - {order.buyerPhoneNumber}
           </h4>
           <p className="text-sm">Invoice: #{order.invoiceNumber}</p>
         </div>
       </div>
       <hr className="border-dashed border-gray-700 w-full md:hidden" />
-      <div className="w-full flex flex-col gap-3 items-center md:items-end text-right text-gray-600">
-        <p>Total Belanja</p>
+      <div className="w-full flex flex-col gap-2 items-center md:items-end text-right text-gray-600">
+        <p className="font-bold">Total Belanja</p>
         {firstItem && (
-          <p>{firstItem.quantity} Produk</p> 
+          <p className="font-semibold">{firstItem.quantity} Produk</p> 
         )}
         <h3 className="font-semibold text-lg text-red-600">Rp {order.price}</h3>
         <StatusDialog order={order} />

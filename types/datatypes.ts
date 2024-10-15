@@ -1,4 +1,3 @@
-import { date } from "yup";
 import { WarehouseList } from "@/types/warehouse";
 
 export interface userAddress {
@@ -176,16 +175,16 @@ export enum BankTransfer {
 }
 
 export interface CreateOrderItemRequestDto {
-  productIds: number; // Ensure this is correctly populated for each product
-  quantity: number;  // Ensure quantity is positive
+  productIds: number;
+  quantity: number; 
 }
 
 export interface CreateOrderRequestDto {
   items: CreateOrderItemRequestDto[];
   paymentMethod: PaymentMethod;
   bankTransfer?: BankTransfer;
-  shippingMethod: string; // Ensure this is a valid shipping method
-  shippingAddressId: number; // Ensure a valid shipping address ID is passed
+  shippingMethod: string; 
+  shippingAddressId: number;
 }
 
 export interface CreateOrderResponseDto {

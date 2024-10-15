@@ -123,14 +123,11 @@ const Checkout: React.FC = () => {
                 className="flex flex-col gap-5"
               >
                 {addresses?.data.map((address) => (
-                  <div className="flex flex-col gap-3  w-full">
                   <div key={address.id} className="flex gap-3 w-full">
                     <RadioGroupItem value={address.id.toString()} id={`address-${address.id}`} />
                     <Label htmlFor={`address-${address.id}`} className="leading-[1.6]">
                       {address.name} - {address.phoneNumber} <br />{address.address.street}, <br /> {address.address.city}
                     </Label>
-                  </div>
-                  <hr className="w-full border-dashed " />
                   </div>
                 ))}
               </RadioGroup>
@@ -160,6 +157,7 @@ const Checkout: React.FC = () => {
           <div className="w-full lg:w-[40%] flex flex-col gap-10 lg:mx-10 p-10 bg-gray-100 h-fit rounded-xl shadow-boxedSoft">
             <div className="flex flex-col gap-3">
               <h2 className="font-semibold text-lg">Pesanan</h2>
+              <hr className="w-full border-dashed border-gray-700 " />
               <div className="flex items-center justify-between">
                 <p>Subtotal</p>
                 <p className="font-semibold text-lg">
@@ -172,9 +170,9 @@ const Checkout: React.FC = () => {
                   Rp {shippingCost.toLocaleString()}
                 </p>
               </div>
-              <div className="flex items-center justify-between">
-                <p>Total</p>
-                <p className="font-semibold text-lg">
+              <div className="flex items-center font-semibold justify-between">
+                <p className="text-lg">Total</p>
+                <p className="text-xl text-red-600">
                   Rp {(subtotal + shippingCost).toLocaleString()}
                 </p>
               </div>
@@ -182,6 +180,7 @@ const Checkout: React.FC = () => {
 
             <div className="flex flex-col gap-5">
               <h3 className="font-semibold">Metode Pembayaran</h3>
+              <hr className="w-full border-dashed border-gray-700 " />
               <RadioGroup
                 value={selectedPaymentMethod}
                 onValueChange={setSelectedPaymentMethod}
@@ -200,6 +199,7 @@ const Checkout: React.FC = () => {
               {selectedPaymentMethod === "MIDTRANS" && (
                 <div className="flex flex-col gap-5">
                   <h3 className="font-semibold">Pilih Bank Transfer</h3>
+                  <hr className="w-full border-dashed border-gray-700 " />
                   <RadioGroup
                     value={selectedBank}
                     onValueChange={setSelectedBank}
@@ -227,6 +227,7 @@ const Checkout: React.FC = () => {
 
               <div className="flex flex-col gap-5">
                 <h3 className="font-semibold">Pilih Ongkos Kirim</h3>
+                <hr className="w-full border-dashed border-gray-700 " />
                 <RadioGroup
                   value={selectedShippingMethod}
                   onValueChange={setSelectedShippingMethod}
