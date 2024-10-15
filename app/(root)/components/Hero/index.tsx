@@ -31,10 +31,6 @@ const Hero: React.FC = () => {
         slidesPerView: 1,
         spaceBetween: 10,
       },
-      '@0.75': {
-        slidesPerView: 1,
-        spaceBetween: 20,
-      },
       '@1.00': {
         slidesPerView: 2,
         spaceBetween: 40,

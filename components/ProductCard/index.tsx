@@ -8,10 +8,16 @@ import { useSession } from "next-auth/react";
 import { useGetProfile } from "@/hooks/useUser";
 import AlertDialog from "@/components/AlertDialog";
 import { useAddToCart } from "@/hooks/useCart";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 
-const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) => {
-  const { data: session, status } = useSession(); 
+const Index: React.FC<productCards> = ({
+  thumbnail,
+  name,
+  price,
+  stock,
+  id,
+}) => {
+  const { data: session, status } = useSession();
   const { profile, isLoading: isProfileLoading } = useGetProfile();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
@@ -39,7 +45,9 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) =>
               setDialogOpen(true);
             },
             onError: () => {
-              setDialogMessage("Failed to add product to cart. Please try again.");
+              setDialogMessage(
+                "Failed to add product to cart. Please try again."
+              );
               setDialogOpen(true);
             },
           }
@@ -56,34 +64,38 @@ const Index: React.FC<productCards> = ({ thumbnail, name, price, stock, id }) =>
   };
 
   const handleCardClick = () => {
-    router.push("/product/" + id)
-  }
+    router.push("/product/" + id);
+  };
 
   return (
-<div className="flex flex-col gap-2 min-w-[150px] h-full max-w-[200px] hover:bg-white shadow-antiMetal shadow-transparent hover:scale-105 hover:shadow-gray-200 rounded-xl transition-all duration-500">
+    <div className="flex flex-col gap-2 min-w-[100px] h-full max-w-[200px] hover:bg-white shadow-antiMetal border border-gray-200 hover:shadow-gray-200 rounded-xl transition-all duration-500 overflow-hidden">
       <Image
         src={thumbnail}
         width={200}
         height={200}
         alt={name}
         onClick={handleCardClick}
-        className={"hover: cursor-pointer"}
+        className='hover:cursor-pointer max-w-[200px] max-h-[200px]  object-cover object-center'
       />
+      <hr className="border-dashed border-gray-700" />
       <div
-          className="flex flex-col gap-2.5 p-5 h-full justify-end hover:cursor-pointer"
-          onClick={handleCardClick}
+        className="flex flex-col gap-2.5 p-5 h-full justify-end hover:cursor-pointer"
+        onClick={handleCardClick}
       >
-        <h2 className="font-medium line-clamp-2">{name}</h2>
-        <p className="font-semibold text-gray-500">Stok dari toko</p>
+        <h2 className="font-bold line-clamp-2">{name}</h2>
+        <p className=" text-gray-500">Stok dari toko</p>
         <p className="font-bold text-red-600">Rp {price.toLocaleString()}</p>
       </div>
+      <hr className="border-dashed border-gray-700" />
       <div className={"p-5"}>
         <Buttons
-            className={`w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
-                stock < 1 || !isAuthenticated || !isVerified ? "!bg-gray-300 !text-gray-800" : "!bg-red-600"
-            }`}
-            onClick={handleButtonClick}
-            disabled={stock < 1 }
+          className={`w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
+            stock < 1 || !isAuthenticated || !isVerified
+              ? "!bg-gray-300 !text-gray-800"
+              : "!bg-red-600"
+          }`}
+          onClick={handleButtonClick}
+          disabled={stock < 1}
         >
           {stock < 1 ? "Stock Kosong" : "Beli"}
         </Buttons>

@@ -1,44 +1,43 @@
 "use client";
-
-import React, { useEffect, useState } from 'react';
-import StatusCard from '../components/StatusCard';
-import { useOrdersByStatus } from '@/hooks/useOrder';
-import { Order } from '@/types/datatypes';
-import dynamic from 'next/dynamic';
+import React, { useEffect, useState } from "react";
+import StatusCard from "../components/StatusCard";
+import { useOrdersByStatus } from "@/hooks/useOrder";
+import { Order } from "@/types/datatypes";
 
 const OrderSent: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const [loading, setLoading] = useState(true);
-  const { mutate: fetchOrdersByStatus } = useOrdersByStatus('DELIVERING');
+  const { mutate: fetchOrdersByStatus } = useOrdersByStatus("DELIVERING");
 
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      fetchOrdersByStatus(undefined, {
-        onSuccess: (response: any) => {
-          if (response.success && Array.isArray(response.data)) {
-            setOrders(response.data);
-          }
-          setLoading(false);
-        },
-        onError: (error) => {
-          console.error('Error fetching orders by status:', error);
-          setLoading(false);
-        },
-      });
-    }
+    console.log("Fetching orders...");
+    fetchOrdersByStatus(undefined, {
+      onSuccess: (response: any) => {
+        console.log("Orders fetched successfully:", response);
+        if (response.success && Array.isArray(response.data)) {
+          setOrders(response.data);
+        } else {
+          console.error("Unexpected response structure:", response);
+        }
+      },
+      onError: (error) => {
+        console.error("Error fetching orders by status:", error);
+      },
+    });
   }, [fetchOrdersByStatus]);
 
   return (
+    <>
     <div className="flex flex-col gap-5">
-      {loading ? (
-        <p>Loading orders being delivered...</p>
-      ) : orders.length > 0 ? (
-        orders.map((order) => <StatusCard key={order.id} order={order} />)
+      {orders.length > 0 ? (
+        orders.map((order) => (
+          <StatusCard key={order.id} order={order} />
+        ))
       ) : (
-        <p>No orders found for delivery.</p>
+        <p>No orders found for waiting confirmation.</p>
       )}
     </div>
+    </>
   );
 };
 
-export default dynamic(() => Promise.resolve(OrderSent), { ssr: false });
+export default OrderSent;
