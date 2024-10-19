@@ -1,7 +1,6 @@
 import { WarehouseList } from "@/types/warehouse";
 
 export interface userAddress {
-  data?: {
     id: number;
     name: string;
     phoneNumber: string;
@@ -14,7 +13,6 @@ export interface userAddress {
       longitude: number;
     };
     primary: boolean;
-  };
 }
 
 export interface AddItemDto {

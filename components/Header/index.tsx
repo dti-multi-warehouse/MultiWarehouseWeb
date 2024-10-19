@@ -53,10 +53,10 @@ const Header: React.FC = () => {
 
   return (
     <>
-    <div className="w-full h-full py-2 px-10 bg-gray-100">
+    <div className="w-full h-full py-2 px-5 md:px-10 bg-gray-100">
       <AddressSaved />
     </div>
-      <div className="flex items-center justify-between py-5 px-10 shadow-airbnbSoft overflow-x-hidden">
+      <div className="flex items-center justify-between py-5 px-5 md:px-10 shadow-airbnbSoft overflow-x-hidden">
         <div className="flex items-center gap-10">
           <Link href="/" className="text-red-500 font-semibold">
             AlphaMarch
@@ -95,7 +95,7 @@ const Header: React.FC = () => {
                 }
               }}
               onChange={(e) => {setSearchValue(e.target.value);}}
-              className={`absolute left-full ml-2 border rounded-md px-2 py-1 transition-all duration-300 ease-in-out transform ${
+              className={`absolute w-[190px] sm:w-[200px] md:w-[350px] left-full ml-2 border rounded-md px-2 py-1 transition-all duration-300 ease-in-out transform ${
                 isSearchOpen
                   ? "translate-x-[-115%] opacity-100"
                   : "translate-x-0 opacity-0"
@@ -131,6 +131,11 @@ const Header: React.FC = () => {
                   <Link href="/my-profile">
                     <div className="block px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">
                       Profile
+                    </div>
+                  </Link>
+                  <Link href="/waiting-payment">
+                    <div className="block px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">
+                      Status Transaksi
                     </div>
                   </Link>
                   <button

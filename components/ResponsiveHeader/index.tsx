@@ -61,7 +61,7 @@ const ResponsiveHeader: React.FC = () => {
                 <Link
                   key={index}
                   href={link.url}
-                  className="text-sm font-medium text-gray-500"
+                  className="font-medium text-gray-500"
                 >
                   {link.label}
                 </Link>
@@ -69,17 +69,7 @@ const ResponsiveHeader: React.FC = () => {
               <div className="mt-4">
                 {isLoggedIn && !isProfileLoading ? (
                   <div className="">
-                    <Link href="/my-profile">
-                      <div className="block  py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">
-                        Profile
-                      </div>
-                    </Link>
-                    <button
-                      className="block w-full text-left py-2 text-gray-700 hover:bg-gray-200"
-                      onClick={handleLogout}
-                    >
-                      Logout
-                    </button>
+                    
                   </div>
                 ) : (
                   <div className="text-gray-700">

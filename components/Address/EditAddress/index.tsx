@@ -13,7 +13,10 @@ import axios from "axios";
 import { useState, useEffect, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useGetUserAddressById, useUpdateUserAddress } from "@/hooks/useAddress";
+import {
+  useGetUserAddressById,
+  useUpdateUserAddress,
+} from "@/hooks/useAddress";
 import { userAddress } from "@/types/datatypes";
 import React from "react";
 
@@ -28,9 +31,11 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
     longitude: 106.816666,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [gettingLocation, setGettingLocation] = useState(false);
   const mapRef = useRef<any>(null);
 
-  const { address: addressData, isLoading: addressLoading } = useGetUserAddressById(addressId);
+  const { address: addressData, isLoading: addressLoading } =
+    useGetUserAddressById(addressId);
   const { mutate: updateAddress } = useUpdateUserAddress();
 
   const [initialValues, setInitialValues] = useState({
@@ -46,21 +51,20 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
   useEffect(() => {
     if (addressData) {
       setInitialValues({
-        name: addressData.data?.name || "",
-        phoneNumber: addressData.data?.phoneNumber || "",
-        label: addressData.data?.label || "",
-        street: addressData.data?.address?.street || "",
-        city: addressData.data?.address?.city || "",
-        province: addressData.data?.address?.province || "",
-        isPrimary: addressData.data?.isPrimary || false,
+        name: addressData.name || "",
+        phoneNumber: addressData.phoneNumber || "",
+        label: addressData.label || "",
+        street: addressData.address?.street || "",
+        city: addressData.address?.city || "",
+        province: addressData.address?.province || "",
+        isPrimary: addressData.primary || false,
       });
       setCoordinates({
-        latitude: addressData.data?.address?.latitude || -6.2,
-        longitude: addressData.data?.address?.longitude || 106.816666,
+        latitude: addressData.address?.latitude || -6.2,
+        longitude: addressData.address?.longitude || 106.816666,
       });
     }
   }, [addressData]);
-
 
   const fetchGeolocation = async (fullAddress: string) => {
     try {
@@ -75,11 +79,12 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
         const { lat, lng } = data.results[0].geometry;
         setCoordinates({ latitude: lat, longitude: lng });
         if (mapRef.current) {
-          const map = mapRef.current;
-          map.setView([lat, lng], 13);
+          mapRef.current.setView([lat, lng], 13);
         }
       } else {
-        alert("Alamat tidak dapat ditemukan, masukkan titik lokasi di map.");
+        alert(
+          "Address not found. Please click on the map to set the location."
+        );
       }
     } catch (error) {
       console.error("Error fetching geolocation data:", error);
@@ -89,14 +94,11 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
     }
   };
 
-  const opencageapi = process.env.NEXT_PUBLIC_OPENCAGE_API_KEY;
-  console.log(opencageapi);
-
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
       setIsLoading(true);
       const response = await axios.get(
-        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${opencageapi}&language=id`
+        `https://api.opencagedata.com/geocode/v1/json?q=${lat}+${lng}&key=${process.env.NEXT_PUBLIC_OPENCAGE_API_KEY}&language=id`
       );
       const data = response.data;
       if (data.results && data.results.length > 0) {
@@ -106,7 +108,7 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
         const province = components.state || components.region || "";
         return { street, city, province };
       } else {
-        alert("Alamat tidak dapat ditemukan.");
+        alert("Address not found.");
       }
     } catch (error) {
       console.error("Error fetching reverse geolocation data:", error);
@@ -121,10 +123,7 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
     useMapEvents({
       click: async (e: any) => {
         const { lat, lng } = e.latlng;
-        setCoordinates({
-          latitude: lat,
-          longitude: lng,
-        });
+        setCoordinates({ latitude: lat, longitude: lng });
         const address = await reverseGeocode(lat, lng);
         setFieldValue("street", address.street);
         setFieldValue("city", address.city);
@@ -146,15 +145,15 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
           <hr className="border-dashed border-gray-800" />
           <Formik
             enableReinitialize
-              initialValues={initialValues}
-              validationSchema={Yup.object().shape({
-                name: Yup.string().required("Nama is required"),
-                phoneNumber: Yup.string().required("Nomor telepon is required"),
-                label: Yup.string().required("Label is required"),
-                street: Yup.string().required("Alamat is required"),
-                city: Yup.string().required("Kota is required"),
-                province: Yup.string().required("Provinsi is required"),
-              })}
+            initialValues={initialValues}
+            validationSchema={Yup.object().shape({
+              name: Yup.string().required("Nama is required"),
+              phoneNumber: Yup.string().required("Nomor telepon is required"),
+              label: Yup.string().required("Label is required"),
+              street: Yup.string().required("Alamat is required"),
+              city: Yup.string().required("Kota is required"),
+              province: Yup.string().required("Provinsi is required"),
+            })}
             onSubmit={(values, { setSubmitting }) => {
               setSubmitting(true);
               const dataToSubmit: userAddress = {
@@ -246,27 +245,65 @@ const EditAddress: React.FC<EditAddressProps> = ({ onClose, addressId }) => {
                     />
                   </div>
                 </div>
-
-                <div className="w-full h-[200px] rounded-xl overflow-hidden">
-                  {isLoading ? (
-                    <p>Loading map...</p>
-                  ) : (
-                    <MapContainer
-                      center={[coordinates.latitude, coordinates.longitude]}
-                      zoom={13}
-                      className="leaflet-container"
-                      ref={mapRef}
-                      scrollWheelZoom={false}
-                      doubleClickZoom={false}
-                    >
-                      <TileLayer
-                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                      />
-                      <Marker position={[coordinates.latitude, coordinates.longitude]} />
-                      <MapClickHandler setFieldValue={setFieldValue} />
-                    </MapContainer>
-                  )}
+                <p className="text-xs text-gray-600">
+                  * click anywhere to <strong> load map </strong>after input the
+                  address
+                </p>
+                <div className="flex flex-col gap-2 items-start">
+                  <div className="flex items-center justify-center mb-3">
+                  <Buttons
+                  onClick={() => {
+                    setGettingLocation(true);
+                    navigator.geolocation.getCurrentPosition(
+                      async (position) => {
+                        const { latitude, longitude } = position.coords;
+                        setCoordinates({ latitude, longitude });
+                        const address = await reverseGeocode(latitude, longitude);
+                        setFieldValue("street", address.street);
+                        setFieldValue("city", address.city);
+                        setFieldValue("province", address.province);
+                        setGettingLocation(false);
+                      },
+                      () => {
+                        alert("Location access denied.");
+                        setGettingLocation(false);
+                      }
+                    );
+                  }}
+                  disabled={gettingLocation}
+                >
+                  {gettingLocation ? "Getting Location..." : "Get My Location"}
+                </Buttons>
+                  </div>
+                  <div className="w-full h-[200px] rounded-xl overflow-hidden">
+                    {isLoading ? (
+                      <div className="w-full h-full rounded-xl bg-gray-200 flex flex-col gap-3 items-center justify-center">
+                        <div className="loader"></div>
+                        <p>Loading Map...</p>
+                      </div>
+                    ) : (
+                      <MapContainer
+                        center={[coordinates.latitude, coordinates.longitude]}
+                        zoom={13}
+                        className="leaflet-container"
+                        ref={mapRef}
+                        scrollWheelZoom={false}
+                        doubleClickZoom={false}
+                      >
+                        <TileLayer
+                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                        />
+                        <Marker
+                          position={[
+                            coordinates.latitude,
+                            coordinates.longitude,
+                          ]}
+                        />
+                        <MapClickHandler setFieldValue={setFieldValue} />
+                      </MapContainer>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center justify-between">

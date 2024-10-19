@@ -1,7 +1,6 @@
 export const links = [
     { label: 'Home', url: '/' },
     { label: 'Shop', url: '/product' },
-    { label: 'Contact', url: '/contact' },
 ]
 
 export const orderlist = [
@@ -45,4 +44,22 @@ export const orderlist = [
         warehouse: "Warehouse 1",
         status: "Order Completed"
     },
+]
+
+export const midtransPayment = [
+    {value: "BCA", id: "bca"},
+    {value: "BRI", id: "bri"},
+    {value: "BNI", id: "bni"},
+    {value: "CIMB", id: "cimb"},
+]
+
+export const shippingMethodList = [
+    {value: "jne", text: "JNE Regular"},
+    {value: "tiki", text: "Tiki Express"},
+    {value: "pos", text: "POS Kilat"},
+]
+
+export const selectPaymentMethod = [
+    {value: "MIDTRANS", id: "midtrans", text: "Midtrans (Virtual Account)"},
+    {value: "MANUAL", id: "manual", text: "Manual Transfer"},
 ]
