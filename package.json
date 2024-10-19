@@ -9,7 +9,7 @@
     "dev": "next dev",
     "clean": "rimraf .next",
     "build": "npm run clean && next build",
-    "start": "next start",
+    "start": "ts-node --transpile-only rename-env-vars.ts && next start",
     "lint": "next lint"
   },
   "dependencies": {

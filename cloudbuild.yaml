@@ -1,7 +1,7 @@
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/sanguine-willow-436015-k8/prod-alphamarch', '.']
+    args: ['build', '-t', 'gcr.io/sanguine-willow-436015-k8/alphamarch', '.']
     env:
       - 'DOCKER_BUILDKIT=1'
     id: 'build-image'
@@ -11,7 +11,7 @@ steps:
 
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/sanguine-willow-436015-k8/prod-alphamarch']
+    args: ['push', 'gcr.io/sanguine-willow-436015-k8/alphamarch']
     id: 'push-image'
 
   # Deploy container image to Cloud Run
@@ -20,15 +20,17 @@ steps:
     args:
       - 'run'
       - 'deploy'
-      - 'prod-alphamarch'
+      - 'multiwarehouse-web'
       - '--image'
-      - 'gcr.io/sanguine-willow-436015-k8/prod-alphamarch'
+      - 'gcr.io/sanguine-willow-436015-k8/alphamarch'
       - '--region'
       - 'asia-southeast2'
       - '--platform'
       - 'managed'
       - '--allow-unauthenticated'
+      - '--set-env-vars'
+      - 'NEXT_PUBLIC_API_BASE_URL=${_NEXT_PUBLIC_API_BASE_URL},NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${_NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY},NEXT_PUBLIC_CLERK_FRONTEND_API=${_NEXT_PUBLIC_CLERK_FRONTEND_API},NEXT_PUBLIC_CLERK_SIGN_IN_URL=${_NEXT_PUBLIC_CLERK_SIGN_IN_URL},NEXT_PUBLIC_CLERK_SIGN_UP_URL=${_NEXT_PUBLIC_CLERK_SIGN_UP_URL},NEXT_PUBLIC_OPENCAGE_API_KEY=${_NEXT_PUBLIC_OPENCAGE_API_KEY},CLERK_SECRET_KEY=${_CLERK_SECRET_KEY},NEXTAUTH_SECRET=${_NEXTAUTH_SECRET},NEXTAUTH_URL=${_NEXTAUTH_URL}'
     id: 'deploy-to-cloud-run'
 
 images:
-  - 'gcr.io/sanguine-willow-436015-k8/prod-alphamarch'
+  - 'gcr.io/sanguine-willow-436015-k8/alphamarch'

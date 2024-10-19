@@ -135,7 +135,6 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
           </div>
 
           <hr className="border-dashed border-gray-800" />
-
           <div className="flex flex-col md:gap-2 p-5 text-gray-500 font-medium">
             <p className="text-black font-semibold mb-1 md:mb-3">Detail Pesanan</p>
             <p>No Invoice: # {order.invoiceNumber || "N/A"}</p>

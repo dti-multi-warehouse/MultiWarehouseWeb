@@ -4,7 +4,14 @@ import React from "react";
 import Image from "next/image";
 import { TbCalendarTime } from "react-icons/tb";
 import StatusDialog from "../StatusDialog";
-import { Order } from "@/types/datatypes";
+import { Order, OrderItem } from "@/types/datatypes";
+
+const getProductDetailsById = (productId: number): { name: string; thumbnail: string } => {
+  return {
+    name: "Sample Product", 
+    thumbnail: "/default-product.png", 
+  };
+};
 
 interface StatusCardProps {
   order: Order;
