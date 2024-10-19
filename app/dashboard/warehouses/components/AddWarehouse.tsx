@@ -12,10 +12,11 @@ import { Formik, Form, Field, ErrorMessage } from "formik";
 import { useState, useRef } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useCreateWarehouse, useAssignWarehouseAdmin } from "@/hooks/useWarehouse";
+import {
+  useCreateWarehouse,
+  useAssignWarehouseAdmin,
+} from "@/hooks/useWarehouse";
 import Buttons from "@/components/Buttons";
-import AdminAssignee from "./AdminAssignee";
-import Image from "next/image";
 import React from "react";
 
 const AddWarehouse: React.FC = () => {
@@ -24,11 +25,11 @@ const AddWarehouse: React.FC = () => {
     longitude: 106.816666,
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [gettingLocation, setGettingLocation] = useState(false);
   const mapRef = useRef<any>(null);
-
   const createWarehouseMutation = useCreateWarehouse();
   const assignWarehouseAdminMutation = useAssignWarehouseAdmin();
-  const [selectedAdmin, setSelectedAdmin] = useState<any>(null); // Track selected admin
+  const [selectedAdmin, setSelectedAdmin] = useState<any>(null);
 
   const reverseGeocode = async (lat: number, lng: number) => {
     try {
@@ -104,13 +105,13 @@ const AddWarehouse: React.FC = () => {
                 createWarehouseMutation.mutate(payload, {
                   onSuccess: (data: any) => {
                     if (selectedAdmin) {
-                      // Assign the selected admin to the warehouse after warehouse creation
                       assignWarehouseAdminMutation.mutate({
                         warehouseId: data.id,
                         userId: selectedAdmin.id,
                       });
                     }
                     alert("Warehouse created successfully!");
+                    window.location.reload();
                   },
                   onError: () => {
                     alert("Failed to create warehouse.");
@@ -184,33 +185,71 @@ const AddWarehouse: React.FC = () => {
                     </div>
                   </div>
 
-                  <div className="w-full h-[200px] rounded-xl overflow-hidden">
-                    {isLoading ? (
-                      <p>Loading map...</p>
-                    ) : (
-                      <MapContainer
-                        center={[coordinates.latitude, coordinates.longitude]}
-                        zoom={13}
-                        className="leaflet-container"
-                        ref={mapRef}
-                        scrollWheelZoom={false}
-                        doubleClickZoom={false}
+                  <p className="text-xs text-gray-600">
+                    * click anywhere to <strong> load map </strong>after input
+                    the address
+                  </p>
+                  <div className="flex flex-col gap-2 items-start">
+                    <div className="flex items-center justify-center mb-3">
+                      <Buttons
+                        onClick={() => {
+                          setGettingLocation(true);
+                          navigator.geolocation.getCurrentPosition(
+                            async (position) => {
+                              const { latitude, longitude } = position.coords;
+                              setCoordinates({ latitude, longitude });
+                              const address = await reverseGeocode(
+                                latitude,
+                                longitude
+                              );
+                              setFieldValue("street", address.street);
+                              setFieldValue("city", address.city);
+                              setFieldValue("province", address.province);
+                              setGettingLocation(false);
+                            },
+                            () => {
+                              alert("Location access denied.");
+                              setGettingLocation(false);
+                            }
+                          );
+                        }}
+                        disabled={gettingLocation}
                       >
-                        <TileLayer
-                          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                        />
-                        <Marker
-                          position={[
-                            coordinates.latitude,
-                            coordinates.longitude,
-                          ]}
-                        />
-                        <MapClickHandler setFieldValue={setFieldValue} />
-                      </MapContainer>
-                    )}
+                        {gettingLocation
+                          ? "Getting Location..."
+                          : "Get My Location"}
+                      </Buttons>
+                    </div>
+                    <div className="w-full h-[200px] rounded-xl overflow-hidden">
+                      {isLoading ? (
+                        <div className="w-full h-full rounded-xl bg-gray-200 flex flex-col gap-3 items-center justify-center">
+                          <div className="loader"></div>
+                          <p>Loading Map...</p>
+                        </div>
+                      ) : (
+                        <MapContainer
+                          center={[coordinates.latitude, coordinates.longitude]}
+                          zoom={13}
+                          className="leaflet-container"
+                          ref={mapRef}
+                          scrollWheelZoom={false}
+                          doubleClickZoom={false}
+                        >
+                          <TileLayer
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+                          />
+                          <Marker
+                            position={[
+                              coordinates.latitude,
+                              coordinates.longitude,
+                            ]}
+                          />
+                          <MapClickHandler setFieldValue={setFieldValue} />
+                        </MapContainer>
+                      )}
+                    </div>
                   </div>
-
                   <Buttons type="submit" disabled={isSubmitting || isLoading}>
                     {isSubmitting ? "Saving..." : "Save"}
                   </Buttons>

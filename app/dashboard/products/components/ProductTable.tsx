@@ -15,6 +15,7 @@ import {useDashboardProducts} from "@/hooks/useProducts";
 import SkeletonTableRow from "app/dashboard/components/SkeletonTableRow";
 import EmptyTableRow from "app/dashboard/components/EmptyTableRow";
 import TablePagination from "@/app/dashboard/components/TablePagination";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 const ProductTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0)
@@ -53,12 +54,15 @@ const ProductTable: FC<{query: string}> = ({query}) => {
 
 const ProductRow: FC<DashboardProducts> = ({id, name, price, thumbnail, category}) => {
     const router = useRouter()
+    const isAdmin = useDashboardStore(state => state.isAdmin)
 
     const handleEdit = () => {
-        router.push("/dashboard/products/edit/" + id)
+        if (isAdmin) {
+            router.push("/dashboard/products/edit/" + id)
+        }
     }
     return (
-        <TableRow onClick={handleEdit} className={"hover:cursor-pointer"}>
+        <TableRow onClick={handleEdit} className={isAdmin ? "hover:cursor-pointer" : ""}>
             <TableCell className="font-medium">{id}</TableCell>
             <TableCell className={"max-md:hidden"}>
                 <Image src={thumbnail} alt={`image of ${name}`} width={60} height={60} />

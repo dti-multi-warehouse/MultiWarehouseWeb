@@ -1,4 +1,3 @@
-'use client'
 import StatusTransactionNav from "@/components/StatusTransactionNav";
 
 export default function StatusLayout({

@@ -1,5 +1,5 @@
 export const config = {
-    BASE_URL: 'https://dev-be.alphamarch.shop', //api
+    BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL, //api
     API_VER: '/api/v1/',
     endpoints: {
         product: 'product',

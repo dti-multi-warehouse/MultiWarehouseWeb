@@ -8,7 +8,7 @@ export default function Home() {
     <main className="p-5 md:p-10 bg-transparent">
       <Hero />
       <CategoryComponent />
-      <ProductCategory categoriesToShow={["Beverages", "Tea"]} />
+      <ProductCategory />
     </main>
   );
 }

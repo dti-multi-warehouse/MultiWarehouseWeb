@@ -4,7 +4,6 @@ import {
     Card,
     CardContent,
     CardDescription,
-    CardFooter,
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
@@ -44,11 +43,6 @@ const ProductSalesChart: FC<ProductSalesChartProps> = ({productSales, month}) =>
                     </BarChart>
                 </ResponsiveContainer>
             </CardContent>
-            <CardFooter className="flex-col items-start gap-2 text-sm">
-                <div className="leading-none text-muted-foreground">
-                    Showing total visitors for {month}
-                </div>
-            </CardFooter>
         </Card>
     )
 }

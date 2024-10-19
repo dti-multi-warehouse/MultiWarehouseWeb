@@ -5,7 +5,6 @@ import { TfiEmail } from "react-icons/tfi";
 import { RiCustomerService2Line } from "react-icons/ri";
 
 const paymentMethod = [
-  { name: "COD", image: "cod.png" },
   { name: "BCA", image: "bca.png" },
   { name: "Mandiri", image: "mandiri.png" },
   { name: "Ovo", image: "ovo.png" },
@@ -15,7 +14,6 @@ const paymentMethod = [
 const menuFooter = [
   { name: "Home", link: "/" },
   { name: "Shop", link: "/shop" },
-  { name: "About", link: "/about" },
 ];
 
 const socMed = [
@@ -38,7 +36,7 @@ const Footer: React.FC = () => {
           <h1 className="font-bold text-red-600 text-2xl">AlphaMarch</h1>
           <p className="lg:mr-10 text-gray-600 font-medium">Shop Smart, Shop Fast, Shop Alpha March! Bringing the Store to Your Door.</p>
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 mb-5 md:mb-0">
           <h3 className="font-bold text-lg">Quick Menu</h3>
           <div className="flex flex-col gap-3">
             {menuFooter.map((item, index) => (

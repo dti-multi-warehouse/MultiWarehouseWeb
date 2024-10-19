@@ -15,11 +15,13 @@ import {
 import AlertDialog from '@/components/AlertDialog';
 import { FaRegEye, FaRegEyeSlash } from 'react-icons/fa';
 import { useQueryClient } from 'react-query';
+import Buttons from '@/components/Buttons';
 
 const UpdateWarehouseAdmin: React.FC<{ adminId: number }> = ({ adminId }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string>('');
+  const [dialogOpen, setDialogOpen] = useState(false); // State to manage dialog open/close
   const queryClient = useQueryClient();
 
   const togglePasswordVisibility = () => setShowPassword((prev) => !prev);
@@ -48,8 +50,11 @@ const UpdateWarehouseAdmin: React.FC<{ adminId: number }> = ({ adminId }) => {
   if (isError) return <div>Error loading admin data</div>;
 
   return (
-    <Dialog>
-      <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500">
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger
+        className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500"
+        onClick={() => setDialogOpen(true)}
+      >
         Edit
       </DialogTrigger>
       <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
@@ -88,9 +93,11 @@ const UpdateWarehouseAdmin: React.FC<{ adminId: number }> = ({ adminId }) => {
               await updateWarehouseAdminMutation.mutateAsync({ id: adminId, data: formData });
               setAlertMessage('Warehouse admin updated successfully!');
               queryClient.invalidateQueries(['warehouseAdmin', adminId]);
+              setSubmitting(false);
+              setDialogOpen(false);
+              window.location.reload();
             } catch (error) {
               setAlertMessage('Failed to update warehouse admin.');
-            } finally {
               setAlertOpen(true);
               setSubmitting(false);
             }
@@ -177,13 +184,12 @@ const UpdateWarehouseAdmin: React.FC<{ adminId: number }> = ({ adminId }) => {
               </div>
 
               <div className="flex items-center justify-end gap-5">
-                <button
-                  className="py-1 px-10 bg-red-600 text-white rounded-xl flex justify-center font-bold items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500"
+                <Buttons
                   type="submit"
                   disabled={isSubmitting}
                 >
-                  Update
-                </button>
+                  {isSubmitting ? 'Updating...' : 'Update'}
+                </Buttons>
               </div>
             </Form>
           )}

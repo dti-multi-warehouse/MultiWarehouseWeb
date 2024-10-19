@@ -3,6 +3,13 @@ import apiClient from '@/lib/apiClient';
 import { useSession } from 'next-auth/react';
 import { userAddress } from '@/types/datatypes';
 
+interface ApiResponse<T> {
+  statusCode: number;
+  message: string;
+  success: boolean;
+  data: T;
+}
+
 export const useGetUserAddresses = () => {
   const { data: session } = useSession();
 
@@ -10,20 +17,17 @@ export const useGetUserAddresses = () => {
     ['userAddresses', session?.user?.id],
     async () => {
       if (!session?.user?.id) throw new Error('User is not logged in');
-      try {
-        const response = await apiClient.get<userAddress[]>(`/api/v1/address/user/${session.user.id}`);
-        return response.data;
-      } catch (err) {
-        console.error('Failed to fetch addresses:', err);
-        throw err;
-      }
+      const response = await apiClient.get<ApiResponse<userAddress[]>>(
+        `/api/v1/address/user/${session.user.id}`
+      );
+      return response.data.data;
     },
     {
       enabled: !!session?.user?.id,
       retry: 1,
       onError: (err) => {
         console.error('Error fetching addresses:', err);
-      }
+      },
     }
   );
 
@@ -104,8 +108,10 @@ export const useGetUserAddressById = (id: number) => {
     ['userAddress', id],
     async () => {
       if (!session?.user?.id) throw new Error('User is not logged in');
-      const response = await apiClient.get<userAddress>(`/api/v1/address/userAddress/${id}`);
-      return response.data;
+      const response = await apiClient.get<ApiResponse<userAddress>>(
+        `/api/v1/address/userAddress/${id}`
+      );
+      return response.data.data;
     },
     {
       enabled: !!session?.user?.id,

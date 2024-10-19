@@ -53,7 +53,7 @@ const UsersTable: React.FC = () => {
   if (isLoading) return <div>Loading users...</div>;
   if (isError) return <div>Failed to load users.</div>;
 
-  const { content: users = [], totalPages = 0 } = data?.data || {}; 
+  const { content: users = [], totalPages = 0 } = data || {}; 
 
   return (
     <>
@@ -61,7 +61,7 @@ const UsersTable: React.FC = () => {
         <TableCaption>A list of users.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[50px]">ID</TableHead>
+            <TableHead className="">ID</TableHead>
             <TableHead>Username</TableHead>
             <TableHead>Email</TableHead>
             <TableHead>Role</TableHead>
@@ -69,17 +69,17 @@ const UsersTable: React.FC = () => {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {data.content.length === 0 ? (
+          {users.length === 0 ? (
             <TableRow>
               <TableCell colSpan={5} className="text-center">
                 No users found.
               </TableCell>
             </TableRow>
           ) : (
-            data.content.map((user: any) => (
+           users.map((user: any) => (
               <TableRow key={user.id}>
-                <TableCell className="font-medium">{user.id}</TableCell>
-                <TableCell>{user.username}</TableCell>
+                <TableCell className="font-semibold">#{" "}{user.id}</TableCell>
+                <TableCell className="capitalize">{user.username}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.role}</TableCell>
                 <TableCell className={`text-right justify-end gap-5 ${user.role !== "warehouse_admin" ? "hidden" : "flex"}`}>
@@ -116,7 +116,7 @@ const UsersTable: React.FC = () => {
                   <PaginationItem>
                     <PaginationNext
                       href="#"
-                      onClick={() => setPage((prev) => Math.min(prev + 1, totalPages - 1))}
+                      onClick={() => setPage((prev) => Math.min(prev + 1, totalPages + 1))}
                     />
                   </PaginationItem>
                 </PaginationContent>

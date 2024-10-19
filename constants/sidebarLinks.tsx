@@ -16,7 +16,17 @@ export const sidebarLinks: SidebarLinkProps[] = [
         icon: <Package2 />,
         text: "Stocks",
         link: "stocks"
-    }
+    },
+    {
+        icon: <Library />,
+        text: "Products",
+        link: "products"
+    },
+    {
+        icon: <Tag />,
+        text: "Categories",
+        link: "categories"
+    },
 ]
 
 export const superAdminLinks: SidebarLinkProps[] = [
@@ -29,16 +39,6 @@ export const superAdminLinks: SidebarLinkProps[] = [
         icon: <Warehouse />,
         text: "Warehouses",
         link: "warehouses"
-    },
-    {
-        icon: <Library />,
-        text: "Products",
-        link: "products"
-    },
-    {
-        icon: <Tag />,
-        text: "Categories",
-        link: "categories"
     },
     {
         icon: <UsersRound />,

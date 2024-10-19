@@ -1,10 +1,9 @@
 import {FC} from "react";
-import { TrendingUp, Loader2 } from "lucide-react"
+import { TrendingUp } from "lucide-react"
 import { CartesianGrid, Line, LineChart, XAxis, YAxis, ResponsiveContainer } from "recharts"
 import {
     Card,
     CardContent,
-    CardDescription,
     CardFooter,
     CardHeader,
     CardTitle,

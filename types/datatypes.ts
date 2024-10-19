@@ -1,8 +1,6 @@
-import { date } from "yup";
 import { WarehouseList } from "@/types/warehouse";
 
 export interface userAddress {
-  data?: {
     id: number;
     name: string;
     phoneNumber: string;
@@ -15,7 +13,6 @@ export interface userAddress {
       longitude: number;
     };
     primary: boolean;
-  };
 }
 
 export interface AddItemDto {
@@ -128,15 +125,6 @@ export interface ConfirmResetPasswordRequest {
   newPassword: string;
 }
 
-export interface Stock {
-  id: number;
-  name: string;
-  stock: number;
-  thumbnail: string;
-  incoming: number;
-  outgoing: number;
-}
-
 export interface StockDetailsResponse {
   stockMovements: StockDetails[];
   stockMovementChartData: StockMovementChartData[];
@@ -185,16 +173,16 @@ export enum BankTransfer {
 }
 
 export interface CreateOrderItemRequestDto {
-  productIds: number; 
-  quantity: number;  
+  productIds: number;
+  quantity: number; 
 }
 
 export interface CreateOrderRequestDto {
   items: CreateOrderItemRequestDto[];
   paymentMethod: PaymentMethod;
   bankTransfer?: BankTransfer;
-  shippingMethod: string; // Ensure this is a valid shipping method
-  shippingAddressId: number; // Ensure a valid shipping address ID is passed
+  shippingMethod: string; 
+  shippingAddressId: number;
 }
 
 export interface CreateOrderResponseDto {
@@ -210,42 +198,49 @@ export interface CreateOrderResponseDto {
 }
 
 export interface Order {
-  id: number;
-  userId: number;
-  userName: string;
-  warehouseId: number;
-  warehouseName: string;
-  price: number;
-  paymentProof: string | null;
-  status: string;
-  paymentMethod: string;
-  shippingCost: number;
-  bank: string;
-  accountNumber: string;
-  createdAt: string;
-  paymentExpiredAt: string;
-  invoiceNumber: number;
-  items: OrderItem[]; // Replace product-specific fields with a list of items
-  totalAmount: number;
-  buyerName: string;
-  buyerPhoneNumber: string;
-  buyerAddress: {
     id: number;
-    street: string;
-    city: string;
-    province: string;
-  };
-  warehouseAddress: {
-    id: number;
-    street: string;
-    city: string;
-    province: string;
-  };
-  statusLabel: string;
-  shippingDate: string;
-  virtualAccountNumber: string;
-}
+    userId: number;
+    userName: string;
+    warehouseId: number;
+    warehouseName: string;
+    paymentProof: string | null;
+    status: string;
+    paymentMethod: string;
+    shippingCost: number;
+    bank: string;
+    accountNumber: string;
+    createdAt: string;
+    paymentExpiredAt: string;
+    invoiceNumber: number;
+    items: OrderItems[];
+    totalAmount: number;
+    price: number;
+    buyerName: string;
+    buyerPhoneNumber: string;
+    buyerAddress: {
+      id: number;
+      street: string;
+      city: string;
+      province: string;
+    };
+    warehouseAddress: {
+      id: number;
+      street: string;
+      city: string;
+      province: string;
+    };
+    statusLabel: string;
+    shippingDate: string;
+    virtualAccountNumber: string;
+  }
 
+  export interface OrderItems{
+    id: number;
+    name: string;
+    quantity: number;
+    thumbnail: string;
+    price: number;
+  }
 
 
 export interface OrderItem {

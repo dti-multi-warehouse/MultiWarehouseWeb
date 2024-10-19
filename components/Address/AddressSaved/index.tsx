@@ -74,7 +74,7 @@ const AddressSaved: React.FC = () => {
     setIsEditAddressOpen(true); 
   };
 
-  if (isLoading) return <p>Loading...</p>;
+  if (isLoading) return <p className="loader"></p>;
 
   if (error) return <p>Error loading addresses</p>;
 
@@ -96,9 +96,9 @@ const AddressSaved: React.FC = () => {
           <div className="flex flex-col gap-5">
             <hr className="border-dashed border-gray-800" />
             <div className="flex flex-col gap-5 w-full p-5">
-              {addresses?.data?.length > 0 ? (
-                addresses.data.map((address, index) => (
-                  <div key={index} className="flex flex-col gap-2">
+              {addresses.length > 0 ? (
+                addresses.map((address, index) => (
+                  <div key={index} className="flex flex-col gap-2 rounded-xl bg-gray-100 p-2 md:p-5">
                     <div className="flex justify-between">
                       <p className="font-semibold">{address.label}</p>
                       <div className="flex items-center gap-2">
@@ -167,7 +167,7 @@ const AddressSaved: React.FC = () => {
         title="Delete Address"
         description="Are you sure you want to delete this address? This action cannot be undone."
         actionLabel="Delete"
-        onAction={handleDeleteConfirm}  // Confirm delete
+        onAction={handleDeleteConfirm}  
         cancelLabel="Cancel"
       />
 
