@@ -1,33 +1,54 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
-import Buttons from '@/components/Buttons';
-import Image from 'next/image';
-import { useCart } from '@/hooks/useCart';
-import { useGetUserAddresses } from '@/hooks/useAddress';
-import { useCreateOrder } from '@/hooks/useOrder';
-import { PaymentMethod, BankTransfer, CreateOrderRequestDto } from '@/types/datatypes';
-import apiClient from '@/lib/apiClient';
-import dynamic from 'next/dynamic';
+import React, { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import Buttons from "@/components/Buttons";
+import Image from "next/image";
+import { useCart } from "@/hooks/useCart";
+import { useGetUserAddresses } from "@/hooks/useAddress";
+import { useCreateOrder } from "@/hooks/useOrder";
+import {
+  PaymentMethod,
+  BankTransfer,
+  CreateOrderRequestDto,
+} from "@/types/datatypes";
+import apiClient from "@/lib/apiClient";
+import dynamic from "next/dynamic";
+import {
+  midtransPayment,
+  shippingMethodList,
+  selectPaymentMethod,
+} from "@/data/data";
+import AlertDialog from "@/components/AlertDialog";
 
 const Checkout: React.FC = () => {
   const { cart, isLoading: isCartLoading } = useCart();
   const { addresses, isLoading: isAddressLoading } = useGetUserAddresses();
   const [subtotal, setSubtotal] = useState(0);
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("MIDTRANS");
+  const [selectedPaymentMethod, setSelectedPaymentMethod] =
+    useState("MIDTRANS");
   const [selectedBank, setSelectedBank] = useState("BCA");
   const [selectedShippingMethod, setSelectedShippingMethod] = useState("");
   const [shippingCost, setShippingCost] = useState(0);
-  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(null);
+  const [selectedAddressId, setSelectedAddressId] = useState<number | null>(
+    null
+  );
+  const [isShippingLoading, setIsShippingLoading] = useState(false);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [resultDialog, setResultDialog] = useState({
+    open: false,
+    title: "",
+    description: "",
+  });
   const router = useRouter();
   const createOrder = useCreateOrder();
 
   useEffect(() => {
-    if (addresses && addresses.data.length > 0) {
-      const primaryAddress = addresses.data.find(address => address.primary);
+    if (addresses && addresses.length > 0) {
+      const primaryAddress = addresses.find((address) => address.primary);
       if (primaryAddress) {
         setSelectedAddressId(primaryAddress.id);
       }
@@ -36,7 +57,10 @@ const Checkout: React.FC = () => {
 
   useEffect(() => {
     if (cart) {
-      const calculatedSubtotal = cart.data.cartItems.reduce((total, item) => total + item.price * item.quantity, 0);
+      const calculatedSubtotal = cart.data.cartItems.reduce(
+        (total, item) => total + item.price * item.quantity,
+        0
+      );
       setSubtotal(calculatedSubtotal);
     }
   }, [cart]);
@@ -47,6 +71,7 @@ const Checkout: React.FC = () => {
       return;
     }
 
+    setIsShippingLoading(true);
     try {
       const response = await apiClient.post("/api/v1/order/shipping-cost", {
         destinationCityId: selectedAddressId,
@@ -54,10 +79,14 @@ const Checkout: React.FC = () => {
         courier: selectedShippingMethod,
       });
 
-      const costData = response.data?.data?.rajaongkir?.results?.[0]?.costs?.[0]?.cost?.[0]?.value;
+      const costData =
+        response.data?.data?.rajaongkir?.results?.[0]?.costs?.[0]?.cost?.[0]
+          ?.value;
       setShippingCost(costData || 0);
     } catch (error) {
       console.error("Error fetching shipping cost:", error);
+    } finally {
+      setIsShippingLoading(false);
     }
   };
 
@@ -68,45 +97,87 @@ const Checkout: React.FC = () => {
   }, [selectedAddressId, selectedShippingMethod]);
 
   const handleCheckout = () => {
-    const selectedAddress = addresses?.data.find((address) => address.id === selectedAddressId);
+    setConfirmDialogOpen(true);
+  };
+
+  const confirmCheckout = () => {
+    const selectedAddress = addresses?.find(
+      (address) => address.id === selectedAddressId
+    );
     if (!selectedAddress) {
-      alert("No shipping address selected.");
+      setResultDialog({
+        open: true,
+        title: "Error",
+        description: "No shipping address selected.",
+      });
       return;
     }
 
-    const items = cart?.data.cartItems.map((item) => ({
-      productId: item.productId,
-      quantity: item.quantity,
-    })) || [];
+    const items =
+      cart?.data.cartItems.map((item) => ({
+        productId: item.productId,
+        quantity: item.quantity,
+      })) || [];
 
     if (items.length === 0) {
-      alert("Cart is empty.");
+      setResultDialog({
+        open: true,
+        title: "Error",
+        description: "Cart is empty.",
+      });
       return;
     }
 
     if (!selectedShippingMethod) {
-      alert("Please select a shipping method.");
+      setResultDialog({
+        open: true,
+        title: "Error",
+        description: "Please select a shipping method.",
+      });
       return;
     }
 
-    const [courier] = selectedShippingMethod.split('-');
+    setIsCheckoutLoading(true);
+    const [courier] = selectedShippingMethod.split("-");
 
     const orderPayload: CreateOrderRequestDto = {
       productIds: items.map((item) => item.productId),
       items,
-      paymentMethod: PaymentMethod[selectedPaymentMethod as keyof typeof PaymentMethod],
-      bankTransfer: selectedPaymentMethod === 'MIDTRANS' ? BankTransfer[selectedBank as keyof typeof BankTransfer] : undefined,
+      paymentMethod:
+        PaymentMethod[selectedPaymentMethod as keyof typeof PaymentMethod],
+      bankTransfer:
+        selectedPaymentMethod === "MIDTRANS"
+          ? BankTransfer[selectedBank as keyof typeof BankTransfer]
+          : undefined,
       shippingMethod: courier,
       shippingAddressId: selectedAddressId,
     };
 
     createOrder.mutate(orderPayload, {
-      onSuccess: () => router.push("/waiting-payment"),
-      onError: (error) => console.error("Order creation failed:", error),
+      onSuccess: () => {
+        setResultDialog({
+          open: true,
+          title: "Success",
+          description: "Your order has been created successfully!",
+        });
+        router.push("/waiting-payment");
+      },
+      onError: (error) => {
+        setResultDialog({
+          open: true,
+          title: "Failed",
+          description: "Order creation failed. Please try again.",
+        });
+        console.error("Order creation failed:", error);
+      },
+      onSettled: () => {
+        setIsCheckoutLoading(false);
+        setConfirmDialogOpen(false);
+      },
     });
   };
 
-  if (isCartLoading || isAddressLoading) return <div>Loading...</div>;
+  if (isCartLoading || isAddressLoading) return <div className="p-5 md:p-10 flex h-screen w-screen items-center justify-center"><div className="loader"></div></div>;
 
   return (
     <>
@@ -122,31 +193,44 @@ const Checkout: React.FC = () => {
                 onValueChange={(value) => setSelectedAddressId(parseInt(value))}
                 className="flex flex-col gap-5"
               >
-                {addresses?.data.map((address) => (
+                {addresses?.map((address) => (
                   <div key={address.id} className="flex gap-3 w-full">
-                    <RadioGroupItem value={address.id.toString()} id={`address-${address.id}`} />
-                    <Label htmlFor={`address-${address.id}`} className="leading-[1.6]">
-                      {address.name} - {address.phoneNumber} <br />{address.address.street}, <br /> {address.address.city}
+                    <RadioGroupItem
+                      value={address.id.toString()}
+                      id={`address-${address.id}`}
+                    />
+                    <Label
+                      htmlFor={`address-${address.id}`}
+                      className="leading-[1.6]"
+                    >
+                      {address.name} - {address.phoneNumber} <br />
+                      {address.address.street}, <br /> {address.address.city}
                     </Label>
                   </div>
                 ))}
               </RadioGroup>
-              {!addresses?.data.length && <p>No address available.</p>}
+              {!addresses?.length && <p>No address available.</p>}
             </div>
             <div className="h-2 w-full bg-gray-200 rounded-lg"></div>
             <div className="flex flex-col gap-5">
               <h3 className="font-semibold">Stok Barang</h3>
               {cart?.data?.cartItems.map((item, index) => (
-                <div key={index} className="flex gap-10 w-full">
+                <div
+                  key={index}
+                  className="flex gap-10 w-full bg-gray-100 rounded-xl p-2 md:p-5 items-center"
+                >
                   <Image
                     src={item.imageUrl}
                     alt={item.name}
-                    width={150}
+                    width={200}
                     height={150}
+                    className="rounded-xl max-w-[200px] max-h-[150px] object-cover object-center"
                   />
                   <div className="flex flex-col gap-3 w-full">
                     <h2 className="font-semibold text-gray-600">{item.name}</h2>
-                    <p className="font-semibold text-lg">Rp {item.price.toLocaleString()}</p>
+                    <p className="font-semibold text-lg">
+                      Rp {item.price.toLocaleString()}
+                    </p>
                     <p className="font-semibold">Jumlah beli {item.quantity}</p>
                   </div>
                 </div>
@@ -166,9 +250,15 @@ const Checkout: React.FC = () => {
               </div>
               <div className="flex items-center justify-between">
                 <p>Ongkos Kirim</p>
-                <p className="font-semibold text-lg">
-                  Rp {shippingCost.toLocaleString()}
-                </p>
+                {isShippingLoading ? (
+                  <p className="font-semibold text-lg animate-pulse">
+                    Loading...
+                  </p>
+                ) : (
+                  <p className="font-semibold text-lg">
+                    Rp {shippingCost.toLocaleString()}
+                  </p>
+                )}
               </div>
               <div className="flex items-center font-semibold justify-between">
                 <p className="text-lg">Total</p>
@@ -186,14 +276,12 @@ const Checkout: React.FC = () => {
                 onValueChange={setSelectedPaymentMethod}
                 className="font-semibold text-xl flex flex-col gap-5"
               >
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="MIDTRANS" id="midtrans" />
-                  <Label htmlFor="midtrans">Midtrans (Virtual Account)</Label>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <RadioGroupItem value="MANUAL" id="manual" />
-                  <Label htmlFor="manual">Manual Transfer</Label>
-                </div>
+                {selectPaymentMethod.map((method, index) => (
+                  <div className="flex items-center space-x-2" key={index}>
+                    <RadioGroupItem value={method.value} id={method.id} />
+                    <Label htmlFor={method.id}>{method.text}</Label>
+                  </div>
+                ))}
               </RadioGroup>
 
               {selectedPaymentMethod === "MIDTRANS" && (
@@ -205,22 +293,12 @@ const Checkout: React.FC = () => {
                     onValueChange={setSelectedBank}
                     className="font-semibold text-xl flex flex-col gap-5"
                   >
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="BCA" id="bca" />
-                      <Label htmlFor="bca">BCA</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="BRI" id="bri" />
-                      <Label htmlFor="bri">BRI</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="BNI" id="bni" />
-                      <Label htmlFor="bni">BNI</Label>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RadioGroupItem value="CIMB" id="cimb" />
-                      <Label htmlFor="cimb">CIMB</Label>
-                    </div>
+                    {midtransPayment.map((payment, index) => (
+                      <div className="flex items-center space-x-2" key={index}>
+                        <RadioGroupItem value={payment.value} id={payment.id} />
+                        <Label htmlFor={payment.id}>{payment.value}</Label>
+                      </div>
+                    ))}
                   </RadioGroup>
                 </div>
               )}
@@ -233,28 +311,45 @@ const Checkout: React.FC = () => {
                   onValueChange={setSelectedShippingMethod}
                   className="font-semibold text-xl flex flex-col gap-5"
                 >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="jne" id="jne" />
-                    <Label htmlFor="jne">JNE Regular</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="tiki" id="tiki" />
-                    <Label htmlFor="tiki">TIKI Express</Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="pos" id="pos" />
-                    <Label htmlFor="pos">POS Kilat</Label>
-                  </div>
+                  {shippingMethodList.map((shipping, index) => (
+                    <div className="flex items-center space-x-2" key={index}>
+                      <RadioGroupItem
+                        value={shipping.value}
+                        id={shipping.value}
+                      />
+                      <Label htmlFor={shipping.value}>{shipping.text}</Label>
+                    </div>
+                  ))}
                 </RadioGroup>
               </div>
 
-              <Buttons className="w-fit self-center font-semibold !px-10 !py-2" onClick={handleCheckout}>
-                Checkout Now
+              <Buttons
+                className="w-fit self-center font-semibold !px-10 !py-2"
+                onClick={handleCheckout}
+              >
+                {isCheckoutLoading ? " Checkout..." : "Checkout Now"}
               </Buttons>
             </div>
           </div>
         </div>
       </div>
+      {/* Confirmation Dialog */}
+      <AlertDialog
+        open={confirmDialogOpen}
+        onOpenChange={setConfirmDialogOpen}
+        title="Are you sure wants to proceed the checkout now?"
+        actionLabel="Yes"
+        cancelLabel="No"
+        onAction={confirmCheckout}
+      />
+      {/* Result Dialog */}
+      <AlertDialog
+        open={resultDialog.open}
+        onOpenChange={(open) => setResultDialog((prev) => ({ ...prev, open }))}
+        title={resultDialog.title}
+        cancelVisibility="hidden"
+        description={resultDialog.description}
+      />
     </>
   );
 };

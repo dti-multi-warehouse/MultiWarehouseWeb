@@ -29,7 +29,7 @@ export default function ClientRootLayout({
   }, [status, session, router, setUser, clearUser, isAdmin]);
 
   if (status === "loading") {
-    return <div>Loading...</div>;
+    return <div className=" flex flex-col gap-5 items-center justify-center h-screen w-screen"><p className="font-bold text-red-600 text-2xl animate-bounce duration-1000">AlphaMarch</p></div>;
   }
 
   return <>{children}</>;

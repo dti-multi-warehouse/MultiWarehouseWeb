@@ -18,6 +18,8 @@ const Cart: React.FC = () => {
 
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+  const [isTotalLoading, setIsTotalLoading] = useState(false);
+  const [isCheckoutLoading, setIsCheckoutLoading] = useState(false);
 
   const isAuthenticated = status === "authenticated";
   const isVerified = profile?.verified;
@@ -35,8 +37,23 @@ const Cart: React.FC = () => {
     }
   }, [isAuthenticated, isProfileLoading, isVerified]);
 
+  useEffect(() => {
+    if (isCartLoading) {
+      setIsTotalLoading(true);
+    } else {
+      setIsTotalLoading(true);
+      setTimeout(() => {
+        setIsTotalLoading(false);
+      }, 500);
+    }
+  }, [cart, isCartLoading]);
+
   if (status === "loading" || isProfileLoading || isCartLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div className="p-5 md:p-10 flex h-screen w-screen items-center justify-center">
+        <div className="loader"></div>
+      </div>
+    );
   }
 
   if (cartError) {
@@ -45,7 +62,10 @@ const Cart: React.FC = () => {
 
   const handleCheckout = () => {
     if (isVerified) {
-      router.push("/checkout");
+      setIsCheckoutLoading(true);
+      setTimeout(() => {
+        router.push("/checkout");
+      }, 1000); 
     } else {
       setDialogMessage("You need to verify your account before proceeding to checkout.");
       setDialogOpen(true);
@@ -73,14 +93,18 @@ const Cart: React.FC = () => {
               <hr className="border-gray-900 border-dashed" />
               <div className="flex items-center justify-between">
                 <p className="text-gray-700 font-semibold">Subtotal</p>
-                <p className="text-xl font-semibold">Rp {cart?.data?.totalPrice || 0}</p>
+                {isTotalLoading ? (
+                  <p className="text-xl font-semibold animate-pulse">Loading...</p>
+                ) : (
+                  <p className="text-xl font-semibold">Rp {cart?.data?.totalPrice?.toLocaleString() || 0}</p>
+                )}
               </div>
               <Buttons
                 className={`py-2 text-sm font-semibold mt-2 ${!isVerified ? "!bg-gray-300 !text-gray-800" : ""}`}
-                disabled={!isVerified}
+                disabled={!isVerified || isCheckoutLoading} 
                 onClick={handleCheckout}
               >
-                Checkout Sekarang
+                {isCheckoutLoading ? "Ke Checkout..." : "Checkout Sekarang"} 
               </Buttons>
             </div>
           </div>

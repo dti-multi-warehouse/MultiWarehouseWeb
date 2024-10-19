@@ -11,7 +11,7 @@ import React from "react";
 
 const ProfileInformation: React.FC = () => {
   const { profile, isLoading: profileLoading, error: profileError } = useGetProfile();
-  const { addresses, isLoading: addressesLoading, error: addressesError } = useGetUserAddresses();
+  const { addresses = [], isLoading: addressesLoading, error: addressesError } = useGetUserAddresses();
   const [showResendButton, setShowResendButton] = useState(false);
   const resendVerificationEmail = useResendVerificationEmail();
 
@@ -96,8 +96,8 @@ const ProfileInformation: React.FC = () => {
 
           <h3 className="font-bold text-lg">Alamat User</h3>
           <div className="flex flex-col gap-5 w-full">
-            {addresses?.data?.length > 0 ? (
-              addresses.data.map((address, index) => (
+            {addresses.length > 0 ? (
+                addresses.map((address, index) => (
                 <div key={index} className="flex flex-col gap-2">
                   <div className="flex justify-between">
                     <p className="font-semibold">{address.label}</p>
@@ -117,7 +117,7 @@ const ProfileInformation: React.FC = () => {
                   </p>
                   <div
                     className={`h-2 w-full bg-gray-200 rounded-lg mt-5 ${
-                      index === 2 ? "hidden" : "block"
+                      index === addresses.length - 1 ? "hidden" : "block"
                     }`}
                   ></div>
                 </div>

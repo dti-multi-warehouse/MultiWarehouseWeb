@@ -6,12 +6,23 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 import { Navigation } from 'swiper/modules';
 import Image from "next/image";
-import {useCategories} from "@/hooks/useCategories";
+import { useCategories } from "@/hooks/useCategories";
+import CategorySkeleton from "./CategorySkeleton";
 
 const CategoryComponent: React.FC = () => {
-  const {data, isLoading, error} = useCategories()
+  const { data, isLoading, error } = useCategories();
+  if (isLoading) {
+    return (
+      <div className="">
+        <CategorySkeleton />
+      </div>
+    );
+  }
 
-  console.log(data)
+  if (error) {
+    return <div className="text-gray-500 rounded-xl font-semibold py-1 px-2 shadow-airbnbSoft">There are no category to show.</div>;
+  }
+
   return (
     <Swiper
       spaceBetween={30}

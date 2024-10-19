@@ -15,11 +15,13 @@ import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useCreateWarehouseAdmin } from "@/hooks/useAdmin"; 
 import { useRouter } from "next/navigation";
+import Buttons from "@/components/Buttons";
 
 const CreateWarehouseAdmin: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [alertOpen, setAlertOpen] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
+  const [dialogOpen, setDialogOpen] = useState(false);
   const router = useRouter();
 
   const createWarehouseAdminMutation = useCreateWarehouseAdmin();
@@ -44,8 +46,10 @@ const CreateWarehouseAdmin: React.FC = () => {
   });
 
   return (
-    <Dialog>
-      <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500">
+    <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
+      <DialogTrigger
+        className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500"
+      >
         Add Admin
       </DialogTrigger>
       <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
@@ -87,7 +91,8 @@ const CreateWarehouseAdmin: React.FC = () => {
               onSuccess: () => {
                 setAlertMessage("Warehouse admin created successfully!");
                 setAlertOpen(true);
-                window.location.reload();
+                setDialogOpen(false);
+                window.location.reload(); 
               },
               onError: (error) => {
                 console.error("Error creating warehouse admin:", error);
@@ -179,13 +184,12 @@ const CreateWarehouseAdmin: React.FC = () => {
               </div>
 
               <div className="flex items-center justify-end gap-5">
-                <button
-                  className="py-1 px-10 bg-red-600 text-white rounded-xl flex justify-center font-bold items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500"
+                <Buttons
                   type="submit"
                   disabled={isSubmitting}
                 >
-                  Save
-                </button>
+                  {isSubmitting ? "Saving..." : "Save"} 
+                </Buttons>
               </div>
             </Form>
           )}

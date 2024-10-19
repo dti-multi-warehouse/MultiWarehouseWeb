@@ -88,7 +88,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
 
   return (
     <Dialog>
-      <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex md:justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500 w-fit self-center md:self-end">
+      <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex md:justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500 w-fit md:self-end">
         {order.status === "AWAITING_PAYMENT" ? "Bayar Sekarang" : "Lihat Detail"}
       </DialogTrigger>
       <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
@@ -104,13 +104,20 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
               </p>
             </div>
             <div className="flex flex-col md:flex-row items-start md:gap-16 text-gray-500 font-medium w-full">
-              <h3>Toko Pengirim</h3>
-              <p>{order.warehouseName || "N/A"}</p>
+              <h3 className="whitespace-nowrap">Toko Pengirim</h3>
+              <div className="w-full flex flex-col items-start self-start">
+                <p className="text-gray-800 font-bold capitalize">{order.warehouseName || "N/A"} </p>
+                <p className="text-gray-600 self-start text-left">{order.warehouseAddress.street +
+                    ", " +
+                    order.warehouseAddress.city +
+                    ", " +
+                    order.warehouseAddress.province || "Address not available"}</p>
+              </div>
             </div>
             <div className="flex flex-col md:flex-row items-start md:gap-14 text-gray-500 font-medium w-full">
               <h3 className="whitespace-nowrap">Alamat Pembeli</h3>
               <div className="w-full flex flex-col items-start self-start">
-                <p>{order.buyerName || "N/A"}</p>
+                <p className="text-gray-800 font-bold capitalize">{order.buyerName || "N/A"}</p>
                 <p>{order.buyerPhoneNumber || "N/A"}</p>
                 <p className="text-gray-600 self-start text-left">
                   {order.buyerAddress.street +
@@ -129,38 +136,40 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
 
           <hr className="border-dashed border-gray-800" />
 
-          <div className="flex flex-col gap-2 p-5 text-gray-500 font-medium">
-            <p className="text-black font-semibold mb-3">Detail Pesanan</p>
-            <p>No Invoice: {order.invoiceNumber || "N/A"}</p>
-            <p>
+          <div className="flex flex-col md:gap-2 p-5 text-gray-500 font-medium">
+            <p className="text-black font-semibold mb-1 md:mb-3">Detail Pesanan</p>
+            <p>No Invoice: # {order.invoiceNumber || "N/A"}</p>
+            <p className="mb-3">
               Dikirim pada{" "}
               {order.shippingDate
                 ? new Date(order.shippingDate).toLocaleDateString()
                 : "N/A"}
             </p>
-            {order.items.map((item, index) => (
-              <div key={index} className="flex flex-col md:flex-row gap-5 md:items-center w-full">
-                <div className=" w-[150px] h-[150px] rounded-xl border-2 overflow-hidden">
-                  <Image alt="product" src={item.thumbnail || "/default-product.png"} width={150} height={150} className="w-[150px] h-[150px] object-cover object-center rounded-xl" />
-                </div>
-                <div className="flex flex-col gap-2 font-semibold items-start w-full">
-                  <p className="text-gray-500">{item.name || "N/A"}</p>
-                  <p className="text-lg text-red-600">Rp {item.price || 0}</p>
-                  <div className="flex items-center justify-between w-full">
-                    <p className="text-gray-500">Jumlah beli {item.quantity || 0}</p>
+            <div className="flex flex-col gap-5 rounded-xl p-2 border bg-gray-100">
+              {order.items.map((item, index) => (
+                <div key={index} className="flex gap-5 items-center w-full">
+                  <div className=" w-[150px] h-[150px] rounded-xl border-2 overflow-hidden">
+                    <Image alt="product" src={item.thumbnail || "/default-product.png"} width={150} height={150} className="w-[150px] h-[150px] object-cover object-center rounded-xl" />
+                  </div>
+                  <div className="flex flex-col gap-2 font-semibold items-start text-left w-full">
+                    <p className="text-gray-500">{item.name || "N/A"}</p>
+                    <p className="text-lg text-red-600">Rp {item.price || 0}</p>
+                    <div className="flex items-center justify-between w-full">
+                      <p className="text-gray-500">Jumlah beli {item.quantity || 0}</p>
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <hr className="border-dashed border-gray-800" />
 
-          <div className="flex flex-col gap-5 p-5 font-medium text-sm w-full">
+          <div className="flex flex-col md:gap-5 p-5 font-medium w-full">
             <p className="font-semibold">Detail Pembayaran</p>
             <div className="flex flex-col md:flex-row items-center justify-between w-full gap-10">
-              <div className="flex flex-col w-full gap-2 text-gray-500">
-                <p>Metode Pembayaran: {order.paymentMethod + " " + order.bank || "N/A"}</p>
+              <div className="flex flex-col items-center md:items-start w-full gap-2 text-gray-500">
+                <p>Metode Pembayaran: {order.paymentMethod || "N/A"} {" "} {order.paymentMethod === "MANUAL" ? "BANK TRANSFER" : order.bank}</p>
                 {order.paymentMethod === "MANUAL" ? (
                   <div className={`${order.status === "AWAITING_PAYMENT" ? "block" : "hidden"}`}>
                     <p>Upload Bukti Pembayaran:</p>
@@ -178,7 +187,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
               </div>
               <div className="flex flex-col items-center md:items-end text-gray-500 w-full">
                 <p>Total Pembayaran</p>
-                <p className="font-bold text-lg text-red-600">Rp {order.price || 0}</p>
+                <p className="font-bold text-xl text-red-600">Rp {order.price || 0}</p>
 
                 {order.status === "AWAITING_PAYMENT" && !isExpired && (
                   <>
@@ -203,11 +212,11 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
           <AlertDialog
             open={cancelDialogOpen}
             onOpenChange={setCancelDialogOpen}
-            title="Batalkan Pesanan"
-            description="Apakah Anda yakin ingin membatalkan pesanan ini?"
-            actionLabel="Ya, Batalkan"
+            title="Cancel Your Order"
+            description="Are you sure wants to cancel this order?"
+            actionLabel="Yes, Cancel"
             onAction={confirmCancelOrder}
-            cancelLabel="Tidak"
+            cancelLabel="No"
           />
         </DialogHeader>
       </DialogContent>
