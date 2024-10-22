@@ -16,10 +16,11 @@ import useDashboardStore from "@/stores/useDashboardStore";
 
 const CategoryTable: FC = () => {
     const { data, isLoading, error } = useCategories()
+    const isAdmin = useDashboardStore(state => state.isAdmin)
 
     return (
         <Table>
-            <TableCaption>Click on the category row to edit a category</TableCaption>
+            {isAdmin && <TableCaption>Click on the category row to edit a category</TableCaption>}
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">#</TableHead>

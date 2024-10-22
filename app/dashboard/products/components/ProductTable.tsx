@@ -20,10 +20,11 @@ import useDashboardStore from "@/stores/useDashboardStore";
 const ProductTable: FC<{query: string}> = ({query}) => {
     const [page, setPage] = useState(0)
     const { data, isLoading, error } = useDashboardProducts(query, page)
+    const isAdmin = useDashboardStore(state => state.isAdmin)
 
     return (
         <Table>
-            <TableCaption>Click on the product row to edit a product</TableCaption>
+            {isAdmin && <TableCaption>Click on the product row to edit a product</TableCaption>}
             <TableHeader>
                 <TableRow>
                     <TableHead className="w-[100px]">#</TableHead>
