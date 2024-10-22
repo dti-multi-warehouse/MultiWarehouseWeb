@@ -138,7 +138,7 @@ export const useUploadPaymentProof = () => {
       const formData = new FormData();
       formData.append('paymentProof', paymentProof);
 
-      const response = await apiClient.post(`/api/v1/order/payment/${orderId}`, formData, {
+      const response = await apiClient.post(`/api/v1/order/${orderId}/payment`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' }
       });
       return response.data;

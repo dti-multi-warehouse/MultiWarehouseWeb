@@ -1,5 +1,8 @@
+"use client"
+
 import Link from "next/link";
 import React from "react";
+import { usePathname } from "next/navigation";
 
 const statustrxlink = [
     { link: "/waiting-payment", label: "Menunggu Pembayaran" },
@@ -8,18 +11,29 @@ const statustrxlink = [
     { link: "/order-sent", label: "Dikirim" },
     { link: "/order-confirmation", label: "Dikonfirmasi" },
     { link: "/cancel-order", label: "Dibatalkan " },
-]
+];
 
 const StatusTransactionNav: React.FC = () => {
-    return(
-        <>
+    const currentPath = usePathname(); 
+
+    return (
         <div className="flex items-center gap-5 overflow-x-scroll status-trx">
-            {statustrxlink.map((status, index) => (
-                <Link href={status.link} key={index} className="text-red-600 py-2 px-5 border border-red-600 rounded-full text-xs font-medium md:text-sm whitespace-nowrap">{status.label}</Link>
-            ))}
+            {statustrxlink.map((status, index) => {
+                const isActive = currentPath === status.link; 
+
+                return (
+                    <Link
+                        href={status.link}
+                        key={index}
+                        className={`py-2 px-5 border rounded-full text-xs font-medium md:text-sm whitespace-nowrap
+                        ${isActive ? "bg-red-600 text-white border-red-600" : "text-red-600 border-red-600"}`}
+                    >
+                        {status.label}
+                    </Link>
+                );
+            })}
         </div>
-        </>
-    )
-}
+    );
+};
 
 export default StatusTransactionNav;

@@ -3,30 +3,20 @@
 import React from "react";
 import { useSearchParams } from "next/navigation";
 import ProductCard from "../../../../components/ProductCard";
-import { BiDrink } from "react-icons/bi";
-import { IoFastFood } from "react-icons/io5";
-import { FaKitchenSet } from "react-icons/fa6";
-import { MdOutlinePets } from "react-icons/md";
-import { GiShop, GiInnerSelf, GiMeat } from "react-icons/gi";
-import {useFeaturedProducts} from "@/hooks/useProducts";
+import { useFeaturedProducts } from "@/hooks/useProducts";
+import ProductCategorySkeleton from "./ProductCategorySkeleton";
 
-const iconMap: { [key: string]: JSX.Element } = {
-  BiDrink: <BiDrink />,
-  IoFastFood: <IoFastFood />,
-  FaKitchenSet: <FaKitchenSet />,
-  MdOutlinePets: <MdOutlinePets />,
-  GiShop: <GiShop />,
-  GiInnerSelf: <GiInnerSelf />,
-  GiMeat: <GiMeat />,
-};
-
-interface ProductCategoryProps {
-  categoriesToShow?: string[];
-}
-
-const ProductCategory: React.FC<ProductCategoryProps> = ({ categoriesToShow }) => {
+const ProductCategory: React.FC = () => {
   const params = useSearchParams();
   const { data, isLoading, error } = useFeaturedProducts();
+
+  if (isLoading) {
+    return <ProductCategorySkeleton />;
+  }
+
+  if (error) {
+    return <div className="text-xl font-semibold text-gray-700">There is no product to show.</div>;
+  }
 
   return (
     <div className="flex flex-col gap-[60px] h-full">
@@ -35,7 +25,7 @@ const ProductCategory: React.FC<ProductCategoryProps> = ({ categoriesToShow }) =
           <div className="flex items-center gap-2 text-xl font-semibold">
             <h1>{featured.group_key}</h1>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-5">
             {featured.hits.map((product, productIndex) => (
               <ProductCard
                 key={productIndex}

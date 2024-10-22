@@ -23,7 +23,7 @@ import {
 import WarehouseUpdate from "./WarehouseUpdate";
 import { useSearchWarehouses, useDeleteWarehouse } from "@/hooks/useWarehouse";
 import AdminAssignee from "./AdminAssignee";
-import { useToast } from "@/hooks/use-toast"; 
+import { useToast } from "@/hooks/use-toast";
 import { ToastAction } from "@/components/ui/toast";
 
 const WarehouseTable: React.FC = () => {
@@ -96,10 +96,15 @@ const WarehouseTable: React.FC = () => {
                 <TableCell>{warehouse.city}</TableCell>
                 <TableCell>{warehouse.province}</TableCell>
                 <TableCell className="">
-                <div className="flex flex-col gap-1">
-                  <p className="font-bold py-1 px-3 border border-red-600 text-red-600 rounded-full text-center">{warehouse.adminUsername}</p>
-                  <AdminAssignee warehouseId={warehouse.id} />
-                </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="font-bold py-1 px-3 border border-red-600 text-red-600 rounded-full text-center capitalize">
+                      {warehouse.adminUsername || "No Admin Assigned"}
+                    </p>
+                    <AdminAssignee
+                      warehouseId={warehouse.id}
+                      assignedAdminName={warehouse.adminUsername}
+                    />
+                  </div>
                 </TableCell>
                 <TableCell className="text-right flex justify-end gap-5">
                   <WarehouseUpdate warehouseId={warehouse.id} />
@@ -136,7 +141,7 @@ const WarehouseTable: React.FC = () => {
                     <PaginationNext
                       href="#"
                       onClick={() =>
-                        setPage((prev) => Math.min(prev + 1, totalPages - 1))
+                        setPage((prev) => Math.min(prev + 1, totalPages + 1))
                       }
                     />
                   </PaginationItem>

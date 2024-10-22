@@ -44,8 +44,8 @@ const CartItems: React.FC = () => {
   return (
     <div className="flex flex-col gap-5 w-full">
       {cartItems.map((item) => (
-        <div key={item.productId} className="flex flex-col md:flex-row gap-5 md:gap-10 w-full">
-          <Image src={item.imageUrl} alt={item.name} width={150} height={150} className="" />
+        <div key={item.productId} className="flex p-2 rounded-xl bg-gray-100 md:p-5 flex-col md:flex-row md:items-center gap-5 md:gap-10 w-full">
+          <Image src={item.imageUrl} alt={item.name} width={200} height={150} className="max-w-[200px] max-h-[150px] object-cover object-center rounded-xl" />
           <div className="flex flex-col gap-3 w-full">
             <button
               className="bg-red-200 text-red-600 rounded-full p-2 w-fit self-end"
@@ -53,9 +53,9 @@ const CartItems: React.FC = () => {
             >
               <RiDeleteBin6Line />
             </button>
-            <h2 className="font-semibold text-gray-600">{item.name}</h2>
+            <h2 className="font-semibold text-xl">{item.name}</h2>
             <div className="flex items-center justify-between gap-20">
-              <p className="font-semibold text-lg">Rp {item.price}</p>
+              <p className="font-semibold text-lg ">Rp {item.price}</p>
               <div className="flex items-center gap-5 text-lg font-semibold">
                 <button
                   className="bg-white border border-red-600 py-0 text-red-600 px-5 rounded-lg"
@@ -77,7 +77,7 @@ const CartItems: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-10 justify-between items-center mt-5">
-              <p className="font-semibold">Total {item.name}</p>
+              <p className="font-semibold text-gray-600">Total Per-barang</p>
               <p className="font-semibold text-lg text-red-600 whitespace-nowrap">
                 Rp {item.price * (localQuantities[item.productId] || item.quantity)}
               </p>

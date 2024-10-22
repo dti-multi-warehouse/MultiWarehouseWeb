@@ -1,8 +1,6 @@
-import { date } from "yup";
 import { WarehouseList } from "@/types/warehouse";
 
 export interface userAddress {
-  data?: {
     id: number;
     name: string;
     phoneNumber: string;
@@ -15,7 +13,6 @@ export interface userAddress {
       longitude: number;
     };
     primary: boolean;
-  };
 }
 
 export interface AddItemDto {
@@ -176,16 +173,16 @@ export enum BankTransfer {
 }
 
 export interface CreateOrderItemRequestDto {
-  productIds: number; // Ensure this is correctly populated for each product
-  quantity: number;  // Ensure quantity is positive
+  productIds: number;
+  quantity: number; 
 }
 
 export interface CreateOrderRequestDto {
   items: CreateOrderItemRequestDto[];
   paymentMethod: PaymentMethod;
   bankTransfer?: BankTransfer;
-  shippingMethod: string; // Ensure this is a valid shipping method
-  shippingAddressId: number; // Ensure a valid shipping address ID is passed
+  shippingMethod: string; 
+  shippingAddressId: number;
 }
 
 export interface CreateOrderResponseDto {
@@ -206,7 +203,6 @@ export interface Order {
     userName: string;
     warehouseId: number;
     warehouseName: string;
-    price: number;
     paymentProof: string | null;
     status: string;
     paymentMethod: string;
@@ -216,10 +212,9 @@ export interface Order {
     createdAt: string;
     paymentExpiredAt: string;
     invoiceNumber: number;
-    productImages: string[];
-    productName: string;
-    quantity: number;
+    items: OrderItems[];
     totalAmount: number;
+    price: number;
     buyerName: string;
     buyerPhoneNumber: string;
     buyerAddress: {
@@ -237,6 +232,14 @@ export interface Order {
     statusLabel: string;
     shippingDate: string;
     virtualAccountNumber: string;
+  }
+
+  export interface OrderItems{
+    id: number;
+    name: string;
+    quantity: number;
+    thumbnail: string;
+    price: number;
   }
 
 

@@ -144,18 +144,18 @@ export const authOptions: NextAuthOptions = {
       }
 
       // Decode the JWT header to get the `kid`
-      if (token.accessToken) {
-        try {
-          const decodedHeader = jwt.decode(token.accessToken, { complete: true });
-          console.log("Decoded JWT Header:", decodedHeader?.header);
+      // if (token.accessToken) {
+      //   try {
+      //     const decodedHeader = jwt.decode(token.accessToken, { complete: true });
+      //     console.log("Decoded JWT Header:", decodedHeader?.header);
 
-          // Access `kid`
-          const kid = decodedHeader?.header?.kid;
-          console.log("JWT `kid`:", kid);
-        } catch (err) {
-          console.error("Error decoding JWT:", err);
-        }
-      }
+      //     // Access `kid`
+      //     const kid = decodedHeader?.header?.kid;
+      //     console.log("JWT `kid`:", kid);
+      //   } catch (err) {
+      //     console.error("Error decoding JWT:", err);
+      //   }
+      // }
 
       return token;
     },
