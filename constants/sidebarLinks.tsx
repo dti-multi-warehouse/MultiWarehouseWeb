@@ -31,11 +31,6 @@ export const sidebarLinks: SidebarLinkProps[] = [
 
 export const superAdminLinks: SidebarLinkProps[] = [
     {
-        icon: <Building />,
-        text: "Team",
-        link: "team"
-    },
-    {
         icon: <Warehouse />,
         text: "Warehouses",
         link: "warehouses"
