@@ -9,7 +9,12 @@ import { useRouter } from "next/navigation";
 import React from "react";
 
 const EmailVerifSchema = Yup.object().shape({
-  password: Yup.string().required("Password is required"),
+  password: Yup.string()
+    .required("Password is required")
+    .min(6, "Password must be at least 6 characters")
+    .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
+    .matches(/[a-z]/, "Password must contain at least one lowercase letter")
+    .matches(/[0-9]/, "Password must contain at least one number"),
 });
 
 const EmailVerificationForm: React.FC<{ email: string; token: string }> = ({

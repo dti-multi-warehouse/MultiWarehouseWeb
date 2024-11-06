@@ -1,7 +1,7 @@
 "use client";
 
 import * as Yup from "yup";
-import { Formik, Form, Field } from "formik";
+import { Formik, Form, Field, ErrorMessage } from "formik";
 import {
   Dialog,
   DialogContent,
@@ -13,7 +13,7 @@ import {
 import AlertDialog from "@/components/AlertDialog";
 import { useState } from "react";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
-import { useCreateWarehouseAdmin } from "@/hooks/useAdmin"; 
+import { useCreateWarehouseAdmin } from "@/hooks/useAdmin";
 import { useRouter } from "next/navigation";
 import Buttons from "@/components/Buttons";
 
@@ -31,7 +31,9 @@ const CreateWarehouseAdmin: React.FC = () => {
   const CreateWarehouseAdminSchema = Yup.object().shape({
     username: Yup.string().required("Username is required"),
     email: Yup.string().email("Invalid email").required("Email is required"),
-    password: Yup.string().required("Password is required"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(6, "Password must be at least 6 characters"),
     avatar: Yup.mixed()
       .nullable()
       .test("fileSize", "File size too large", (value: any) => {
@@ -40,21 +42,24 @@ const CreateWarehouseAdmin: React.FC = () => {
       .test("fileType", "Unsupported file format", (value: any) => {
         return (
           !value ||
-          (value && ["image/jpeg", "image/jpg", "image/png", "image/gif"].includes(value.type))
+          (value &&
+            ["image/jpeg", "image/jpg", "image/png", "image/gif"].includes(
+              value.type
+            ))
         );
       }),
   });
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger
-        className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500"
-      >
+      <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500">
         Add Admin
       </DialogTrigger>
       <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-center p-5 pb-0">Add Warehouse Admin</DialogTitle>
+          <DialogTitle className="text-center p-5 pb-0">
+            Add Warehouse Admin
+          </DialogTitle>
           <DialogDescription className="text-center p-5">
             Fill in the details to create a new warehouse admin.
           </DialogDescription>
@@ -92,7 +97,7 @@ const CreateWarehouseAdmin: React.FC = () => {
                 setAlertMessage("Warehouse admin created successfully!");
                 setAlertOpen(true);
                 setDialogOpen(false);
-                window.location.reload(); 
+                window.location.reload();
               },
               onError: (error) => {
                 console.error("Error creating warehouse admin:", error);
@@ -108,7 +113,10 @@ const CreateWarehouseAdmin: React.FC = () => {
           {({ isSubmitting, setFieldValue }) => (
             <Form className="p-5 flex flex-col gap-5">
               <div>
-                <label className="block text-sm font-bold mb-2" htmlFor="username">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  htmlFor="username"
+                >
                   Username
                 </label>
                 <Field
@@ -132,7 +140,10 @@ const CreateWarehouseAdmin: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-sm font-bold mb-2" htmlFor="password">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  htmlFor="password"
+                >
                   Password
                 </label>
                 <div style={{ position: "relative" }}>
@@ -158,10 +169,16 @@ const CreateWarehouseAdmin: React.FC = () => {
                     {showPassword ? <FaRegEyeSlash /> : <FaRegEye />}
                   </button>
                 </div>
+                <div className="text-red-600 text-xs">
+                  <ErrorMessage name="password" />
+                </div>
               </div>
 
               <div>
-                <label className="block text-sm font-bold mb-2" htmlFor="avatar">
+                <label
+                  className="block text-sm font-bold mb-2"
+                  htmlFor="avatar"
+                >
                   Upload Avatar (Optional)
                 </label>
                 <input
@@ -170,7 +187,10 @@ const CreateWarehouseAdmin: React.FC = () => {
                   type="file"
                   accept=".jpg,.jpeg,.png,.gif"
                   onChange={(event) => {
-                    if (event.currentTarget?.files && event.currentTarget.files.length > 0) {
+                    if (
+                      event.currentTarget?.files &&
+                      event.currentTarget.files.length > 0
+                    ) {
                       setFieldValue("avatar", event.currentTarget.files[0]);
                     } else {
                       setFieldValue("avatar", null);
@@ -179,16 +199,14 @@ const CreateWarehouseAdmin: React.FC = () => {
                   className="w-full p-1 border-2 rounded-lg border-gray-300"
                 />
                 <p className="text-xs font-semibold text-red-500">
-                  * File must be less than 1 MB and in JPG, JPEG, PNG, or GIF format.
+                  * File must be less than 1 MB and in JPG, JPEG, PNG, or GIF
+                  format.
                 </p>
               </div>
 
               <div className="flex items-center justify-end gap-5">
-                <Buttons
-                  type="submit"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "Saving..." : "Save"} 
+                <Buttons type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Save"}
                 </Buttons>
               </div>
             </Form>

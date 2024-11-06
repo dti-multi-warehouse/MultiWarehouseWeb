@@ -9,7 +9,7 @@ const ProductCategorySkeleton: React.FC = () => {
         <div className="flex flex-col gap-5 p-5 md:p-10">
             <Skeleton className="w-32 h-10" />
             <div
-                className={clsx('grid grid-cols-2 gap-y-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 overflow-visible no-scrollbar')}>
+                className={clsx('grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 overflow-hidden no-scrollbar gap-5')}>
                 {array.map( i => <ProductCardSkeleton key={i} />)}
             </div>
         </div>

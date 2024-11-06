@@ -88,9 +88,9 @@ const WarehouseTable: React.FC = () => {
               </TableCell>
             </TableRow>
           ) : (
-            warehouses.map((warehouse: any) => (
+            warehouses.map((warehouse: any, index: number) => (
               <TableRow key={warehouse.id}>
-                <TableCell className="font-medium">#{warehouse.id}</TableCell>
+                <TableCell className="font-medium">#{index+1}</TableCell>
                 <TableCell>{warehouse.name}</TableCell>
                 <TableCell>{warehouse.street}</TableCell>
                 <TableCell>{warehouse.city}</TableCell>

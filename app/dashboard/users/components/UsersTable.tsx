@@ -76,9 +76,9 @@ const UsersTable: React.FC = () => {
               </TableCell>
             </TableRow>
           ) : (
-           users.map((user: any) => (
+           users.map((user: any, index: number) => (
               <TableRow key={user.id}>
-                <TableCell className="font-semibold">#{" "}{user.id}</TableCell>
+                <TableCell className="font-semibold">#{" "}{index+1}</TableCell>
                 <TableCell className="capitalize">{user.username}</TableCell>
                 <TableCell>{user.email}</TableCell>
                 <TableCell>{user.role}</TableCell>
