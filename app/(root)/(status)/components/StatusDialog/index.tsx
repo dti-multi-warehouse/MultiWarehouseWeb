@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import Image from "next/image";
 import Buttons from "@/components/Buttons";
+import { useRouter } from "next/navigation";
 import { Order } from "@/types/datatypes";
 import { useCancelOrder, useUploadPaymentProof, useFinalizeOrder } from "@/hooks/useOrder";
 import AlertDialog from "@/components/AlertDialog";
@@ -21,12 +22,15 @@ interface StatusDialogProps {
 const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
   const [cancelDialogOpen, setCancelDialogOpen] = useState<boolean>(false);
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  const [alertDialogOpen, setAlertDialogOpen] = useState<boolean>(false);
+  const [alertMessage, setAlertMessage] = useState<string>("");
   const [isExpired, setIsExpired] = useState<boolean>(false);
   const [paymentProof, setPaymentProof] = useState<File | null>(null);
   const [isCopied, setIsCopied] = useState<boolean>(false);
   const uploadPaymentProof = useUploadPaymentProof();
   const cancelOrder = useCancelOrder();
   const confirmPayment = useFinalizeOrder();
+  const router = useRouter();
 
   useEffect(() => {
     if (order.status === "AWAITING_PAYMENT" && order.paymentExpiredAt) {
@@ -63,9 +67,27 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
   const handlePaymentProofUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0] || null;
     setPaymentProof(file);
+  };
 
-    if (file) {
-      uploadPaymentProof.mutate({ orderId: order.id, paymentProof: file });
+  const handleSendProof = () => {
+    if (paymentProof) {
+      uploadPaymentProof.mutate(
+        { orderId: order.id, paymentProof },
+        {
+          onSuccess: () => {
+            setAlertMessage("Payment proof uploaded successfully!"); 
+            setAlertDialogOpen(true); 
+            router.push("/waiting-confirmation"); 
+          },
+          onError: () => {
+            setAlertMessage("Failed to upload payment proof. Please try again.");
+            setAlertDialogOpen(true);
+          },
+        }
+      );
+    } else {
+      setAlertMessage("Please select a file before sending proof."); 
+      setAlertDialogOpen(true);
     }
   };
 
@@ -174,6 +196,9 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
                   <div className={`${order.status === "AWAITING_PAYMENT" ? "block" : "hidden"}`}>
                     <p>Upload Bukti Pembayaran:</p>
                     <input type="file" accept="image/*" onChange={handlePaymentProofUpload} />
+                    <Buttons onClick={handleSendProof} className="bg-blue-500 mt-2">
+                      Send Proof
+                    </Buttons>
                   </div>
                 ) : (
                   <div>
@@ -208,6 +233,15 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
               </div>
             </div>
           </div>
+
+          <AlertDialog
+            open={alertDialogOpen}
+            onOpenChange={setAlertDialogOpen}
+            title="Upload Status"
+            description={alertMessage}
+            actionLabel="OK"
+            onAction={() => setAlertDialogOpen(false)}
+          />
 
           <AlertDialog
             open={cancelDialogOpen}

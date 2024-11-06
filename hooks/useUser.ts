@@ -179,6 +179,16 @@ export const useUpdateProfile = (): UseMutationResult<void, unknown, FormData> =
         throw new Error("No access token");
       }
 
+      const fieldsToCheck = ["username", "email", "newPassword", "currentPassword"];
+      const isUnchanged = fieldsToCheck.every(field => {
+        const formDataValue = data.get(field);
+        return formDataValue === null || formDataValue === ""; 
+      });
+
+      if (isUnchanged) {
+        throw new Error("No fields changed");
+      }
+
       await apiClient.put('/api/v1/updateProfile', data, {
         headers: {
           'Content-Type': 'multipart/form-data',
