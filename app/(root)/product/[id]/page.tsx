@@ -3,7 +3,7 @@ import {FC} from "react";
 import CTA from "@/app/(root)/product/[id]/components/CTA";
 import ProductImage from "@/app/(root)/product/[id]/components/ProductImage";
 import ProductDetails from "@/app/(root)/product/[id]/components/ProductDetails";
-import {AlertCircle, Loader} from "lucide-react";
+import {AlertCircle} from "lucide-react";
 import {Skeleton} from "@/components/ui/skeleton";
 import {useProductDetails} from "@/hooks/useProducts";
 
@@ -50,7 +50,7 @@ const ProductDetailsPage: FC<Props> = ({ params }) => {
         <main className={"flex flex-col items-center xl:grid xl:grid-cols-4 gap-4 xl:gap-24 m-4 lg:mx-16 lg:my-12"}>
             <ProductImage imageUrls={data.imageUrls}/>
             <ProductDetails name={data.name} price={data?.price} description={data?.description}/>
-            <CTA/>
+            <CTA id={data.id} stock={data.stock}/>
         </main>
     )
 }
