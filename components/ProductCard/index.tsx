@@ -40,10 +40,6 @@ const Index: React.FC<productCards> = ({
         addToCart.mutate(
           { productId: id, quantity: 1 },
           {
-            onSuccess: () => {
-              setDialogMessage("Product added to cart!");
-              setDialogOpen(true);
-            },
             onError: () => {
               setDialogMessage(
                 "Failed to add product to cart. Please try again."
@@ -68,30 +64,30 @@ const Index: React.FC<productCards> = ({
   };
 
   return (
-    <div className="flex flex-col gap-2 min-w-[100px] h-full max-w-[200px] hover:bg-white shadow-antiMetal border border-gray-200 hover:shadow-gray-200 rounded-xl transition-all duration-500">
-      <div className="w-full max-w-[200px] h-full max-h-[250px] overflow-hidden flex items-center justify-center">
+    <div className="flex flex-col min-w-[100px] h-full max-w-[300px] hover:bg-white shadow-antiMetal border border-gray-200  hover:shadow-gray-200 rounded-xl transition-all duration-500 p-3">
+      <div className="w-full max-w-[300px] h-full max-h-[250px] overflow-hidden flex items-center justify-center bg-gray-200 p-3 rounded-xl">
         <Image
           src={thumbnail}
           width={200}
           height={200}
           alt={name}
           onClick={handleCardClick}
-          className='hover:cursor-pointer max-w-[200px] max-h-[200px]  object-cover object-center'
+          className='hover:cursor-pointer max-w-[200px] max-h-[200px]  object-cover object-center mix-blend-multiply bg-blend-multiply rounded-xl'
         />
       </div>
-      <hr className="border-dashed border-gray-700" />
       <div
-        className="flex flex-col gap-2.5 p-3 sm:p-5 h-full justify-end hover:cursor-pointer !pt-0"
+        className="flex flex-col gap-2.5 !pt-5 h-fit justify-start hover:cursor-pointer"
         onClick={handleCardClick}
       >
-        <h2 className="font-bold line-clamp-2">{name}</h2>
-        <p className=" text-gray-500">Stok dari toko</p>
-        <p className="font-bold text-red-600">Rp {price.toLocaleString()}</p>
+        <div>
+          <h2 className="font-bold line-clamp-1">{name}</h2>
+          <p className=" text-gray-500 text-sm">Stok dari toko</p>
+        </div>
+        <p className="font-bold text-red-600 text-sm">Rp {price.toLocaleString()}</p>
       </div>
-      <hr className="border-dashed border-gray-700" />
-      <div className={"p-3 sm:p-5"}>
+      <div className={"pt-3 sm:pt-5 w-full"}>
         <Buttons
-          className={`w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
+          className={`!w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
             stock < 1 || !isAuthenticated || !isVerified
               ? "!bg-gray-300 !text-gray-800"
               : "!bg-red-600"
