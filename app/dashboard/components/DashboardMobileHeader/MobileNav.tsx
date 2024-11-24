@@ -9,6 +9,7 @@ import {Menu} from "lucide-react";
 import Link from "next/link";
 import SidebarLink from "@/app/dashboard/components/DashboardSidebar/SidebarLink";
 import {sidebarLinks, superAdminLinks} from "@/constants/sidebarLinks";
+import UserInfo from "../DashboardHeader/UserInfo";
 
 const MobileNav: FC = () => {
     const isSuper = true
@@ -32,6 +33,7 @@ const MobileNav: FC = () => {
                         ))
                     }
                 </nav>
+                <UserInfo />
             </SheetContent>
         </Sheet>
 
