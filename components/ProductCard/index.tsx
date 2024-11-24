@@ -9,6 +9,7 @@ import { useGetProfile } from "@/hooks/useUser";
 import AlertDialog from "@/components/AlertDialog";
 import { useAddToCart } from "@/hooks/useCart";
 import { useRouter } from "next/navigation";
+import { toast } from "react-hot-toast";
 
 const Index: React.FC<productCards> = ({
   thumbnail,
@@ -21,6 +22,7 @@ const Index: React.FC<productCards> = ({
   const { profile, isLoading: isProfileLoading } = useGetProfile();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [dialogMessage, setDialogMessage] = useState("");
+  const [isAdding, setIsAdding] = useState(false); // State for button text
   const router = useRouter();
 
   const addToCart = useAddToCart();
@@ -37,14 +39,20 @@ const Index: React.FC<productCards> = ({
       setDialogOpen(true);
     } else {
       if (id) {
+        setIsAdding(true); // Change button text to "Beli..."
         addToCart.mutate(
           { productId: id, quantity: 1 },
           {
+            onSuccess: () => {
+              toast.success("Product added to cart!", { position: "bottom-right" });
+              setIsAdding(false); // Revert button text to "Beli"
+            },
             onError: () => {
               setDialogMessage(
                 "Failed to add product to cart. Please try again."
               );
               setDialogOpen(true);
+              setIsAdding(false); // Revert button text to "Beli"
             },
           }
         );
@@ -72,7 +80,7 @@ const Index: React.FC<productCards> = ({
           height={200}
           alt={name}
           onClick={handleCardClick}
-          className='hover:cursor-pointer max-w-[200px] max-h-[200px]  object-cover object-center mix-blend-multiply bg-blend-multiply rounded-xl'
+          className="hover:cursor-pointer max-w-[200px] max-h-[200px]  object-cover object-center mix-blend-multiply bg-blend-multiply rounded-xl"
         />
       </div>
       <div
@@ -95,7 +103,7 @@ const Index: React.FC<productCards> = ({
           onClick={handleButtonClick}
           disabled={stock < 1}
         >
-          {stock < 1 ? "Stock Kosong" : "Beli"}
+          {stock < 1 ? "Stock Kosong" : isAdding ? "Beli..." : "Beli"}
         </Buttons>
       </div>
 

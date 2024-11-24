@@ -56,7 +56,7 @@ const Header: React.FC = () => {
     <div className="w-full h-full py-2 px-5 md:px-10 bg-gray-100">
       <AddressSaved />
     </div>
-      <div className="flex items-center justify-between py-5 px-5 md:px-10 shadow-airbnbSoft overflow-x-hidden">
+      <div className="flex items-center justify-between py-5 px-5 md:px-10 shadow-airbnbSoft overflow-x-hidden" id="header">
         <div className="flex items-center gap-10">
           <Link href="/" className="text-red-500 font-semibold">
             AlphaMarch

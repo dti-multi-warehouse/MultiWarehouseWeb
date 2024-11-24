@@ -106,10 +106,7 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        // secure: process.env.NODE_ENV !== 'development',
-        // domain: process.env.NODE_ENV === 'development' ? 'localhost' : 'dev.alphamarch.shop',
         secure: true,
-        // domain: '.alphamarch.shop'
       },
     },
     csrfToken: {
@@ -118,7 +115,6 @@ export const authOptions: NextAuthOptions = {
         httpOnly: true,
         sameSite: 'lax',
         path: '/',
-        // secure: process.env.NODE_ENV !== 'development',
         secure: true,
       },
     },
@@ -145,16 +141,16 @@ export const authOptions: NextAuthOptions = {
 
       // Decode the JWT header to get the `kid`
       if (token.accessToken) {
-        try {
-          const decodedHeader = jwt.decode(token.accessToken, { complete: true });
-          console.log("Decoded JWT Header:", decodedHeader?.header);
+        // try {
+        //   const decodedHeader = jwt.decode(token.accessToken, { complete: true });
+        //   console.log("Decoded JWT Header:", decodedHeader?.header);
 
-          // Access `kid`
-          const kid = decodedHeader?.header?.kid;
-          console.log("JWT `kid`:", kid);
-        } catch (err) {
-          console.error("Error decoding JWT:", err);
-        }
+        //   // Access `kid`
+        //   const kid = decodedHeader?.header?.kid;
+        //   console.log("JWT `kid`:", kid);
+        // } catch (err) {
+        //   console.error("Error decoding JWT:", err);
+        // }
       }
 
       return token;
