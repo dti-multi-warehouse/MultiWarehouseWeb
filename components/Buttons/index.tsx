@@ -1,8 +1,10 @@
 "use client";
 
+import React from "react";
+
 interface ButtonProps {
   children?: JSX.Element | React.ReactNode;
-  onClick?: () => void;
+  onClick?: (e?: React.MouseEvent<HTMLButtonElement>) => void;
   className?: string;
   disabled?: boolean;
   type?: "button" | "submit" | "reset"; 

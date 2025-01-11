@@ -45,10 +45,12 @@ const AlertDialog: React.FC<AlertDialogProps> = ({
             <AlertDialogTitle>{title}</AlertDialogTitle>
             <AlertDialogDescription>{description}</AlertDialogDescription>
           </AlertDialogHeader>
-          <AlertDialogAction onClick={handleAction} className="bg-red-500">
-            {actionLabel}
-          </AlertDialogAction>
-          <AlertDialogCancel onClick={() => onOpenChange(false)} className={` ${cancelVisibility}`}>{cancelLabel}</AlertDialogCancel>
+          <div className="flex w-full items-center gap-5 justify-end">
+            <AlertDialogAction onClick={handleAction} className="bg-red-500">
+              {actionLabel}
+            </AlertDialogAction>
+            <AlertDialogCancel onClick={() => onOpenChange(false)} className={` ${cancelVisibility}`}>{cancelLabel}</AlertDialogCancel>
+          </div>
         </AlertDialogContent>
       </AlertDialogs>
     </>

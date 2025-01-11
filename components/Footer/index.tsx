@@ -13,7 +13,7 @@ const paymentMethod = [
 
 const menuFooter = [
   { name: "Home", link: "/" },
-  { name: "Shop", link: "/shop" },
+  { name: "Shop", link: "/product" },
 ];
 
 const socMed = [

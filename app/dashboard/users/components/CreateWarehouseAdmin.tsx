@@ -52,7 +52,7 @@ const CreateWarehouseAdmin: React.FC = () => {
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
-      <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500">
+      <DialogTrigger className="py-3 px-5 md:px-10 bg-red-600 text-white rounded-lg flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all xl:max-w-[220px] xl:w-full text-sm duration-500">
         Add Admin
       </DialogTrigger>
       <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">

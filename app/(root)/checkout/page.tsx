@@ -22,6 +22,7 @@ import {
   selectPaymentMethod,
 } from "@/data/data";
 import AlertDialog from "@/components/AlertDialog";
+import BuyerDetail from "./components/BuyerDetail";
 
 const Checkout: React.FC = () => {
   const { cart, isLoading: isCartLoading } = useCart();
@@ -75,7 +76,7 @@ const Checkout: React.FC = () => {
     try {
       const response = await apiClient.post("/api/v1/order/shipping-cost", {
         destinationCityId: selectedAddressId,
-        weight: 10,
+        weight: 1,
         courier: selectedShippingMethod,
       });
 
@@ -182,50 +183,33 @@ const Checkout: React.FC = () => {
   return (
     <>
       <div className="w-full p-5 md:p-10 flex flex-col gap-5">
-        <h1 className="font-bold text-xl">Checkout Pesanan</h1>
+        <h1 className="font-extrabold text-xl">Checkout Pesanan</h1>
         <div className="flex flex-col lg:flex-row gap-10">
           <div className="w-full lg:w-[60%] flex flex-col gap-5">
             <div className="h-2 w-full bg-gray-200 rounded-lg"></div>
-            <div className="flex flex-col gap-5 py-3">
-              <h3 className="font-semibold">Detail Pembeli</h3>
-              <RadioGroup
-                value={selectedAddressId?.toString()}
-                onValueChange={(value) => setSelectedAddressId(parseInt(value))}
-                className="flex flex-col gap-5"
-              >
-                {addresses?.map((address) => (
-                  <div key={address.id} className="flex gap-3 w-full">
-                    <RadioGroupItem
-                      value={address.id.toString()}
-                      id={`address-${address.id}`}
-                    />
-                    <Label
-                      htmlFor={`address-${address.id}`}
-                      className="leading-[1.6]"
-                    >
-                      {address.name} - {address.phoneNumber} <br />
-                      {address.address.street}, <br /> {address.address.city}
-                    </Label>
-                  </div>
-                ))}
-              </RadioGroup>
-              {!addresses?.length && <p>No address available.</p>}
-            </div>
-            <div className="h-2 w-full bg-gray-200 rounded-lg"></div>
+            <h3 className="font-bold">Alamat Terpilih</h3>
+            <BuyerDetail
+              selectedAddressId={selectedAddressId}
+              onAddressSelect={setSelectedAddressId}
+            />
+            <hr className="border-dashed border-gray-700" />
+            {/* <div className="h-2 w-full bg-gray-200 rounded-lg"></div> */}
             <div className="flex flex-col gap-5">
-              <h3 className="font-semibold">Stok Barang</h3>
+              <h3 className="font-bold">Stok Barang</h3>
               {cart?.data?.cartItems.map((item, index) => (
                 <div
                   key={index}
-                  className="flex gap-10 w-full bg-gray-100 rounded-xl p-2 md:p-5 items-center"
+                  className="flex gap-10 w-full bg-gray-50 rounded-xl p-2 md:p-5 items-center border-2 border-gray-400"
                 >
-                  <Image
-                    src={item.imageUrl}
-                    alt={item.name}
-                    width={200}
-                    height={150}
-                    className="rounded-xl max-w-[200px] max-h-[150px] object-cover object-center"
-                  />
+                  <div className="bg-white flex justify-center rounded-xl shadow-airbnbSoft shadow-gray-200 border-2 border-gray-300">  
+                    <Image
+                      src={item.imageUrl}
+                      alt={item.name}
+                      width={200}
+                      height={150}
+                      className="rounded-xl max-w-[200px] max-h-[150px] object-contain mix-blend-multiply object-center"
+                    />
+                  </div>
                   <div className="flex flex-col gap-3 w-full">
                     <h2 className="font-semibold text-gray-600">{item.name}</h2>
                     <p className="font-semibold text-lg">
@@ -238,7 +222,7 @@ const Checkout: React.FC = () => {
             </div>
           </div>
 
-          <div className="w-full lg:w-[40%] flex flex-col gap-10 lg:mx-10 p-10 bg-gray-100 h-fit rounded-xl shadow-boxedSoft">
+          <div className="w-full lg:w-[40%] flex flex-col gap-10 lg:mx-10 p-5 border-2 border-gray-400 bg-gray-100 h-fit rounded-xl shadow-boxedSoft">
             <div className="flex flex-col gap-3">
               <h2 className="font-semibold text-lg">Pesanan</h2>
               <hr className="w-full border-dashed border-gray-700 " />
@@ -268,42 +252,46 @@ const Checkout: React.FC = () => {
               </div>
             </div>
 
-            <div className="flex flex-col gap-5">
-              <h3 className="font-semibold">Metode Pembayaran</h3>
-              <hr className="w-full border-dashed border-gray-700 " />
-              <RadioGroup
-                value={selectedPaymentMethod}
-                onValueChange={setSelectedPaymentMethod}
-                className="font-semibold text-xl flex flex-col gap-5"
-              >
-                {selectPaymentMethod.map((method, index) => (
-                  <div className="flex items-center space-x-2" key={index}>
-                    <RadioGroupItem value={method.value} id={method.id} />
-                    <Label htmlFor={method.id}>{method.text}</Label>
+            <div className="flex flex-col gap-10">
+              <div className="flex flex-col gap-3">
+                <h3 className="font-semibold">Metode Pembayaran</h3>
+                <hr className="w-full border-dashed border-gray-700 " />
+                <RadioGroup
+                  value={selectedPaymentMethod}
+                  onValueChange={setSelectedPaymentMethod}
+                  className="font-semibold text-xl flex flex-col gap-5"
+                >
+                  {selectPaymentMethod.map((method, index) => (
+                    <div className="flex items-center space-x-2" key={index}>
+                      <RadioGroupItem value={method.value} id={method.id} />
+                      <Label htmlFor={method.id}>{method.text}</Label>
+                    </div>
+                  ))}
+                </RadioGroup>
+              </div>
+
+              <div className="flex flex-col gap-3">
+                {selectedPaymentMethod === "MIDTRANS" && (
+                  <div className="flex flex-col gap-3">
+                    <h3 className="font-semibold">Pilih Bank Transfer</h3>
+                    <hr className="w-full border-dashed border-gray-700 " />
+                    <RadioGroup
+                      value={selectedBank}
+                      onValueChange={setSelectedBank}
+                      className="font-semibold text-xl flex flex-col gap-5"
+                    >
+                      {midtransPayment.map((payment, index) => (
+                        <div className="flex items-center space-x-2" key={index}>
+                          <RadioGroupItem value={payment.value} id={payment.id} />
+                          <Label htmlFor={payment.id}>{payment.value}</Label>
+                        </div>
+                      ))}
+                    </RadioGroup>
                   </div>
-                ))}
-              </RadioGroup>
-
-              {selectedPaymentMethod === "MIDTRANS" && (
-                <div className="flex flex-col gap-5">
-                  <h3 className="font-semibold">Pilih Bank Transfer</h3>
-                  <hr className="w-full border-dashed border-gray-700 " />
-                  <RadioGroup
-                    value={selectedBank}
-                    onValueChange={setSelectedBank}
-                    className="font-semibold text-xl flex flex-col gap-5"
-                  >
-                    {midtransPayment.map((payment, index) => (
-                      <div className="flex items-center space-x-2" key={index}>
-                        <RadioGroupItem value={payment.value} id={payment.id} />
-                        <Label htmlFor={payment.id}>{payment.value}</Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </div>
-              )}
-
-              <div className="flex flex-col gap-5">
+                )}
+              </div>
+              
+              <div className="flex flex-col gap-3">
                 <h3 className="font-semibold">Pilih Ongkos Kirim</h3>
                 <hr className="w-full border-dashed border-gray-700 " />
                 <RadioGroup

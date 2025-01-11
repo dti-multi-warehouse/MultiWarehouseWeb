@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import apiClient from "@/lib/apiClient";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AfterSignIn: React.FC = () => {
   const { user, isLoaded } = useUser();
@@ -54,9 +55,9 @@ const AfterSignIn: React.FC = () => {
   }, [isLoaded, user, getToken, syncSocialLogin]);
 
   return (
-    <div>
+    <Skeleton className="flex w-full p-5 justify-center text-xl font-semibold text-gray-800">
       {loading ? <p>Signing you in...</p> : error ? <p>{error}</p> : <p>Sign-in successful! Redirecting...</p>}
-    </div>
+    </Skeleton>
   );
 };
 

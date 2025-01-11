@@ -24,8 +24,8 @@ const CartLayout: React.FC = () => {
   }, []);
 
   return !isHeaderVisible ? (
-    <div className="fixed bottom-10 right-10 lg:scale-110 backdrop-blur-md p-3 shadow-xl bg-white rounded-full border-2 border-red-600">
-      <CartHeader />
+    <div className="fixed bottom-10 right-10 lg:scale-110 backdrop-blur-md p-3 bg-red-600 rounded-full border-4 border-white shadow-sketchSoft shadow-gray-400">
+      <CartHeader className="text-white" qtyClassName="text-red-600" />
     </div>
   ) : null;
 };

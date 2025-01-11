@@ -62,6 +62,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
   const confirmCancelOrder = () => {
     cancelOrder.mutate(order.id);
     setCancelDialogOpen(false);
+    router.push("/cancel-order")
   };
 
   const handlePaymentProofUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +107,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
 
   const handleConfirmPayment = () => {
     confirmPayment.mutate(order.id); 
+    router.push('/order-confirmation')
   };
 
   return (
@@ -195,7 +197,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
                 {order.paymentMethod === "MANUAL" ? (
                   <div className={`${order.status === "AWAITING_PAYMENT" ? "block" : "hidden"}`}>
                     <p>Upload Bukti Pembayaran:</p>
-                    <input type="file" accept="image/*" onChange={handlePaymentProofUpload} />
+                    <input type="file" accept="image/*" onChange={handlePaymentProofUpload} className="max-w-40 w-full" />
                     <Buttons onClick={handleSendProof} className="bg-blue-500 mt-2">
                       Send Proof
                     </Buttons>
@@ -203,7 +205,7 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
                 ) : (
                   <div>
                     <p>Nomor VA:</p>
-                    <h3 className="text-lg">{order.virtualAccountNumber || "N/A"}</h3>
+                    <h3 className="text-lg w-full max-w-36 md:whitespace-normal">{order.virtualAccountNumber || "N/A"}</h3>
                     <Buttons onClick={handleCopyVirtualAccount} className={`${order.status === "AWAITING_PAYMENT" ? "block" : "hidden"}`}>
                       {isCopied ? "Nomor VA Disalin!" : "Salin Nomor VA"}
                     </Buttons>

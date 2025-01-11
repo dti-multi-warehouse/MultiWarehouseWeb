@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Buttons from "@/components/Buttons";
 import {
   Table,
@@ -20,47 +20,80 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
+import { LiaSortSolid } from "react-icons/lia";
+import { RiDeleteBin6Line } from "react-icons/ri";
 import WarehouseUpdate from "./WarehouseUpdate";
 import { useSearchWarehouses, useDeleteWarehouse } from "@/hooks/useWarehouse";
 import AdminAssignee from "./AdminAssignee";
-import { useToast } from "@/hooks/use-toast";
-import { ToastAction } from "@/components/ui/toast";
+import SkeletonTableRow from "../../components/SkeletonTableRow";
+import WarehouseDrawer from "./WarehouseDrawer";
 
-const WarehouseTable: React.FC = () => {
+interface WarehouseTableProps {
+  filters: { name?: string; city?: string; province?: string };
+}
+
+const WarehouseTable: React.FC<WarehouseTableProps> = ({ filters }) => {
   const [page, setPage] = useState(0);
-  const { toast } = useToast();
+  const [isXL, setIsXL] = useState(false);
+  const [selectedWarehouse, setSelectedWarehouse] = useState<any>(null);
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+
+  const [sortField, setSortField] = useState<string | undefined>(undefined);
+  const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('asc');
 
   const { data, isLoading, isError, refetch } = useSearchWarehouses({
+    ...filters,
     page,
     size: 10,
+    sortField,
+    sortDirection,
   });
 
   const deleteWarehouseMutation = useDeleteWarehouse();
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(min-width: 1280px)");
+    const handleResize = () => setIsXL(mediaQuery.matches);
+    handleResize();
+    mediaQuery.addEventListener("change", handleResize);
+    return () => mediaQuery.removeEventListener("change", handleResize);
+  }, []);
+
+  const handleRowClick = (warehouse: any) => {
+    if (!isXL) {
+      setSelectedWarehouse(warehouse);
+      setIsDrawerOpen(true);
+    }
+  };
 
   const handleDelete = (id: number) => {
     if (window.confirm("Are you sure you want to delete this warehouse?")) {
       deleteWarehouseMutation.mutate(id, {
         onSuccess: () => {
-          toast({
-            title: "Warehouse deleted",
-            description: "The warehouse has been successfully deleted.",
-            action: <ToastAction altText="Undo">Undo</ToastAction>,
-          });
           refetch();
         },
         onError: (error) => {
-          toast({
-            title: "Error",
-            description: "Failed to delete warehouse.",
-            variant: "destructive",
-          });
           console.error("Error deleting warehouse:", error);
         },
       });
     }
   };
 
-  if (isLoading) return <div>Loading warehouses...</div>;
+  const handleWarehouseUpdate = (updatedWarehouse: any) => {
+    setSelectedWarehouse(updatedWarehouse);
+
+    refetch();
+  };
+
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortDirection((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortDirection('asc');
+    }
+  };
+
   if (isError) return <div>Failed to load warehouses.</div>;
 
   const { content: warehouses = [], totalPages = 0 } = data?.data || {};
@@ -70,17 +103,46 @@ const WarehouseTable: React.FC = () => {
       <Table className="border rounded-xl">
         <TableCaption>A list of warehouses.</TableCaption>
         <TableHeader>
-          <TableRow>
-            <TableHead className="w-[50px]">ID</TableHead>
-            <TableHead>Warehouse</TableHead>
-            <TableHead>Street</TableHead>
-            <TableHead>City</TableHead>
-            <TableHead>Province</TableHead>
-            <TableHead>Admin Assignee</TableHead>
+        <TableRow>
+            <TableHead className="w-[50px]">No.</TableHead>
+            <TableHead>
+              <div
+                className="flex items-center gap-1 cursor-pointer"
+                onClick={() => handleSort('name')}
+              >
+                Warehouse <LiaSortSolid/>
+                {sortField === 'name' && (sortDirection === 'asc' ? ' ↑' : ' ↓')}
+              </div>
+            </TableHead>
+            <TableHead className="max-xl:hidden">
+              <div className="flex items-center gap-1 cursor-pointer">
+                Street
+              </div>
+            </TableHead>
+            <TableHead className="max-md:hidden">
+              <div
+                className="flex items-center gap-1 cursor-pointer"
+                onClick={() => handleSort('city')}
+              >
+                City <LiaSortSolid />
+                {sortField === 'city' && (sortDirection === 'asc' ? ' ↑' : ' ↓')}
+              </div>
+            </TableHead>
+            <TableHead className="max-lg:hidden">
+              <div
+                className="flex items-center gap-1 cursor-pointer"
+                onClick={() => handleSort('province')}
+              >
+                Province <LiaSortSolid />
+                {sortField === 'province' && (sortDirection === 'asc' ? ' ↑' : ' ↓')}
+              </div>
+            </TableHead>
+            <TableHead className="max-lg:hidden">Admin Assignee</TableHead>
             <TableHead className="text-right">Action</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="text-sm">
+          {isLoading && <SkeletonTableRow col={7} />}
           {warehouses.length === 0 ? (
             <TableRow>
               <TableCell colSpan={7} className="text-center">
@@ -89,30 +151,37 @@ const WarehouseTable: React.FC = () => {
             </TableRow>
           ) : (
             warehouses.map((warehouse: any, index: number) => (
-              <TableRow key={warehouse.id}>
-                <TableCell className="font-medium">#{index+1}</TableCell>
+              <TableRow
+                key={warehouse.id}
+                className="cursor-pointer hover:bg-gray-100"
+                onClick={() => handleRowClick(warehouse)}
+              >
+                <TableCell className="font-medium">#{page * 10 + index + 1}</TableCell>
                 <TableCell>{warehouse.name}</TableCell>
-                <TableCell>{warehouse.street}</TableCell>
-                <TableCell>{warehouse.city}</TableCell>
-                <TableCell>{warehouse.province}</TableCell>
-                <TableCell className="">
-                  <div className="flex flex-col gap-1">
-                    <p className="font-bold py-1 px-3 border border-red-600 text-red-600 rounded-full text-center capitalize">
-                      {warehouse.adminUsername || "No Admin Assigned"}
-                    </p>
+                <TableCell className="max-xl:hidden">{warehouse.street}</TableCell>
+                <TableCell className="max-md:hidden">{warehouse.city}</TableCell>
+                <TableCell className="max-lg:hidden">{warehouse.province}</TableCell>
+                <TableCell className="max-lg:hidden">
+                  <div className="flex flex-col gap-1" onClick={(e) => e.stopPropagation()}>
                     <AdminAssignee
                       warehouseId={warehouse.id}
                       assignedAdminName={warehouse.adminUsername}
                     />
                   </div>
                 </TableCell>
-                <TableCell className="text-right flex justify-end gap-5">
-                  <WarehouseUpdate warehouseId={warehouse.id} />
+                <TableCell className="text-right flex items-center justify-end gap-2">
+                  <div onClick={(e) => e.stopPropagation()}>
+                    <WarehouseUpdate warehouseId={warehouse.id} />
+                  </div>
                   <Buttons
-                    onClick={() => handleDelete(warehouse.id)}
-                    className="bg-white !text-red-600 border border-red-600"
+                    onClick={(e: any) => {
+                      e.stopPropagation();
+                      handleDelete(warehouse.id);
+                    }}
+                    className="bg-white text-xs md:text-sm !gap-1 !px-3 !text-red-600 border border-red-600 !rounded-lg"
                   >
-                    Delete
+                    <RiDeleteBin6Line />
+                    Del
                   </Buttons>
                 </TableCell>
               </TableRow>
@@ -151,6 +220,14 @@ const WarehouseTable: React.FC = () => {
           </TableRow>
         </TableFooter>
       </Table>
+
+      {/* Drawer */}
+      <WarehouseDrawer
+        isOpen={isDrawerOpen}
+        onClose={() => setIsDrawerOpen(false)}
+        warehouse={selectedWarehouse}
+        onUpdateWarehouse={handleWarehouseUpdate}
+      />
     </>
   );
 };

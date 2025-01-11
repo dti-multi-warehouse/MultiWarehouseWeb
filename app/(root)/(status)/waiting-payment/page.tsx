@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import StatusCard from "../components/StatusCard";
 import { useOrdersByStatus } from "@/hooks/useOrder";
 import { Order } from "@/types/datatypes";
+import StatusCardLoading from "../components/StatusCardLoading";
 
 const WaitingPayment: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const { mutate: fetchOrdersByStatus } = useOrdersByStatus("AWAITING_PAYMENT");
+  const { mutate: fetchOrdersByStatus, isLoading } = useOrdersByStatus("AWAITING_PAYMENT");
 
   useEffect(() => {
     console.log("Fetching orders...");
@@ -24,6 +25,8 @@ const WaitingPayment: React.FC = () => {
       },
     });
   }, [fetchOrdersByStatus]);
+
+  if(isLoading) return <StatusCardLoading />;
 
   return (
     <>

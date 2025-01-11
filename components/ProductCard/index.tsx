@@ -96,14 +96,14 @@ const Index: React.FC<productCards> = ({
       <div className={"pt-3 sm:pt-5 w-full"}>
         <Buttons
           className={`!w-full !py-2 !px-10 self-center text-sm font-semibold whitespace-nowrap ${
-            stock < 1 || !isAuthenticated || !isVerified
+            stock <= 0 || !isAuthenticated || !isVerified
               ? "!bg-gray-300 !text-gray-800"
               : "!bg-red-600"
           }`}
           onClick={handleButtonClick}
-          disabled={stock < 1}
+          disabled={stock <= 0}
         >
-          {stock < 1 ? "Stock Kosong" : isAdding ? "Beli..." : "Beli"}
+          {stock <= 0 ? "Stock Kosong" : isAdding ? "Beli..." : "Beli"}
         </Buttons>
       </div>
 

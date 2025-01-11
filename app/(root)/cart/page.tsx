@@ -41,10 +41,9 @@ const Cart: React.FC = () => {
     if (isCartLoading) {
       setIsTotalLoading(true);
     } else {
-      setIsTotalLoading(true);
       setTimeout(() => {
         setIsTotalLoading(false);
-      }, 500);
+      }, 300); // Smooth transition delay
     }
   }, [cart, isCartLoading]);
 
@@ -65,7 +64,7 @@ const Cart: React.FC = () => {
       setIsCheckoutLoading(true);
       setTimeout(() => {
         router.push("/checkout");
-      }, 1000); 
+      }, 1000);
     } else {
       setDialogMessage("You need to verify your account before proceeding to checkout.");
       setDialogOpen(true);
@@ -88,23 +87,25 @@ const Cart: React.FC = () => {
             <CartItems />
           </div>
           <div className="flex w-full lg:w-[40%] lg:px-20">
-            <div className="p-5 w-full rounded-xl shadow-boxedSoft shadow-gray-400 bg-gray-200 h-fit flex flex-col gap-5">
+            <div className="p-5 w-full rounded-xl shadow-boxedSoft border-2 border-gray-300 shadow-gray-400 bg-gray-200 h-fit flex flex-col gap-5">
               <h2 className="text-lg font-semibold">Pesanan</h2>
               <hr className="border-gray-900 border-dashed" />
               <div className="flex items-center justify-between">
                 <p className="text-gray-700 font-semibold">Subtotal</p>
                 {isTotalLoading ? (
-                  <p className="text-xl font-semibold animate-pulse">Loading...</p>
+                  <p className="text-xl font-semibold animate-pulse opacity-50 transition-opacity">
+                    Loading...
+                  </p>
                 ) : (
                   <p className="text-xl font-semibold">Rp {cart?.data?.totalPrice?.toLocaleString() || 0}</p>
                 )}
               </div>
               <Buttons
                 className={`py-2 text-sm font-semibold mt-2 ${!isVerified ? "!bg-gray-300 !text-gray-800" : ""}`}
-                disabled={!isVerified || isCheckoutLoading} 
+                disabled={!isVerified || isCheckoutLoading}
                 onClick={handleCheckout}
               >
-                {isCheckoutLoading ? "Ke Checkout..." : "Checkout Sekarang"} 
+                {isCheckoutLoading ? "Ke Checkout..." : "Checkout Sekarang"}
               </Buttons>
             </div>
           </div>

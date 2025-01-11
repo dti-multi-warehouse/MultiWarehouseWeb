@@ -12,7 +12,7 @@ const ProductPage = () => {
     const { data, isLoading, error } = useProducts(params)
 
     return <main className={""}>
-        <div className={"flex flex-col xl:grid xl:grid-cols-5 gap-4"}>
+        <div className={"flex flex-col xl:grid xl:grid-cols-5 gap-4 mb-5"}>
             <ProductFilter />
             {isLoading || !data ? <ProductRowSkeleton /> : <ProductRow isRow={false} hits={data.hits} />}
         </div>
