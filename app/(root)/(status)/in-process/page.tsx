@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import StatusCard from "../components/StatusCard";
 import { useOrdersByStatus } from "@/hooks/useOrder";
 import { Order } from "@/types/datatypes";
+import StatusCardLoading from "../components/StatusCardLoading";
 
 const InProcess: React.FC = () => {
   const [orders, setOrders] = useState<Order[]>([]);
-  const { mutate: fetchOrdersByStatus } = useOrdersByStatus("PROCESSING");
+  const { mutate: fetchOrdersByStatus, isLoading } = useOrdersByStatus("PROCESSING");
 
   useEffect(() => {
     console.log("Fetching orders...");
@@ -24,6 +25,8 @@ const InProcess: React.FC = () => {
       },
     });
   }, [fetchOrdersByStatus]);
+
+  if(isLoading) return <StatusCardLoading />;
 
   return (
     <>

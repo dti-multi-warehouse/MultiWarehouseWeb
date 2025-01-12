@@ -13,6 +13,7 @@ const CartItems: React.FC = () => {
   const decrementQuantity = useDecrementQuantity();
 
   const [localQuantities, setLocalQuantities] = useState<{ [key: number]: number }>({});
+  const [loadingItems, setLoadingItems] = useState<{ [key: number]: boolean }>({}); // Loading state per item
 
   if (isLoading) return <div>Loading cart...</div>;
   if (error) return <div>Error loading cart</div>;
@@ -31,21 +32,34 @@ const CartItems: React.FC = () => {
   }, 300);
 
   const updateQuantity = (productId: number, newQuantity: number, action: "increment" | "decrement") => {
-    if (newQuantity < 1) return;
+    if (newQuantity < 1 || loadingItems[productId]) return;
+
+    const product = cartItems.find((item) => item.productId === productId);
+    if (!product) return;
+
+    setLoadingItems((prev) => ({ ...prev, [productId]: true })); // Mark item as loading
 
     setLocalQuantities((prev) => ({
       ...prev,
       [productId]: newQuantity,
     }));
 
+    // Optimistically update UI
     updateQuantityThrottled(productId, action);
+
+    // Simulate server delay and remove loading state
+    setTimeout(() => {
+      setLoadingItems((prev) => ({ ...prev, [productId]: false }));
+    }, 300);
   };
 
   return (
     <div className="flex flex-col gap-5 w-full">
       {cartItems.map((item) => (
-        <div key={item.productId} className="flex p-2 rounded-xl bg-gray-100 md:p-5 flex-col md:flex-row md:items-center gap-5 md:gap-10 w-full">
-          <Image src={item.imageUrl} alt={item.name} width={200} height={150} className="max-w-[200px] max-h-[150px] object-cover object-center rounded-xl" />
+        <div key={item.productId} className="flex p-2 rounded-xl bg-gray-100 md:p-5 flex-col md:flex-row md:items-center gap-5 md:gap-10 w-full border-2 border-gray-300">
+          <div className="bg-white flex justify-center rounded-xl shadow-airbnbSoft shadow-gray-200 border-2 border-gray-300">
+            <Image src={item.imageUrl} alt={item.name} width={200} height={150} className="max-w-[200px] max-h-[150px] object-contain mix-blend-multiply object-center rounded-xl" />
+          </div>
           <div className="flex flex-col gap-3 w-full">
             <button
               className="bg-red-200 text-red-600 rounded-full p-2 w-fit self-end"
@@ -58,25 +72,32 @@ const CartItems: React.FC = () => {
               <p className="font-semibold text-lg ">Rp {item.price}</p>
               <div className="flex items-center gap-5 text-lg font-semibold">
                 <button
-                  className="bg-white border border-red-600 py-0 text-red-600 px-5 rounded-lg"
+                  className={`bg-red-600 text-white border border-white shadow-airbnbSoft py-0 px-5 rounded-lg ${
+                    loadingItems[item.productId] ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
                   onClick={() => updateQuantity(item.productId, (localQuantities[item.productId] || item.quantity) - 1, "decrement")}
-                  disabled={localQuantities[item.productId] <= 1 || item.quantity <= 1} 
+                  disabled={loadingItems[item.productId] || (localQuantities[item.productId] || item.quantity) <= 1}
                 >
                   -
                 </button>
-                <p className="">{localQuantities[item.productId] || item.quantity}</p>
+                <p className={`${loadingItems[item.productId] ? "animate-pulse" : ""}`}>
+                  {localQuantities[item.productId] || item.quantity}
+                </p>
                 <button
-                  className={`bg-white border border-red-600 py-0 text-red-600 px-5 rounded-lg ${
-                    (localQuantities[item.productId] || item.quantity) >= item.stock ? "opacity-50 cursor-not-allowed" : ""
+                  className={`bg-red-600 border border-white py-0 text-white shadow-airbnbSoft px-5 rounded-lg ${
+                    loadingItems[item.productId] || (localQuantities[item.productId] || item.quantity) >= item.stock
+                      ? "opacity-50 cursor-not-allowed"
+                      : ""
                   }`}
                   onClick={() => updateQuantity(item.productId, (localQuantities[item.productId] || item.quantity) + 1, "increment")}
-                  disabled={(localQuantities[item.productId] || item.quantity) >= item.stock} 
+                  disabled={loadingItems[item.productId] || (localQuantities[item.productId] || item.quantity) >= item.stock}
                 >
                   +
                 </button>
               </div>
             </div>
-            <div className="flex gap-10 justify-between items-center mt-5">
+            <hr className="border-dashed border-gray-700" />
+            <div className="flex gap-10 justify-between items-center">
               <p className="font-semibold text-gray-600">Total Per-barang</p>
               <p className="font-semibold text-lg text-red-600 whitespace-nowrap">
                 Rp {item.price * (localQuantities[item.productId] || item.quantity)}

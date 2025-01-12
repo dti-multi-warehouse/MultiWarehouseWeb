@@ -37,7 +37,7 @@ const EditProfileSchema = Yup.object().shape({
 });
 
 const PasswordSchema = Yup.object().shape({
-  currentPassword: Yup.string().required("Current password is required"),
+  currentPassword: Yup.string(),
   newPassword: Yup.string()
     .min(6, "Password must be at least 6 characters")
     .matches(/[A-Z]/, "Password must contain at least one uppercase letter")
@@ -242,21 +242,22 @@ const EditProfileDialog: React.FC = () => {
                 formData.append("userId", session?.user?.id || "");
                 formData.append("currentPassword", values.currentPassword);
                 formData.append("newPassword", values.newPassword);
-            
+              
                 try {
                   await updateProfile.mutateAsync(formData);
                   setAlertMessage("Password changed successfully!");
+                  setAlertOpen(true); 
                 } catch (error: any) {
                   if (error.response?.data === "Current password is incorrect.") {
                     setFieldError("currentPassword", "Current password is incorrect.");
                   } else {
                     setAlertMessage("Failed to change password.");
+                    setAlertOpen(true); 
                   }
                 } finally {
-                  setAlertOpen(true);
                   setSubmitting(false);
                 }
-              }}
+              }}              
             >
               {({ isSubmitting }) => (
                 <Form className="p-5 flex flex-col gap-5">

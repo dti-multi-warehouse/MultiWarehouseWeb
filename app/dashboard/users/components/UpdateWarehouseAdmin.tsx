@@ -19,6 +19,8 @@ import AlertDialog from "@/components/AlertDialog";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 import { useQueryClient } from "react-query";
 import Buttons from "@/components/Buttons";
+import { Skeleton } from "@/components/ui/skeleton";
+import { RiEdit2Fill } from "react-icons/ri";
 
 const UpdateWarehouseAdmin: React.FC<{ adminId: number }> = ({ adminId }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -58,16 +60,16 @@ const UpdateWarehouseAdmin: React.FC<{ adminId: number }> = ({ adminId }) => {
       }),
   });
 
-  if (isLoading) return <div>Loading...</div>;
+  if (isLoading) return <Skeleton className="w-20 h-6" />;
   if (isError) return <div>Error loading admin data</div>;
 
   return (
     <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
       <DialogTrigger
-        className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500"
+        className="py-1 px-3 bg-red-600 text-white rounded-lg flex justify-center items-center gap-1 text-xs md:text-sm hover:scale-105 hover:shadow-antiMetal transition-all duration-500"
         onClick={() => setDialogOpen(true)}
       >
-        Edit
+        <RiEdit2Fill />Edit
       </DialogTrigger>
       <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
         <DialogHeader>

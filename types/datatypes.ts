@@ -182,7 +182,7 @@ export interface CreateOrderRequestDto {
   paymentMethod: PaymentMethod;
   bankTransfer?: BankTransfer;
   shippingMethod: string; 
-  shippingAddressId: number;
+  shippingAddressId: number | null;
 }
 
 export interface CreateOrderResponseDto {

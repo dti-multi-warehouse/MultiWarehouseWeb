@@ -1,7 +1,8 @@
 const BannerHome: React.FC = () =>{
     return(
-        <>
-        </>
+        <div>
+            
+        </div>
     )
 }
 

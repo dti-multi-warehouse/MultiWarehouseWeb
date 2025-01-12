@@ -8,8 +8,8 @@ import useDashboardStore from "@/stores/useDashboardStore";
 const DashboardSidebar: FC = () => {
     const isAdmin = useDashboardStore(state => state.isAdmin)
     return (
-        <section className={"sticky top-0 left-0 h-screen w-[240px] flex flex-col max-md:hidden"}>
-            <Link href={"/"} className={"text-red-500 font-semibold text-center pt-6 pb-8"}>
+        <section className={"sticky top-0 left-0 h-screen w-[240px] flex flex-col max-lg:hidden"}>
+            <Link href={"/dashboard"} className={"text-red-500 font-semibold text-center pt-6 pb-8"}>
                 AlphaMarch
             </Link>
             <nav className={"flex flex-col"}>

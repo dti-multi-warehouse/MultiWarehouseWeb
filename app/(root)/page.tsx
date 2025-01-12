@@ -2,6 +2,7 @@ import React from "react";
 import CategoryComponent from "./components/Category";
 import Hero from "./components/Hero";
 import ProductCategory from "./components/ProductCategory/ProductCategory";
+import OurBenefit from "./components/OurBenefit";
 
 export default function Home() {
   return (
@@ -9,6 +10,7 @@ export default function Home() {
       <Hero />
       <CategoryComponent />
       <ProductCategory />
+      <OurBenefit />
     </main>
   );
 }

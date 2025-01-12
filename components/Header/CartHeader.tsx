@@ -8,7 +8,12 @@ import { useGetProfile } from "@/hooks/useUser";
 import { useCart } from "@/hooks/useCart";
 import AlertDialog from "@/components/AlertDialog";
 
-const CartHeader: React.FC = () => {
+interface CardHeaderProps{
+  className?: string;
+  qtyClassName?: string;
+}
+
+const CartHeader: React.FC<CardHeaderProps> = ({ className, qtyClassName }) => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const { profile, isLoading: isProfileLoading } = useGetProfile();
@@ -50,12 +55,12 @@ const CartHeader: React.FC = () => {
     <>
       <div className="relative">
         <button
-          className="flex items-center text-red-600 gap-1 hover:scale-105 transition-all"
+          className={`${className} flex items-center text-red-600 gap-1 hover:scale-105 transition-all`}
           onClick={handleCartClick}
         >
           <IoCartOutline className="text-3xl" />
           {totalItems > 0 && (
-            <span className="absolute -top-1 -right-2 bg-red-200 px-2 rounded-full text-sm font-bold">
+            <span className={`${qtyClassName} absolute -top-1 -right-2 bg-red-200 px-2 rounded-full text-sm font-bold`}>
               {totalItems}
             </span>
           )}

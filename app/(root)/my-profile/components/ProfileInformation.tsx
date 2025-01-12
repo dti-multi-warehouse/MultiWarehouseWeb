@@ -72,7 +72,7 @@ const ProfileInformation: React.FC = () => {
           <h3 className="text-lg font-bold">User Data</h3>
           <div>
             <p className="text-sm font-medium text-gray-600">Name</p>
-            <p className="font-semibold">{profile?.username || "your name"}</p>
+            <p className="font-semibold">{profile?.username || (profile?.email.split("@")[0])}</p>
           </div>
 
           <div>

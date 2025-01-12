@@ -10,6 +10,14 @@ html{
   scrollbar-width: thin;
 }
 
+html body[data-scroll-locked="1"] {
+  overscroll-behavior: auto !important;
+  position: static !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin: 0 !important;
+}
+
 .map-container {
   height: 200px; 
   width: 100%; 
@@ -35,6 +43,14 @@ html{
   text-align: left!important;
   margin-top: 20px;
   top: 10px;
+}
+
+.swiper-button-prev, .swiper-button-prev::after{
+  left: -20px !important;
+}
+
+.swiper-button-next, .swiper-button-next::after{
+  right: -20px !important;
 }
 
 .swiper-button-prev, .swiper-button-next, .swiper-button-prev::after, .swiper-button-next::after{

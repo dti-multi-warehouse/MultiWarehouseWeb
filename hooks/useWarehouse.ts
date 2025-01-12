@@ -19,18 +19,27 @@ export const useGetWarehouseById = (id: number) => {
   );
 };
 
-export const useSearchWarehouses = (params: { name?: string; city?: string; province?: string; page?: number; size?: number }) => {
-  const { name, city, province, page = 0, size = 10 } = params;
+export const useSearchWarehouses = (params: {
+  name?: string;
+  city?: string;
+  province?: string;
+  page?: number;
+  size?: number;
+  sortField?: string;
+  sortDirection?: string;
+}) => {
+  const { name, city, province, page = 0, size = 10, sortField, sortDirection } = params;
+
   return useQuery(
-    ['warehouses', { name, city, province, page, size }],
+    ['warehouses', { name, city, province, page, size, sortField, sortDirection }],
     async () => {
       const response = await apiClient.get(`/api/v1/warehouse/search`, {
-        params: { name, city, province, page, size }
+        params: { name, city, province, page, size, sortField, sortDirection },
       });
       return response.data;
     },
     {
-      keepPreviousData: true, 
+      keepPreviousData: true,
       onError: (error) => {
         console.error('Error searching warehouses:', error);
       },
@@ -95,7 +104,7 @@ export const useDeleteWarehouse = (): UseMutationResult<void, unknown, number> =
   );
 };
 
-export const useAssignWarehouseAdmin = (): UseMutationResult<void, unknown, { warehouseId: number, userId: number }> => {
+export const useAssignWarehouseAdmin = (): UseMutationResult<void, unknown, { warehouseId: number, userId: number | null }> => {
   const queryClient = useQueryClient();
 
   return useMutation(

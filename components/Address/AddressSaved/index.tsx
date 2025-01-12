@@ -18,6 +18,7 @@ import { useSession } from "next-auth/react";
 import { useGetUserAddresses, useDeleteUserAddress } from "@/hooks/useAddress";
 import AlertDialog from "@/components/AlertDialog";
 import React from "react";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AddressSaved: React.FC = () => {
   const [isAddAddressOpen, setIsAddAddressOpen] = useState(false);
@@ -74,7 +75,7 @@ const AddressSaved: React.FC = () => {
     setIsEditAddressOpen(true); 
   };
 
-  if (isLoading) return <p className="loader"></p>;
+  if (isLoading) return <div><Skeleton className="w-40 h-5" /></div>;
 
   if (error) return <p>Error loading addresses</p>;
 
@@ -98,7 +99,7 @@ const AddressSaved: React.FC = () => {
             <div className="flex flex-col gap-5 w-full p-5">
               {addresses.length > 0 ? (
                 addresses.map((address, index) => (
-                  <div key={index} className="flex flex-col gap-2 rounded-xl bg-gray-100 p-2 md:p-5">
+                  <div key={index} className="flex flex-col gap-2 rounded-xl bg-gray-100 border-2 border-gray-400 p-2 md:p-5">
                     <div className="flex justify-between">
                       <p className="font-semibold">{address.label}</p>
                       <div className="flex items-center gap-2">
@@ -125,6 +126,7 @@ const AddressSaved: React.FC = () => {
                         </button>
                       </div>
                     </div>
+                    <hr className="border-dashed border border-gray-400" />
                     <div className="flex gap-3 font-medium">
                       <p>{address.name}</p> - <p>{address.phoneNumber}</p>
                     </div>

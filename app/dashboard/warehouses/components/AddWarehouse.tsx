@@ -72,7 +72,7 @@ const AddWarehouse: React.FC = () => {
   return (
     <>
       <Dialog>
-        <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500">
+        <DialogTrigger className="py-3 px-5 md:px-10 bg-red-600 text-white rounded-lg flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500 text-sm whitespace-nowrap">
           Add Warehouse
         </DialogTrigger>
         <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
@@ -123,7 +123,7 @@ const AddWarehouse: React.FC = () => {
               }}
             >
               {({ setFieldValue, isSubmitting }) => (
-                <Form className="p-5 flex flex-col gap-5">
+                <Form className="p-5 flex flex-col gap-5 text-left">
                   <div>
                     <label>Name</label>
                     <Field
@@ -134,21 +134,6 @@ const AddWarehouse: React.FC = () => {
                     />
                     <ErrorMessage
                       name="name"
-                      component="div"
-                      className="text-red-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label>Street</label>
-                    <Field
-                      type="text"
-                      name="street"
-                      placeholder="Street Address"
-                      className="w-full p-1 border-2 rounded-lg border-gray-300"
-                    />
-                    <ErrorMessage
-                      name="street"
                       component="div"
                       className="text-red-500"
                     />
@@ -183,6 +168,21 @@ const AddWarehouse: React.FC = () => {
                         className="text-red-500"
                       />
                     </div>
+                  </div>
+                  
+                  <div>
+                    <label>Street</label>
+                    <Field
+                      type="text"
+                      name="street"
+                      placeholder="Street Address"
+                      className="w-full p-1 border-2 rounded-lg border-gray-300"
+                    />
+                    <ErrorMessage
+                      name="street"
+                      component="div"
+                      className="text-red-500"
+                    />
                   </div>
 
                   <p className="text-xs text-gray-600">

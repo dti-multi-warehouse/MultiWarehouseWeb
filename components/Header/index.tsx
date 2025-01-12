@@ -13,7 +13,7 @@ import { TiArrowSortedDown } from "react-icons/ti";
 import Image from "next/image";
 import { useGetProfile } from "@/hooks/useUser";
 import AddressSaved from "../Address/AddressSaved";
-import {useRouter} from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 const Header: React.FC = () => {
@@ -49,14 +49,21 @@ const Header: React.FC = () => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
   const isLoggedIn = session || isClerkSignedIn;
 
   return (
     <>
-    <div className="w-full h-full py-2 px-5 md:px-10 bg-gray-100">
-      <AddressSaved />
-    </div>
-      <div className="flex items-center justify-between py-5 px-5 md:px-10 shadow-airbnbSoft overflow-x-hidden" id="header">
+      <div className="w-full h-full py-2 px-5 md:px-10 bg-gray-100">
+        <AddressSaved />
+      </div>
+      <div
+        className="flex items-center justify-between py-5 px-5 md:px-10 shadow-airbnbSoft overflow-x-hidden"
+        id="header"
+      >
         <div className="flex items-center gap-10">
           <Link href="/" className="text-red-500 font-semibold">
             AlphaMarch
@@ -66,7 +73,7 @@ const Header: React.FC = () => {
               <Link
                 key={index}
                 href={link.url}
-                className="text-sm font-medium text-gray-500"
+                className="text-sm font-medium text-gray-500 hover:text-red-600"
               >
                 {link.label}
               </Link>
@@ -91,10 +98,12 @@ const Header: React.FC = () => {
               value={searchValue}
               onKeyDown={(e) => {
                 if (e.key === "Enter") {
-                  router.push("/product?query=" + searchValue)
+                  router.push("/product?query=" + searchValue);
                 }
               }}
-              onChange={(e) => {setSearchValue(e.target.value);}}
+              onChange={(e) => {
+                setSearchValue(e.target.value);
+              }}
               className={`absolute w-[190px] sm:w-[200px] md:w-[350px] left-full ml-2 border rounded-md px-2 py-1 transition-all duration-300 ease-in-out transform ${
                 isSearchOpen
                   ? "translate-x-[-115%] opacity-100"
@@ -109,7 +118,10 @@ const Header: React.FC = () => {
           <p className="font-semibold text-gray-300 text-3xl">|</p>
 
           {isLoggedIn && !isProfileLoading ? (
-            <div className="">
+            <div
+              className=""
+              onMouseLeave={closeDropdown} // Close dropdown on mouse leave
+            >
               <button
                 className="flex items-center gap-2"
                 onClick={toggleDropdown}
@@ -127,7 +139,7 @@ const Header: React.FC = () => {
               </button>
 
               {isDropdownOpen && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
+                <div className="absolute right-0 w-48 bg-white rounded-md shadow-lg z-50">
                   <Link href="/my-profile">
                     <div className="block px-4 py-2 text-gray-700 hover:bg-gray-200 cursor-pointer">
                       Profile

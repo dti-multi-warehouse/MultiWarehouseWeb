@@ -181,21 +181,6 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
                     className="w-full p-1 border-2 rounded-lg border-gray-300"
                   />
                 </div>
-                <div>
-                  <label className="font-semibold">Alamat</label>
-                  <Field
-                    type="text"
-                    name="street"
-                    placeholder="Ketik Alamat Lengkap"
-                    className="w-full p-1 border-2 rounded-lg border-gray-300"
-                    onBlur={async () => {
-                      const fullAddress = `${values.street}, ${values.city}, ${values.province}`;
-                      if (values.street && values.city && values.province) {
-                        await fetchGeolocation(fullAddress);
-                      }
-                    }}
-                  />
-                </div>
                 <div className="flex items-center justify-between gap-5">
                   <div>
                     <label className="font-semibold">Kota</label>
@@ -215,6 +200,21 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
                       className="w-full p-1 border-2 rounded-lg border-gray-300"
                     />
                   </div>
+                </div>
+                <div>
+                  <label className="font-semibold">Alamat</label>
+                  <Field
+                    type="text"
+                    name="street"
+                    placeholder="Ketik Alamat Lengkap"
+                    className="w-full p-1 border-2 rounded-lg border-gray-300"
+                    onBlur={async () => {
+                      const fullAddress = `${values.street}, ${values.city}, ${values.province}`;
+                      if (values.street && values.city && values.province) {
+                        await fetchGeolocation(fullAddress);
+                      }
+                    }}
+                  />
                 </div>
                 <p className="text-xs text-gray-600">
                   * click anywhere to <strong> load map </strong>after input the

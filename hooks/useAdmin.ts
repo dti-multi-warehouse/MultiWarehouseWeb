@@ -1,13 +1,22 @@
 import { useMutation, useQuery, useQueryClient, UseMutationResult } from 'react-query';
 import apiClient from '@/lib/apiClient';
 
-export const useSearchUsers = (params: { role?: string, username?: string, email?: string, page?: number, size?: number }) => {
-  const { role, username, email, page = 0, size = 10 } = params;
+export const useSearchUsers = (params: {
+  role?: string;
+  username?: string;
+  email?: string;
+  page?: number;
+  size?: number;
+  sortField?: string;
+  sortDirection?: string;
+}) => {
+  const { role, username, email, page = 0, size = 10, sortField, sortDirection } = params;
+
   return useQuery(
-    ['users', { role, username, email, page, size }],
+    ['users', { role, username, email, page, size, sortField, sortDirection }],
     async () => {
       const response = await apiClient.get(`/api/v1/admin/users/search`, {
-        params: { role, username, email, page, size }
+        params: { role, username, email, page, size, sortField, sortDirection },
       });
       return response.data;
     },
@@ -34,7 +43,6 @@ export const useGetWarehouseAdmins = () => {
     'warehouseAdmins',
     async () => {
       const response = await apiClient.get(`/api/v1/admin/warehouse-admins`);
-      console.log('Full Response:', response.data);
       const warehouseAdmins = response.data.data;
 
       if (!Array.isArray(warehouseAdmins)) {

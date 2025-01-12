@@ -14,8 +14,6 @@ import Link from "next/link";
 import { HiMenuAlt3 } from "react-icons/hi";
 import { useUser as useClerkUser } from "@clerk/nextjs";
 import AlertDialog from "../AlertDialog";
-import Image from "next/image";
-import { TiArrowSortedDown } from "react-icons/ti";
 import { useGetProfile } from "@/hooks/useUser";
 
 const ResponsiveHeader: React.FC = () => {
@@ -61,7 +59,7 @@ const ResponsiveHeader: React.FC = () => {
                 <Link
                   key={index}
                   href={link.url}
-                  className="font-medium text-gray-500"
+                  className="font-medium text-gray-500 hover:text-red-600"
                 >
                   {link.label}
                 </Link>

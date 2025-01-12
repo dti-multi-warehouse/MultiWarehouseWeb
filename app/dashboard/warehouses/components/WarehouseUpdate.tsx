@@ -9,13 +9,13 @@ import {
 } from "@/components/ui/dialog";
 import * as Yup from "yup";
 import { Formik, Form, Field, ErrorMessage } from "formik";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import axios from "axios";
 import Buttons from "@/components/Buttons";
 import { useGetWarehouseById, useUpdateWarehouse } from "@/hooks/useWarehouse";
-import React from "react";
+import { RiEdit2Fill } from "react-icons/ri";
 
 interface WarehouseUpdateProps {
   warehouseId: number;
@@ -83,8 +83,8 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
   return (
     <>
       <Dialog>
-        <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500">
-          Edit
+        <DialogTrigger className="py-1 px-3 bg-red-600 text-white rounded-lg flex justify-center items-center gap-1 hover:scale-105 hover:shadow-antiMetal transition-all duration-500 text-xs md:text-sm">
+          <RiEdit2Fill />Edit
         </DialogTrigger>
         <DialogContent className="address-box max-h-[80vh] !p-0 overflow-y-auto">
           <DialogHeader>
@@ -137,7 +137,7 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
               }}
             >
               {({ setFieldValue, isSubmitting }) => (
-                <Form className="p-5 flex flex-col gap-5">
+                <Form className="p-5 flex flex-col gap-5 text-left">
                   <div>
                     <label>Name</label>
                     <Field
@@ -148,21 +148,6 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
                     />
                     <ErrorMessage
                       name="name"
-                      component="div"
-                      className="text-red-500"
-                    />
-                  </div>
-
-                  <div>
-                    <label>Street</label>
-                    <Field
-                      type="text"
-                      name="street"
-                      placeholder="Street Address"
-                      className="w-full p-1 border-2 rounded-lg border-gray-300"
-                    />
-                    <ErrorMessage
-                      name="street"
                       component="div"
                       className="text-red-500"
                     />
@@ -197,6 +182,21 @@ const WarehouseUpdate: React.FC<WarehouseUpdateProps> = ({ warehouseId }) => {
                         className="text-red-500"
                       />
                     </div>
+                  </div>
+                  
+                  <div>
+                    <label>Street</label>
+                    <Field
+                      type="text"
+                      name="street"
+                      placeholder="Street Address"
+                      className="w-full p-1 border-2 rounded-lg border-gray-300"
+                    />
+                    <ErrorMessage
+                      name="street"
+                      component="div"
+                      className="text-red-500"
+                    />
                   </div>
                   <p className="text-xs text-gray-600">
                     * click anywhere to <strong> load map </strong>after input

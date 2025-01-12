@@ -5,6 +5,7 @@ import { useUser, useClerk } from "@clerk/nextjs";
 import { saveEmailToBackend } from '@/hooks/useUser';
 import { useRouter } from "next/navigation";
 import AlertDialog from "@/components/AlertDialog";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const AfterSignUp: React.FC = () => {
   const { user, isLoaded } = useUser();
@@ -53,11 +54,9 @@ const AfterSignUp: React.FC = () => {
 
   return (
     <>
-      <div className="my-5 flex justify-center">
-        <div className="p-5 rounded-xl border-2 border-gray-300">
-          <p className="text-xl font-semibold text-gray-500">Finishing up your registration...</p>
-        </div>
-      </div>
+      <Skeleton className="flex w-full p-5 justify-center">
+        <p className="text-xl font-semibold text-gray-800">Finishing up your registration...</p>
+      </Skeleton>
 
       <AlertDialog
         open={dialogOpen}

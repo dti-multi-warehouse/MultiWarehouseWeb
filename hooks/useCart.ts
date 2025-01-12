@@ -1,7 +1,7 @@
-import { useQuery, useMutation, useQueryClient } from 'react-query';
-import apiClient from '@/lib/apiClient';
-import { AddItemDto, CartResponse } from '@/types/datatypes';
-import { getSession } from 'next-auth/react';
+import { useQuery, useMutation, useQueryClient } from "react-query";
+import apiClient from "@/lib/apiClient";
+import { AddItemDto, CartResponse } from "@/types/datatypes";
+import { getSession } from "next-auth/react";
 
 const attachToken = async (config: any) => {
   const session = await getSession();
@@ -17,20 +17,22 @@ const attachToken = async (config: any) => {
 export const useCart = () => {
   const queryClient = useQueryClient();
 
-  const { data: cart, error, isLoading } = useQuery<CartResponse>(
-    'cart',
+  const {
+    data: cart,
+    error,
+    isLoading,
+  } = useQuery<CartResponse>(
+    "cart",
     async () => {
-      try {
-        const config = await attachToken({});
-        const response = await apiClient.get<CartResponse>('/api/v1/cart', config);
-        return response.data;
-      } catch (error) {
-        console.error('Failed to fetch cart:', error);
-        throw error;
-      }
+      const config = await attachToken({});
+      const response = await apiClient.get<CartResponse>(
+        "/api/v1/cart",
+        config
+      );
+      return response.data;
     },
     {
-      retry: false, 
+      retry: false,
     }
   );
 
@@ -44,24 +46,26 @@ export const useAddToCart = () => {
     async (item: AddItemDto) => {
       const config = await attachToken({});
       try {
-        const response = await apiClient.post('/api/v1/cart', item, config);
-        console.log('Item added to cart successfully:', response.data);
+        const response = await apiClient.post("/api/v1/cart", item, config);
+        console.log("Item added to cart successfully:", response.data);
       } catch (error: any) {
-        console.error('Error adding item to cart:', error.response?.data || error.message);
+        console.error(
+          "Error adding item to cart:",
+          error.response?.data || error.message
+        );
         throw error;
       }
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('cart'); 
+        queryClient.invalidateQueries("cart");
       },
       onError: (error) => {
-        console.error('Failed to add item to cart:', error);
+        console.error("Failed to add item to cart:", error);
       },
     }
   );
 };
-
 
 export const useRemoveFromCart = () => {
   const queryClient = useQueryClient();
@@ -72,13 +76,13 @@ export const useRemoveFromCart = () => {
         const config = await attachToken({});
         await apiClient.delete(`/api/v1/cart/${productId}`, config);
       } catch (error) {
-        console.error('Failed to remove item from cart:', error);
+        console.error("Failed to remove item from cart:", error);
         throw error;
       }
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('cart');
+        queryClient.invalidateQueries("cart");
       },
     }
   );
@@ -94,7 +98,7 @@ export const useIncrementQuantity = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('cart');
+        queryClient.invalidateQueries("cart");
       },
     }
   );
@@ -110,7 +114,7 @@ export const useDecrementQuantity = () => {
     },
     {
       onSuccess: () => {
-        queryClient.invalidateQueries('cart');
+        queryClient.invalidateQueries("cart");
       },
     }
   );
