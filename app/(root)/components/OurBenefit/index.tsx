@@ -71,7 +71,7 @@ const OurBenefit: React.FC = () => {
         </div>
         <div className="flex  gap-4">
           {downloadStore.map((store, index) => (
-            <div key={index} className="flex flex-col sm:flex-row items-center gap-2 bg-black text-white py-3 px-10 rounded-xl border-4 border-white shadow-airbnbSoft shadow-gray-400 cursor-pointer hover:scale-105 duration-300">
+            <div key={index} className="flex flex-col justify-between sm:justify-center sm:flex-row items-center gap-2 bg-black text-white py-3 px-5 sm:px-10 rounded-xl border-4 border-white shadow-airbnbSoft shadow-gray-400 cursor-pointer hover:scale-105 duration-300">
               <Image
                 src={store.image}
                 alt="Download Store"

@@ -199,7 +199,7 @@ const Checkout: React.FC = () => {
               {cart?.data?.cartItems.map((item, index) => (
                 <div
                   key={index}
-                  className="flex gap-10 w-full bg-gray-50 rounded-xl p-2 md:p-5 items-center border-2 border-gray-400"
+                  className="flex flex-col sm:flex-row gap-5 sm:gap-10 w-full bg-gray-50 rounded-xl p-2 md:p-5 sm:items-center border-2 border-gray-400"
                 >
                   <div className="bg-white flex justify-center rounded-xl shadow-airbnbSoft shadow-gray-200 border-2 border-gray-300">  
                     <Image

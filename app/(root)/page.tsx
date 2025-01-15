@@ -6,7 +6,7 @@ import OurBenefit from "./components/OurBenefit";
 
 export default function Home() {
   return (
-    <main className="p-5 md:p-10 bg-transparent">
+    <main className="p-5 md:p-10 bg-transparent overflow-x-hidden">
       <Hero />
       <CategoryComponent />
       <ProductCategory />

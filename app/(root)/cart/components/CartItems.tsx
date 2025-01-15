@@ -37,17 +37,15 @@ const CartItems: React.FC = () => {
     const product = cartItems.find((item) => item.productId === productId);
     if (!product) return;
 
-    setLoadingItems((prev) => ({ ...prev, [productId]: true })); // Mark item as loading
+    setLoadingItems((prev) => ({ ...prev, [productId]: true })); 
 
     setLocalQuantities((prev) => ({
       ...prev,
       [productId]: newQuantity,
     }));
 
-    // Optimistically update UI
     updateQuantityThrottled(productId, action);
 
-    // Simulate server delay and remove loading state
     setTimeout(() => {
       setLoadingItems((prev) => ({ ...prev, [productId]: false }));
     }, 300);
@@ -69,7 +67,7 @@ const CartItems: React.FC = () => {
             </button>
             <h2 className="font-semibold text-xl">{item.name}</h2>
             <div className="flex items-center justify-between gap-20">
-              <p className="font-semibold text-lg ">Rp {item.price}</p>
+              <p className="font-semibold md:text-lg ">Rp {item.price.toLocaleString()}</p>
               <div className="flex items-center gap-5 text-lg font-semibold">
                 <button
                   className={`bg-red-600 text-white border border-white shadow-airbnbSoft py-0 px-5 rounded-lg ${
@@ -98,7 +96,7 @@ const CartItems: React.FC = () => {
             </div>
             <hr className="border-dashed border-gray-700" />
             <div className="flex gap-10 justify-between items-center">
-              <p className="font-semibold text-gray-600">Total Per-barang</p>
+              <p className="font-semibold text-gray-600">Total barang</p>
               <p className="font-semibold text-lg text-red-600 whitespace-nowrap">
                 Rp {item.price * (localQuantities[item.productId] || item.quantity)}
               </p>

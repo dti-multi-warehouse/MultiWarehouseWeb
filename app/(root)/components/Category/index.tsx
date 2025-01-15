@@ -41,19 +41,19 @@ const CategoryComponent: React.FC = () => {
           slidesPerView: 5,
         },
         768: {
-          slidesPerView: 3, 
+          slidesPerView: 4, 
         },
         640: {
-          slidesPerView: 2, 
+          slidesPerView: 3, 
         },
         0: {
-          slidesPerView: 1, 
+          slidesPerView: 2, 
         },
       }}
       loop={true}
       navigation={true}
       modules={[Navigation]}
-      className="my-10"
+      className="mySwiper my-10 !overflow-visible"
     >
       {data.map((item, index) => (
         <SwiperSlide key={index} className="py-5 !w-fit">

@@ -110,6 +110,14 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
     router.push('/order-confirmation')
   };
 
+  const formattedDateTime = new Intl.DateTimeFormat("en-GB", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(new Date(order.shippingDate));  
+
   return (
     <Dialog>
       <DialogTrigger className="py-1 px-5 bg-red-600 text-white rounded-xl flex md:justify-center items-center gap-3 hover:scale-105 hover:shadow-antiMetal transition-all duration-500 w-fit md:self-end">
@@ -164,22 +172,23 @@ const StatusDialog: React.FC<StatusDialogProps> = ({ order }) => {
             <p className="text-black font-semibold mb-1 md:mb-3">Detail Pesanan</p>
             <p>No Invoice: # {order.invoiceNumber || "N/A"}</p>
             <p className="mb-3">
-              Dikirim pada{" "}
-              {order.shippingDate
-                ? new Date(order.shippingDate).toLocaleDateString()
-                : "N/A"}
+              Tgl Order: {" "}
+              {formattedDateTime}
             </p>
             <div className="flex flex-col gap-5 rounded-xl p-2 border bg-gray-100">
               {order.items.map((item, index) => (
                 <div key={index} className="flex gap-5 items-center w-full">
-                  <div className=" w-[150px] h-[150px] rounded-xl border-2 overflow-hidden">
-                    <Image alt="product" src={item.thumbnail || "/default-product.png"} width={150} height={150} className="w-[150px] h-[150px] object-cover object-center rounded-xl" />
+                  <div className=" w-[150px] h-[150px] rounded-xl border-2 overflow-hidden bg-white">
+                    <Image alt="product" src={item.thumbnail || "/default-product.png"} width={150} height={150} className="w-[150px] h-[150px] object-contain mix-blend-multiply object-center rounded-xl" />
                   </div>
                   <div className="flex flex-col gap-2 font-semibold items-start text-left w-full">
-                    <p className="text-gray-500">{item.name || "N/A"}</p>
-                    <p className="text-lg text-red-600">Rp {item.price || 0}</p>
-                    <div className="flex items-center justify-between w-full">
-                      <p className="text-gray-500">Jumlah beli {item.quantity || 0}</p>
+                    <div>
+                      <p className="text-gray-700">{item.name || "N/A"}</p>
+                      <p className="text-black">Rp {item.price || 0}<span className="text-xs">/pcs</span> </p>
+                    </div>
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between w-full">
+                      <p className="text-gray-500">Total {item.quantity || 0} barang</p>
+                      <p className="text-lg text-red-600">Rp {item.price * item.quantity || 0}</p>
                     </div>
                   </div>
                 </div>
