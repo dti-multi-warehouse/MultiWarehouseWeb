@@ -16,7 +16,7 @@ const ProductFilter:FC = () => {
                 <DrawerTrigger asChild >
                     <Button variant={"outline"}>Filter</Button>
                 </DrawerTrigger>
-                <DrawerContent>
+                <DrawerContent className="p-5">
                     <FilterForm />
                 </DrawerContent>
             </Drawer>
