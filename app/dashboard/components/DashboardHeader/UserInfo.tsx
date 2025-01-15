@@ -46,7 +46,7 @@ const UserInfo: FC = () => {
 
   return (
     <div className="relative pt-10 lg:pt-2">
-      <div className="flex gap-10 lg:gap-2 items-center justify-between lg:justify-start border border-gray-400 lg:border-none lg:p-0 p-3 rounded-xl">
+      <div className="flex gap-10 lg:gap-2 items-center  lg:justify-start border border-gray-400 lg:border-none lg:p-0 p-3 rounded-xl w-fit">
         <div className="flex items-center gap-2">
           <Avatar.Root className="w-12 h-12 inline-flex border border-white rounded-full bg-red-500 text-white font-semibold">
             {profile?.avatar ? (

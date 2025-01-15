@@ -8,22 +8,21 @@ import 'swiper/css/navigation';
 import hero1 from "@/public/1.png";
 import hero2 from "@/public/2.png";
 import hero3 from "@/public/3.png";
-
 import { Pagination, Navigation } from 'swiper/modules';
 import Image from "next/image";
 
 const HeroContent = [
   {
     image: hero1,
-    tagline: "Multiple warehouses for faster delivery."
-  },
-  {
-    image: hero2,
-    tagline: "Shop Seasoning, Tea & More."
+    tagline: "SALE UP TO 50%!"
   },
   {
     image: hero3,
-    tagline: "From Warehouse to Your Kitchen with Fast Shipping."
+    tagline: "SHOP SMART, SHOP FAST"
+  },
+  {
+    image: hero2,
+    tagline: "FASTER DELIVERY"
   },
 ];
 
@@ -51,16 +50,16 @@ const Hero: React.FC = () => {
     >
       {HeroContent.map((item, index) => (
         <SwiperSlide key={index}>
-          <div className={`h-[400px] flex bg-gray-300 hover:bg-red-300 bg-bgBenefit bg-blend-screen bg-repeat bg-contain text-black uppercase cursor-pointer rounded-xl border-2 border-gray-300 relative ${ index === 1 ? " md:items-start" : "lg:items-center " }`}>
+          <div className={`h-[350px] md:h-[400px] flex justify-center bg-gray-300 hover:bg-red-300 bg-bgBenefit bg-blend-screen bg-repeat bg-contain text-black uppercase cursor-pointer rounded-xl border-2 border-gray-300 relative`}>
             
-            <div className="overflow-hidden absolute w-full h-full z-10 rounded-xl">
+            <div className="overflow-hidden absolute w-full h-full z-10 rounded-xl bottom-0">
               <Image 
                 src={item.image}
                 alt="item image"
-                className="w-full h-full object-cover object-right md:object-center top-0 rounded-xl hover:scale-110 hover:animate-in duration-300 transition-all"
+                className={`w-full h-full top-0 rounded-xl hover:scale-110 hover:animate-in duration-300 transition-all  object-bottom ${index === 2 ? "object-contain" : "object-cover"}`}
               />
             </div>
-            <p className={`p-5 z-20 w-full h-fit font-black text-gray-700 text-xl md:text-xl lg:text-3xl max-w-[370px] ${index === 1 ? "mt-9 md:mt-16" : ""}`}>{item.tagline}</p>
+            <p className={`p-5 z-20 w-full h-fit font-black text-gray-700 text-2xl lg:text-3xl xl:text-4xl text-center`}>{item.tagline}</p>
           </div>
         </SwiperSlide>
       ))}

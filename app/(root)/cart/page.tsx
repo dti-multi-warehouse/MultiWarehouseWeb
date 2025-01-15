@@ -87,7 +87,7 @@ const Cart: React.FC = () => {
             <CartItems />
           </div>
           <div className="flex w-full lg:w-[40%] lg:px-20">
-            <div className="p-5 w-full rounded-xl shadow-boxedSoft border-2 border-gray-300 shadow-gray-400 bg-gray-200 h-fit flex flex-col gap-5">
+            <div className="p-5 w-full rounded-xl border-2 border-gray-300 bg-gray-100 h-fit flex flex-col gap-5">
               <h2 className="text-lg font-semibold">Pesanan</h2>
               <hr className="border-gray-900 border-dashed" />
               <div className="flex items-center justify-between">

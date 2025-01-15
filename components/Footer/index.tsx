@@ -16,6 +16,10 @@ const menuFooter = [
   { name: "Shop", link: "/product" },
 ];
 
+const shippingMethod = [
+  "jne.png", "tiki.png", "poskilat.png"
+]
+
 const socMed = [
   { icon: <FaFacebook />, link: "http://facebook.com" },
   { icon: <FaInstagram />, link: "http://instagram.com" },
@@ -30,19 +34,32 @@ const contacts = [
 const Footer: React.FC = () => {
   return (
     <>
-    <div className="flex flex-col px-10 pt-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+    <div className="flex flex-col px-5 md:px-10 pt-20 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 ">
         <div className="flex flex-col gap-5">
           <h1 className="font-bold text-red-600 text-2xl">AlphaMarch</h1>
           <p className="lg:mr-10 text-gray-600 font-medium">Shop Smart, Shop Fast, Shop Alpha March! Bringing the Store to Your Door.</p>
         </div>
-        <div className="flex flex-col gap-5 mb-5 md:mb-0">
+        <div className="flex flex-col gap-5 my-5 md:mb-0 lg:mt-0">
           <h3 className="font-bold text-lg">Quick Menu</h3>
           <div className="flex flex-col gap-3">
             {menuFooter.map((item, index) => (
               <Link href={item.link} key={index} className=" font-medium text-gray-600  hover:scale-105 transition-all duration-500">
                 {item.name}
               </Link>
+            ))}
+          </div>
+          <h3 className="font-bold text-lg">Shipping Method</h3>
+          <div className="flex gap-1">
+            {shippingMethod.map((item, index) => (
+              <Image
+                src={`/assets/${item}`}
+                alt={item}
+                width={50}
+                height={30}
+                key={index}
+                className="object-contain rounded-full p-1 border-2 border-red-100"
+              />
             ))}
           </div>
         </div>
@@ -67,7 +84,7 @@ const Footer: React.FC = () => {
             ))}
           </div>
         </div>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-5 mt-5 lg:mt-0">
             <h3 className="font-bold text-lg">Our Contact</h3>
             <div className="flex flex-col gap-3">
                 {contacts.map((item, index) => (
@@ -80,7 +97,7 @@ const Footer: React.FC = () => {
         </div>
       </div>
       <hr className="mt-10 border-dashed border-gray-600" />
-      <p className="text-center text-sm font-semibold text-gray-600 my-5">&copy; Alpha March, 2024. All Right Reserved.</p>
+      <p className="text-center text-xs sm:text-sm font-semibold text-gray-600 my-5">&copy; Alpha March, 2024. All Right Reserved.</p>
     </div>
     </>
   );

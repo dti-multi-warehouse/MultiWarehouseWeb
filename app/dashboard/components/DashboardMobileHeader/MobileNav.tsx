@@ -10,22 +10,23 @@ import Link from "next/link";
 import SidebarLink from "@/app/dashboard/components/DashboardSidebar/SidebarLink";
 import {sidebarLinks, superAdminLinks} from "@/constants/sidebarLinks";
 import UserInfo from "../DashboardHeader/UserInfo";
+import useDashboardStore from "@/stores/useDashboardStore";
 
 const MobileNav: FC = () => {
-    const isSuper = true
+    const isAdmin = useDashboardStore(state => state.isAdmin)
     return (
         <Sheet>
             <SheetTrigger>
                 <Menu />
             </SheetTrigger>
-            <SheetContent side={"left"}>
+            <SheetContent side={"left"} className="w-fit">
                 <SheetHeader>
                     <Link href={"/"} className={"text-red-500 font-semibold text-center py-4"}>
                         AlphaMarch
                     </Link>
                 </SheetHeader>
                 <nav>
-                    {(isSuper ? sidebarLinks.concat(superAdminLinks) : sidebarLinks)
+                    {(isAdmin ? sidebarLinks.concat(superAdminLinks) : sidebarLinks)
                         .map(link => (
                             <SheetClose key={link.link} asChild>
                                 <SidebarLink {...link} />
